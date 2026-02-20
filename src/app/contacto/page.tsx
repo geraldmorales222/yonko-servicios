@@ -73,8 +73,7 @@ export default function ContactoPage() {
       const q = query(
         consultasRef,
         where('email', '==', email.toLowerCase().trim()),
-        orderBy('fecha', 'desc'),
-        limit(1)
+        limit(1) 
       );
       const querySnapshot = await getDocs(q);
 
@@ -110,7 +109,7 @@ export default function ContactoPage() {
 
     } catch (err) {
       console.error(err);
-      setError('Error de conexión. Por favor intenta más tarde.');
+      setError('Error de conexión.Por favor intenta más tarde.');
     } finally {
       setEnviando(false);
     }
