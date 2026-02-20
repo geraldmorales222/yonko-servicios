@@ -18,6 +18,12 @@ export const metadata = {
   title: 'YONKO | Ingeniería de Software & UX Strategy',
   description: 'Agencia de consultoría liderada por Magíster en Informática.',
 };
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1, // Esto evita el zoom al hacer focus en inputs
+  userScalable: false,
+};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

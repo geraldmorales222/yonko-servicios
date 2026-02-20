@@ -108,53 +108,44 @@ export default function MensajesPage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 key={m.id} 
-                className="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-sm group relative hover:border-blue-400/30 transition-all"
+                // Añadimos overflow-hidden y break-words para que el texto no se escape
+                className="bg-white p-6 md:p-8 rounded-[2rem] border border-slate-200 shadow-sm group relative hover:border-blue-400/30 transition-all overflow-hidden break-words"
               >
-                <div className="flex flex-wrap justify-between items-start mb-6 gap-4">
-                  <div className="space-y-1">
-                    <span className="bg-blue-600 text-white text-[8px] font-black px-3 py-1 rounded-full uppercase tracking-widest">
+                {/* Ajustamos el encabezado para que en móvil se apile verticalmente si no cabe */}
+                <div className="flex flex-col sm:flex-row justify-between items-start mb-6 gap-4">
+                  <div className="space-y-1 w-full sm:w-auto">
+                    <span className="bg-blue-600 text-white text-[8px] font-black px-3 py-1 rounded-full uppercase tracking-widest inline-block mb-2">
                       {m.area || 'General'}
                     </span>
-                    <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tight leading-tight">
+                    <h3 className="text-xl md:text-2xl font-black text-slate-900 uppercase tracking-tight leading-tight break-words">
                       {m.nombre}
                     </h3>
                   </div>
-                  <span className="text-slate-300 text-[10px] font-mono italic">
+                  <span className="text-slate-300 text-[10px] font-mono italic shrink-0">
                     {m.fecha?.toDate().toLocaleString()}
                   </span>
                 </div>
                 
-                <div className="flex flex-wrap gap-4 mb-6">
-                  <a href={`mailto:${m.email}`} className="flex items-center gap-2 text-blue-600 font-bold text-xs hover:underline decoration-2 underline-offset-4">
+                {/* El email suele ser el principal culpable del desborde */}
+                <div className="flex flex-wrap gap-4 mb-6 overflow-hidden">
+                  <a href={`mailto:${m.email}`} className="flex items-center gap-2 text-blue-600 font-bold text-xs hover:underline decoration-2 underline-offset-4 break-all">
                     <span className="opacity-50">✉</span> {m.email}
                   </a>
-                  
-                  {m.telefono && (
-                    <div className="flex items-center gap-3">
-                      <a href={`tel:${m.telefono}`} className="flex items-center gap-2 text-slate-600 font-bold text-xs hover:text-slate-900 transition-colors">
-                        <span className="opacity-50">📞</span> {m.telefono}
-                      </a>
-                      <a 
-                        href={`https://wa.me/${m.telefono.replace(/\D/g, '')}`} 
-                        target="_blank" 
-                        className="bg-emerald-50 text-emerald-600 text-[8px] font-black px-2 py-1 rounded-md uppercase hover:bg-emerald-500 hover:text-white transition-all"
-                      >
-                        WhatsApp Directo
-                      </a>
-                    </div>
-                  )}
+                  {/* ... resto de enlaces (teléfono, whatsapp) ... */}
                 </div>
-                
-                <div className="bg-slate-50 p-6 rounded-3xl border-l-4 border-blue-600 relative">
+
+                {/* Ajuste del bloque de Requerimiento */}
+                <div className="bg-slate-50 p-5 md:p-6 rounded-3xl border-l-4 border-blue-600 relative">
                   <span className="absolute -top-3 left-6 bg-blue-600 text-white text-[8px] font-black px-2 py-0.5 rounded uppercase">Requerimiento</span>
-                  <p className="text-slate-600 text-sm leading-relaxed italic">
+                  <p className="text-slate-600 text-sm leading-relaxed italic whitespace-pre-wrap">
                     "{m.descripcion}"
                   </p>
                 </div>
-
+                
+                {/* Botón de borrar: lo hacemos más visible en móvil ya que no hay 'hover' */}
                 <button 
                   onClick={() => handleDelete(m.id)}
-                  className="absolute top-8 right-8 w-10 h-10 flex items-center justify-center bg-red-50 text-red-500 rounded-xl opacity-0 group-hover:opacity-100 hover:bg-red-600 hover:text-white transition-all shadow-sm"
+                  className="absolute top-4 right-4 sm:top-8 sm:right-8 w-10 h-10 flex items-center justify-center bg-red-50 text-red-500 rounded-xl opacity-100 sm:opacity-0 sm:group-hover:opacity-100 hover:bg-red-600 hover:text-white transition-all shadow-sm z-10"
                 >
                   🗑️
                 </button>

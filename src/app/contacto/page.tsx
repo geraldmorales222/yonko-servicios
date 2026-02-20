@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { db } from '@/lib/firebase';
@@ -44,6 +44,7 @@ function CanalCard({ href, icon, label, sublabel, color }: {
 
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
 export default function ContactoPage() {
+  const [isClient, setIsClient] = useState(false);
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
   const [telefono, setTelefono] = useState('');      // ← nuevo
@@ -56,6 +57,10 @@ export default function ContactoPage() {
   const formRef = useRef(null);
   const formInView = useInView(formRef, { once: true, margin: '-40px' });
 
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -70,13 +75,14 @@ export default function ContactoPage() {
     try {
       // Validación anti-spam: 1 mensaje cada 24h por email
       const consultasRef = collection(db, 'consultas');
+      /*
       const q = query(
         consultasRef,
         where('email', '==', email.toLowerCase().trim()),
         limit(1) 
       );
       const querySnapshot = await getDocs(q);
-
+      
       if (!querySnapshot.empty) {
         const lastDoc = querySnapshot.docs[0].data();
         if (lastDoc.fecha) {
@@ -87,7 +93,7 @@ export default function ContactoPage() {
             return;
           }
         }
-      }
+      }*/
 
       await addDoc(collection(db, 'consultas'), {
         nombre,
@@ -116,7 +122,7 @@ export default function ContactoPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white text-slate-900 overflow-x-hidden">
+    <main suppressHydrationWarning className="min-h-screen bg-white text-slate-900 overflow-x-hidden">
       <Toast visible={enviado} />
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
@@ -240,7 +246,7 @@ export default function ContactoPage() {
                 <h2 className="text-2xl font-black uppercase tracking-tight text-slate-900">Brief técnico</h2>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-5" autoComplete="none">
 
                 {/* Nombre + Email */}
                 <div className="grid sm:grid-cols-2 gap-4">
@@ -251,6 +257,7 @@ export default function ContactoPage() {
                       type="text"
                       value={nombre}
                       onChange={(e) => setNombre(e.target.value)}
+                      autoComplete="none"
                       placeholder=""
                       className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
                     />
@@ -262,6 +269,7 @@ export default function ContactoPage() {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
+                      autoComplete="none"
                       placeholder="empresa@dominio.com"
                       className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
                     />
@@ -276,6 +284,7 @@ export default function ContactoPage() {
                       type="tel"
                       value={telefono}
                       onChange={(e) => setTelefono(e.target.value)}
+                      autoComplete="none"
                       placeholder="+56 9 XXXX XXXX"
                       className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm"
                     />
