@@ -190,7 +190,7 @@ export default function ContactoPage() {
                 <div className="space-y-3">
                   {/* WhatsApp */}
                   <CanalCard
-                    href="https://wa.me/569XXXXXXXX"
+                    href="https://wa.me/56977843656"
                     label="WhatsApp Business"
                     sublabel="Respuesta rápida"
                     color="bg-emerald-500"
@@ -204,8 +204,8 @@ export default function ContactoPage() {
 
                   {/* Email */}
                   <CanalCard
-                    href="mailto:contacto@yonko.cl"
-                    label="contacto@yonko.cl"
+                    href="mailto:yonko@yonkoservicios.com"
+                    label="yonko@yonkoservicios.com"
                     sublabel="Correo electrónico"
                     color="bg-blue-600"
                     icon={
@@ -215,18 +215,7 @@ export default function ContactoPage() {
                     }
                   />
 
-                  {/* Telegram */}
-                  <CanalCard
-                    href="https://t.me/yonkodev"
-                    label="@yonkodev"
-                    sublabel="Telegram"
-                    color="bg-sky-500"
-                    icon={
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8l-1.68 7.93c-.12.56-.45.7-.9.43l-2.5-1.84-1.2 1.16c-.13.13-.25.25-.51.25l.18-2.55 4.64-4.19c.2-.18-.04-.28-.31-.1l-5.73 3.61-2.47-.77c-.54-.17-.55-.54.11-.8l9.65-3.72c.45-.17.84.11.72.79z"/>
-                      </svg>
-                    }
-                  />
+                 
                 </div>
               </div>
 
@@ -268,7 +257,7 @@ export default function ContactoPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-[9px] font-black uppercase tracking-[0.2em] text-blue-600 mb-1.5 ml-1">Email corporativo</label>
+                    <label className="block text-[9px] font-black uppercase tracking-[0.2em] text-blue-600 mb-1.5 ml-1">Email</label>
                     <input
                       required
                       type="email"

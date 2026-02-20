@@ -63,9 +63,7 @@ export default function AdminPanel() {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setLoading(true);
       if (currentUser && currentUser.email) {
-        // Le preguntamos al servidor si este email es el admin
         const isAdmin = await verifyAdmin(currentUser.email);
-        
         if (isAdmin) {
           setUser(currentUser);
           fetchProyectos();
@@ -85,15 +83,12 @@ export default function AdminPanel() {
 
   const handleLogin = async () => {
     try {
-      // Iniciar popup de Google
       await signInWithPopup(auth, googleProvider);
-      // La lógica de validación se dispara automáticamente en el useEffect (onAuthStateChanged)
     } catch (error) { 
       console.error("Error en Login:", error); 
     }
   };
 
-  // ─── El resto de tus funciones (handleSubmit, etc) se mantienen igual ───
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!imgId) return alert('La portada es obligatoria.');
@@ -139,6 +134,11 @@ export default function AdminPanel() {
       await deleteDoc(doc(db, 'proyectos', id));
       fetchProyectos();
     }
+  };
+
+  // Función para quitar una imagen de la galería antes de subir
+  const removeGalleryImage = (indexToRemove: number) => {
+    setGaleria(prev => prev.filter((_, index) => index !== indexToRemove));
   };
 
   if (loading) return (
@@ -213,13 +213,48 @@ export default function AdminPanel() {
 
           <div className="lg:col-span-5 space-y-6">
             <div className="bg-white p-8 rounded-[3rem] border border-slate-200 space-y-8 shadow-sm">
-              <CldUploadWidget uploadPreset="yonko_presets" onSuccess={(res: any) => setImgId(res.info.public_id)}>
-                {({ open }) => (
-                  <button type="button" onClick={() => open()} className={`w-full py-12 border-2 border-dashed rounded-[2rem] transition-all ${imgId ? 'bg-green-50 border-green-500 text-green-700' : 'border-slate-200 text-slate-400 hover:border-blue-600'}`}>
-                    {imgId ? '✅ Portada Cargada' : '🖼️ Subir Portada'}
-                  </button>
-                )}
-              </CldUploadWidget>
+              {/* PORTADA */}
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 ml-2">Imagen de Portada</p>
+                <CldUploadWidget uploadPreset="yonko_presets" onSuccess={(res: any) => setImgId(res.info.public_id)}>
+                  {({ open }) => (
+                    <button type="button" onClick={() => open()} className={`w-full py-12 border-2 border-dashed rounded-[2rem] transition-all ${imgId ? 'bg-green-50 border-green-500 text-green-700' : 'border-slate-200 text-slate-400 hover:border-blue-600'}`}>
+                      {imgId ? '✅ Portada Cargada' : '🖼️ Subir Portada'}
+                    </button>
+                  )}
+                </CldUploadWidget>
+              </div>
+
+              {/* GALERÍA MÚLTIPLE */}
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-3 ml-2">Galería de Imágenes</p>
+                <CldUploadWidget 
+                  uploadPreset="yonko_presets" 
+                  onSuccess={(res: any) => setGaleria(prev => [...prev, res.info.public_id])}
+                >
+                  {({ open }) => (
+                    <button type="button" onClick={() => open()} className="w-full py-6 border-2 border-dashed border-slate-200 rounded-[2rem] text-slate-400 hover:border-blue-600 hover:text-blue-600 transition-all text-xs font-bold">
+                      📸 Añadir a Galería
+                    </button>
+                  )}
+                </CldUploadWidget>
+
+                {/* Previsualización Galería */}
+                <div className="grid grid-cols-4 gap-2 mt-4">
+                  {galeria.map((id, index) => (
+                    <div key={index} className="relative aspect-square rounded-xl overflow-hidden group border border-slate-100">
+                      <CldImage src={id} fill alt="gal" className="object-cover" />
+                      <button 
+                        type="button"
+                        onClick={() => removeGalleryImage(index)}
+                        className="absolute inset-0 bg-red-600/80 text-white opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[8px] font-black uppercase"
+                      >
+                        Quitar
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
 
               <button type="submit" disabled={uploading} className="w-full bg-slate-900 text-white font-black py-6 rounded-2xl hover:bg-blue-600 transition-all shadow-xl disabled:opacity-50 uppercase tracking-widest text-xs">
                 {uploading ? 'PROCESANDO...' : editId ? 'ACTUALIZAR' : 'PUBLICAR'}
