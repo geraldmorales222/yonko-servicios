@@ -21,7 +21,7 @@ export default function AdminPanel() {
   const [desafio, setDesafio] = useState('');
   const [solucion, setSolucion] = useState('');
   const [urlProyecto, setUrlProyecto] = useState(''); 
-  const [categoria, setCategoria] = useState('Web Engineering');
+  const [categoria, setCategoria] = useState('Desarrollo Web');
   const [tecnologias, setTecnologias] = useState(''); 
   const [imgId, setImgId] = useState('');
   const [galeria, setGaleria] = useState<string[]>([]);
@@ -215,10 +215,15 @@ export default function AdminPanel() {
               </div>
               <div className="grid md:grid-cols-2 gap-4">
                 <select value={categoria} onChange={(e) => setCategoria(e.target.value)} className={inputStyle}>
-                  <option value="Web Engineering">Web Engineering</option>
-                  <option value="SaaS Development">SaaS Development</option>
-                  <option value="AI Integration">AI Integration</option>
-                  <option value="E-commerce Pro">E-commerce Pro</option>
+                  {/* Servicios Activos */}
+                  <option value="Desarrollo Web">Desarrollo Web (Architecture & Scalability)</option>
+                  <option value="E-commerce">E-commerce (Conversion & CX)</option>
+                  <option value="Apps Móviles">Apps Móviles (Mobile Engineering)</option>
+                  <option value="Automatización">Automatización (Efficiency Engineering)</option>
+                  
+                  {/* Servicios en pausa o próximos */}
+                  <option value="Estrategia UX/CX">Estrategia UX/CX (Master Consultancy)</option>
+                  <option value="IA & Data Science">IA & Data Science (Cognitive Systems)</option>
                 </select>
                 <input type="url" placeholder="URL del Proyecto (https://...)" value={urlProyecto} onChange={(e) => setUrlProyecto(e.target.value)} className={inputStyle} />
               </div>
