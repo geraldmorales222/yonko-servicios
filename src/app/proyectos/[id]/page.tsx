@@ -51,7 +51,7 @@ export default function ProyectoDetallePage({ params }: { params: Promise<{ id: 
     damping: 25,
   });
 
-  const cloudName = "dtbhiodgz";
+  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 
   useEffect(() => {
     setWindowWidth(window.innerWidth);
@@ -210,9 +210,10 @@ export default function ProyectoDetallePage({ params }: { params: Promise<{ id: 
                     }}
                   >
                     <img
-                      src={`https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto/v1/${foto}`}
+                      src={`https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto,w_${isMobile ? 400 : 800}/v1/${foto}`}
                       alt={`Vista ${index + 1}`}
                       className="w-full h-full object-cover"
+                      loading={index === 0 ? "eager" : "lazy"}
                     />
                   </div>
                 );
