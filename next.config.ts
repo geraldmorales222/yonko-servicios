@@ -1,8 +1,8 @@
+// next.config.ts
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    // Permitimos que Next.js optimice imágenes desde Cloudinary
     remotePatterns: [
       {
         protocol: 'https',
@@ -20,20 +20,16 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: "Content-Security-Policy",
+            /* Añadimos '*' temporalmente en img-src para descartar 
+               que el problema sea un bloqueo de dominio específico.
+            */
             value: [
               "default-src 'self';",
-              // Scripts permitidos: Google y Cloudinary
               "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://apis.google.com https://www.gstatic.com https://upload-widget.cloudinary.com;", 
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
-              /* CORRECCIÓN AQUÍ: 
-                Añadimos tus dominios y subdominios a img-src. 
-                Sin esto, el móvil bloquea el favicon y las imágenes locales.
-              */
-              "img-src 'self' blob: data: res.cloudinary.com https://lh3.googleusercontent.com https://www.yonkoservicios.com https://yonkoservicios.com;", 
+              "img-src 'self' blob: data: *;", // El '*' permite imágenes de cualquier origen seguro
               "font-src 'self' data: https://fonts.gstatic.com;",
-              // Conexiones de API
               "connect-src 'self' https://*.firebaseio.com https://*.googleapis.com https://*.firebaseapp.com https://api.cloudinary.com;", 
-              // Iframes permitidos
               "frame-src 'self' https://*.firebaseapp.com https://*.google.com https://upload-widget.cloudinary.com;",
               "frame-ancestors 'none';",
             ].join(" "),
