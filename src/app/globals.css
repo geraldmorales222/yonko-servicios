@@ -1,11 +1,9 @@
 @import "tailwindcss";
 
-/* DEFINICIÓN DEL TEMA */
+/* DEFINICIÓN DEL TEMA TAILWIND V4 */
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  
-  /* Animación para el banner de logos */
   --animate-marquee: marquee 40s linear infinite;
 
   @keyframes marquee {
@@ -14,37 +12,35 @@
   }
 }
 
-/* VARIABLES CSS */
+/* VARIABLES DE DISEÑO */
 :root {
-  --background: #ffffff; /* Fondo claro */
-  --foreground: #0f172a; /* Texto oscuro */
+  --background: #ffffff; /* Fondo claro para profesionalismo */
+  --foreground: #0f172a; /* Texto slate-900 */
 }
 
 .dark {
-  --background: #050505; /* Fondo negro */
-  --foreground: #ffffff; /* Texto blanco */
+  --background: #050505; /* Modo oscuro inspirado en terminal */
+  --foreground: #ffffff;
 }
 
-/* ESTILOS BASE */
+/* ESTILOS DE RENDERIZADO BASE */
 @layer base {
   body {
     background-color: var(--background);
     color: var(--foreground);
-    /* Aplicamos la fuente Outfit configurada en layout */
     font-family: var(--font-outfit), sans-serif;
     @apply transition-colors duration-500 antialiased;
   }
 }
 
-/* COMPONENTES */
+/* CLASES DE UTILIDAD PARA LA UI */
 @layer components {
   .animate-marquee {
     display: flex;
     width: max-content;
   }
 
-  /* Efecto Glow para tarjetas */
   .dark .glow-card {
-    box-shadow: 0 0 20px rgba(37, 99, 235, 0.1);
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.15);
   }
 }
