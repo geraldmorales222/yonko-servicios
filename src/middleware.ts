@@ -5,20 +5,15 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // 1. Definimos las rutas que queremos proteger
-  // Esto cubrirá /administracion-yonko-gerald y cualquier subruta como /mensajes
+  /* PROTECCIÓN DE SEGURIDAD:
+    Solo aplicamos la lógica si la ruta empieza con /administracion.
+    Esto evita que el middleware interfiera con los iconos o la home.
+  */
   if (pathname.startsWith('/administracion')) {
-    
-    // NOTA TÉCNICA: En el Middleware no tenemos acceso directo a Firebase Auth 
-    // porque Firebase Auth vive en el cliente (browser). 
-    // Por ahora, haremos una protección por "Email Ofuscado" o "Token de sesión".
-    
-    // Una técnica simple para producción es verificar una Cookie de sesión 
-    // que tú mismo generes al loguearte.
     const session = request.cookies.get('admin_session');
 
     if (!session) {
-      // Si no hay sesión, redirigimos al home o a una página 404 para "desaparecer" la ruta
+      // Si un intruso intenta entrar sin cookie, lo mandamos al home
       return NextResponse.redirect(new URL('/', request.url));
     }
   }
@@ -26,7 +21,20 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// 2. Configuramos en qué rutas se debe ejecutar este middleware
+/* CONFIGURACIÓN DEL MATCHER:
+  Es vital excluir los archivos estáticos aquí para que el middleware 
+  ni siquiera los toque.
+*/
 export const config = {
-  matcher: ['/administracion/:path*'],
+  matcher: [
+    /*
+     * Match todas las rutas excepto:
+     * 1. api (rutas de API)
+     * 2. _next/static (archivos compilados)
+     * 3. _next/image (optimización de imágenes)
+     * 4. favicon.ico, icon.png, etc. (archivos en public)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico|icon.png|apple-touch-icon.png).*)',
+    '/administracion/:path*',
+  ],
 };
