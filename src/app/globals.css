@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
-/* DEFINICIÓN DEL TEMA:
-  Configuramos las variables de color y animaciones para Tailwind v4.
+/* CONFIGURACIÓN DEL TEMA:
+  Definimos las variables para que Tailwind v4 reconozca nuestros colores.
 */
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   
-  /* Animación para el carrusel de logos/tecnologías */
+  /* Animación Marquee para el movimiento infinito de elementos */
   --animate-marquee: marquee 40s linear infinite;
 
   @keyframes marquee {
@@ -16,33 +16,33 @@
   }
 }
 
-/* VARIABLES CSS:
-  Definimos los colores base para modo claro y oscuro.
+/* VARIABLES DE ENTORNO CSS:
+  Establecemos los colores para modo claro y oscuro.
 */
 :root {
-  --background: #ffffff; /* Fondo blanco para la versión light */
-  --foreground: #0f172a; /* Texto azul oscuro (slate-900) */
+  --background: #ffffff; /* Fondo blanco */
+  --foreground: #0f172a; /* Texto azul oscuro */
 }
 
 .dark {
-  --background: #050505; /* Fondo negro profundo */
+  --background: #050505; /* Fondo negro */
   --foreground: #ffffff; /* Texto blanco */
 }
 
-/* CAPA BASE:
-  Aplicamos estilos globales al cuerpo del documento.
+/* ESTILOS BASE:
+  Configuración global del cuerpo de la página.
 */
 @layer base {
   body {
-    /* bg-background usa la variable --background definida arriba */
+    /* bg-background y text-foreground usan las variables definidas arriba */
     @apply bg-background text-foreground transition-colors duration-500 antialiased;
-    /* Fuente Outfit cargada desde el layout */
+    /* Aplicamos la fuente Outfit configurada en el layout */
     font-family: var(--font-outfit), sans-serif;
   }
 }
 
-/* CAPA DE COMPONENTES:
-  Estilos específicos para elementos de la UI.
+/* UTILIDADES PERSONALIZADAS:
+  Clases adicionales para animaciones y efectos visuales.
 */
 @layer components {
   .animate-marquee {
@@ -50,7 +50,7 @@
     width: max-content;
   }
 
-  /* Efecto de resplandor para tarjetas en modo oscuro */
+  /* Efecto de brillo suave para tarjetas en modo oscuro */
   .dark .glow-card {
     box-shadow: 0 0 20px rgba(37, 99, 235, 0.1);
   }
