@@ -195,7 +195,7 @@ export default function ContactoPage() {
                 <div className="space-y-3">
                   {/* WhatsApp */}
                   <CanalCard
-                    href="https://wa.me/56977843656"
+                    href="https://wa.me/56942882503"
                     label="WhatsApp Business"
                     sublabel="Respuesta rápida"
                     color="bg-emerald-500"
