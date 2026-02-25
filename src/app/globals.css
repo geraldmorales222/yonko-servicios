@@ -1,13 +1,11 @@
 @import "tailwindcss";
 
-/* CONFIGURACIÓN DEL TEMA:
-   Definimos variables para Tailwind v4 que usaremos en todo el sitio.
-*/
+/* DEFINICIÓN DEL TEMA */
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   
-  /* Animación para el carrusel de logos */
+  /* Animación para el banner de logos */
   --animate-marquee: marquee 40s linear infinite;
 
   @keyframes marquee {
@@ -16,12 +14,10 @@
   }
 }
 
-/* VARIABLES DE COLOR:
-   Controlamos el esquema de colores para modo claro y oscuro.
-*/
+/* VARIABLES CSS */
 :root {
-  --background: #ffffff; /* Fondo blanco */
-  --foreground: #0f172a; /* Texto azul pizarra */
+  --background: #ffffff; /* Fondo claro */
+  --foreground: #0f172a; /* Texto oscuro */
 }
 
 .dark {
@@ -29,29 +25,25 @@
   --foreground: #ffffff; /* Texto blanco */
 }
 
-/* ESTILOS BASE:
-   Configuramos el comportamiento del body y la fuente principal.
-*/
+/* ESTILOS BASE */
 @layer base {
   body {
     background-color: var(--background);
     color: var(--foreground);
-    /* Aplicamos la fuente Outfit definida en el layout */
+    /* Aplicamos la fuente Outfit configurada en layout */
     font-family: var(--font-outfit), sans-serif;
     @apply transition-colors duration-500 antialiased;
   }
 }
 
-/* COMPONENTES:
-   Clases de utilidad para efectos visuales.
-*/
+/* COMPONENTES */
 @layer components {
   .animate-marquee {
     display: flex;
     width: max-content;
   }
 
-  /* Resplandor para tarjetas en modo oscuro */
+  /* Efecto Glow para tarjetas */
   .dark .glow-card {
     box-shadow: 0 0 20px rgba(37, 99, 235, 0.1);
   }
