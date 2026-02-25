@@ -17,15 +17,22 @@ const jetbrains = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: 'YONKO | Ingeniería de Software',
-  description: 'Agencia de consultoría liderada por Magíster en Informática.', //
+  description: 'Agencia de consultoría liderada por Magíster en Informática.',
+  metadataBase: new URL('https://www.yonkoservicios.com'), // Ayuda a resolver rutas relativas
   icons: {
     icon: [
       { url: "/icon.png", type: "image/png", sizes: "32x32" },
+      { url: "/icon.png", type: "image/png", sizes: "192x192" }, // Para Android
     ],
     apple: [
       { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
     ],
   },
+  // Esto asegura que dispositivos muy estrictos encuentren el icono
+  other: {
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "black-translucent",
+  }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -34,7 +41,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-sans antialiased flex flex-col min-h-screen bg-white text-slate-900">
           <Navbar />
           
-          {/* Main con el mismo padding-top que te funcionó antes */}
           <main className="flex-grow pt-20">
             {children}
           </main>
