@@ -1,11 +1,13 @@
 @import "tailwindcss";
 
-/* CONFIGURACIÓN DEL TEMA (Tailwind v4) */
+/* DEFINICIÓN DEL TEMA:
+  Configuramos las variables de color y animaciones para Tailwind v4.
+*/
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   
-  /* Animación Marquee configurada en el sistema de diseño */
+  /* Animación para el carrusel de logos/tecnologías */
   --animate-marquee: marquee 40s linear infinite;
 
   @keyframes marquee {
@@ -14,37 +16,42 @@
   }
 }
 
-/* VARIABLES DE COLOR */
+/* VARIABLES CSS:
+  Definimos los colores base para modo claro y oscuro.
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #0f172a;
+  --background: #ffffff; /* Fondo blanco para la versión light */
+  --foreground: #0f172a; /* Texto azul oscuro (slate-900) */
 }
 
 .dark {
-  --background: #050505;
-  --foreground: #ffffff;
+  --background: #050505; /* Fondo negro profundo */
+  --foreground: #ffffff; /* Texto blanco */
 }
 
-/* ESTILOS BASE */
+/* CAPA BASE:
+  Aplicamos estilos globales al cuerpo del documento.
+*/
 @layer base {
   body {
-    background-color: var(--background);
-    color: var(--foreground);
+    /* bg-background usa la variable --background definida arriba */
+    @apply bg-background text-foreground transition-colors duration-500 antialiased;
+    /* Fuente Outfit cargada desde el layout */
     font-family: var(--font-outfit), sans-serif;
-    @apply transition-colors duration-500 antialiased;
   }
 }
 
-/* COMPONENTES Y UTILIDADES */
+/* CAPA DE COMPONENTES:
+  Estilos específicos para elementos de la UI.
+*/
 @layer components {
   .animate-marquee {
     display: flex;
     width: max-content;
   }
 
-  /* Efecto Glow mejorado para Yonko */
+  /* Efecto de resplandor para tarjetas en modo oscuro */
   .dark .glow-card {
-    box-shadow: 0 0 20px rgba(37, 99, 235, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.1);
   }
 }
