@@ -1,10 +1,20 @@
 @import "tailwindcss";
 
+/* CONFIGURACIÓN DEL TEMA (Tailwind v4) */
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  
+  /* Animación Marquee configurada en el sistema de diseño */
+  --animate-marquee: marquee 40s linear infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
 }
 
+/* VARIABLES DE COLOR */
 :root {
   --background: #ffffff;
   --foreground: #0f172a;
@@ -15,26 +25,26 @@
   --foreground: #ffffff;
 }
 
+/* ESTILOS BASE */
 @layer base {
   body {
-    @apply bg-background text-foreground transition-colors duration-500 antialiased;
+    background-color: var(--background);
+    color: var(--foreground);
     font-family: var(--font-outfit), sans-serif;
+    @apply transition-colors duration-500 antialiased;
   }
 }
 
-/* Animación Marquee Infinita */
-@keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
+/* COMPONENTES Y UTILIDADES */
+@layer components {
+  .animate-marquee {
+    display: flex;
+    width: max-content;
+  }
 
-.animate-marquee {
-  display: flex;
-  width: max-content;
-  animation: marquee 40s linear infinite;
-}
-
-/* Efecto Glow para el modo oscuro */
-.dark .glow-card {
-  box-shadow: 0 0 20px rgba(37, 99, 235, 0.1);
+  /* Efecto Glow mejorado para Yonko */
+  .dark .glow-card {
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
 }
