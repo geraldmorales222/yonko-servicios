@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    // Permitimos optimizar imágenes desde Cloudinary
+    // Permitimos que Next.js optimice imágenes de Cloudinary
     remotePatterns: [
       {
         protocol: 'https',
@@ -17,24 +17,23 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        // Aplicamos estas reglas a todas las páginas
         source: "/(.*)",
         headers: [
           {
             key: "Content-Security-Policy",
+            /* Explicación de la Política (CSP):
+               - default-src 'self': Solo permite recursos de nuestro propio dominio.
+               - script-src: Permite Google y Firebase para que el Login funcione.
+               - img-src: 'self' permite los iconos de /public. El '*' permite imágenes externas seguras.
+            */
             value: [
               "default-src 'self';",
-              // Permitimos scripts de Google y Firebase para que no bloqueen el renderizado
               "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://apis.google.com https://www.gstatic.com https://upload-widget.cloudinary.com https://*.firebaseapp.com;", 
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
-              /* SOLUCIÓN AL MUNDO GRIS: 
-                 Permitimos imágenes de tu propio dominio, Cloudinary y Google. 
-                 Añadir el asterisco (*) en https: ayuda a que Firebase no bloquee el favicon.
-              */
-              "img-src 'self' data: blob: https: res.cloudinary.com https://*.googleusercontent.com https://www.yonkoservicios.com;", 
+              "img-src 'self' data: blob: https: res.cloudinary.com https://lh3.googleusercontent.com;", 
               "font-src 'self' data: https://fonts.gstatic.com;",
-              // Conexiones de API críticas para Firebase
               "connect-src 'self' https://*.firebaseio.com https://*.googleapis.com https://*.firebaseapp.com https://api.cloudinary.com wss://*.firebaseio.com;", 
-              // Iframes para el Login de Google/Firebase
               "frame-src 'self' https://*.firebaseapp.com https://*.google.com https://upload-widget.cloudinary.com;",
               "frame-ancestors 'none';",
             ].join(" "),
