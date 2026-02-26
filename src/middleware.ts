@@ -1,19 +1,18 @@
-// src/middleware.ts
+// Middleware para controlar el acceso a la administración
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  /* PROTECCIÓN DE SEGURIDAD:
-    Solo aplicamos la lógica si la ruta empieza con /administracion.
-    Esto evita que el middleware interfiera con los iconos o la home.
+  /* PROTECCIÓN DE RUTA: Solo verificamos sesión si el usuario 
+     intenta entrar a /administracion.
   */
   if (pathname.startsWith('/administracion')) {
     const session = request.cookies.get('admin_session');
 
+    // Si no existe la cookie de admin, redirigimos al Home
     if (!session) {
-      // Si un intruso intenta entrar sin cookie, lo mandamos al home
       return NextResponse.redirect(new URL('/', request.url));
     }
   }
@@ -21,20 +20,16 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-/* CONFIGURACIÓN DEL MATCHER:
-  Es vital excluir los archivos estáticos aquí para que el middleware 
-  ni siquiera los toque.
+/* MATCHER: Configuramos Next.js para que el middleware ignore 
+   archivos estáticos y de sistema, evitando el 'mundo gris' por bloqueos accidentales.
 */
 export const config = {
   matcher: [
     /*
-     * Match todas las rutas excepto:
-     * 1. api (rutas de API)
-     * 2. _next/static (archivos compilados)
-     * 3. _next/image (optimización de imágenes)
-     * 4. favicon.ico, icon.png, etc. (archivos en public)
+     * Excluimos explícitamente los iconos de la carpeta public 
+     * para que siempre sean visibles sin importar la sesión.
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|icon.png|apple-touch-icon.png).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|icon.png|apple-touch-icon.png|android-chrome-192.png).*)',
     '/administracion/:path*',
   ],
 };
