@@ -211,7 +211,7 @@ export default function ServiciosPage() {
                 <span className="text-slate-900 font-semibold">arquitectura, rendimiento y escalabilidad.</span>
               </p>
               <div className="flex gap-6">
-                {[{ v: '6', l: 'Servicios' }, { v: '40+', l: 'Proyectos' }, { v: '99.9%', l: 'Uptime' }].map(s => (
+                {[{ v: '7', l: 'Servicios' }, { v: '40+', l: 'Proyectos' }, { v: '99.9%', l: 'Uptime' }].map(s => (
                   <div key={s.l} className="pl-3 border-l-2 border-blue-200">
                     <span className="block text-xl font-black text-slate-900 tracking-tighter">{s.v}</span>
                     <span className="font-mono text-[9px] uppercase tracking-widest text-blue-600">{s.l}</span>
