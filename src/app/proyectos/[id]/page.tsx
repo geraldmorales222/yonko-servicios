@@ -5,7 +5,7 @@ import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
 
 // ─── DocSection ───────────────────────────────────────────────────────────────
 function DocSection({ num, title, content, accent = false }: {
@@ -38,6 +38,172 @@ function LoadingScreen() {
   );
 }
 
+// ─── Flat Slider (> 4 fotos) ──────────────────────────────────────────────────
+function FlatSlider({ fotos, cloudName }: { fotos: string[]; cloudName: string }) {
+  const [current, setCurrent] = useState(0);
+  const [direction, setDirection] = useState(1);
+
+  const goTo = (index: number) => {
+    setDirection(index > current ? 1 : -1);
+    setCurrent(index);
+  };
+
+  const prev = () => goTo(current === 0 ? fotos.length - 1 : current - 1);
+  const next = () => goTo(current === fotos.length - 1 ? 0 : current + 1);
+
+  const variants = {
+    enter: (dir: number) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+    exit: (dir: number) => ({ x: dir > 0 ? '-100%' : '100%', opacity: 0 }),
+  };
+
+  return (
+    <div className="relative bg-slate-950 w-full select-none">
+      {/* Imagen principal */}
+      <div className="relative h-[280px] md:h-[520px] overflow-hidden bg-slate-950">
+        <AnimatePresence initial={false} custom={direction} mode="popLayout">
+          <motion.img
+            key={current}
+            custom={direction}
+            variants={variants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            src={`https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto,w_1200/v1/${fotos[current]}`}
+            alt={`Vista ${current + 1}`}
+            className="absolute inset-0 w-full h-full object-contain"
+            draggable={false}
+          />
+        </AnimatePresence>
+
+        {/* Flechas */}
+        <button onClick={prev}
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-black/40 hover:bg-black/70 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+        </button>
+        <button onClick={next}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 bg-black/40 hover:bg-black/70 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </button>
+
+        {/* Contador overlay */}
+        <div className="absolute bottom-4 right-4 z-20 bg-black/50 backdrop-blur-sm border border-white/20 px-3 py-1.5 rounded-full">
+          <span className="font-mono text-[9px] text-white/80 tracking-widest">{current + 1} / {fotos.length}</span>
+        </div>
+      </div>
+
+      {/* Thumbnails */}
+      <div className="flex gap-2 px-4 py-4 overflow-x-auto scrollbar-hide">
+        {fotos.map((foto, i) => (
+          <button
+            key={i}
+            onClick={() => goTo(i)}
+            className={`relative shrink-0 rounded-xl overflow-hidden transition-all duration-300
+              ${i === current
+                ? 'ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-950 opacity-100 scale-[1.05]'
+                : 'opacity-40 hover:opacity-70'
+              }`}
+            style={{ width: '80px', aspectRatio: '16/9' }}
+          >
+            <img
+              src={`https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto,w_200/v1/${foto}`}
+              alt={`Thumb ${i + 1}`}
+              className="w-full h-full object-cover"
+            />
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── 3D Carousel (<= 4 fotos) ─────────────────────────────────────────────────
+function Carousel3D({ fotos, cloudName, isMobile }: { fotos: string[]; cloudName: string; isMobile: boolean }) {
+  const xDrag = useMotionValue(0);
+  const rotateY = useSpring(useTransform(xDrag, (val) => val * 0.2), {
+    stiffness: 45,
+    damping: 25,
+  });
+
+  const radius = isMobile ? 180 : 450;
+  const itemWidth = isMobile ? 220 : 500;
+
+  return (
+    <section className="relative bg-slate-950 py-8 md:py-0">
+      {/* Hint de arrastre */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1, duration: 0.6 }}
+        className="absolute top-5 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full pointer-events-none"
+      >
+        <svg className="w-3.5 h-3.5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+        </svg>
+        <span className="font-mono text-[8px] uppercase tracking-widest text-white/60">Arrastra para rotar</span>
+      </motion.div>
+
+      <div className="relative h-[300px] md:h-[550px] w-full flex items-center justify-center">
+        {/* Capa de arrastre */}
+        <motion.div
+          drag="x"
+          style={{ x: 0, zIndex: 50 }}
+          dragConstraints={{ left: 0, right: 0 }}
+          onDrag={(_, info) => xDrag.set(xDrag.get() + info.delta.x)}
+          className="absolute inset-0 cursor-grab active:cursor-grabbing"
+        />
+
+        <div style={{ perspective: isMobile ? '800px' : '1500px', pointerEvents: 'none' }}>
+          <motion.div
+            style={{
+              rotateY: rotateY,
+              transformStyle: 'preserve-3d',
+              width: '200px',
+              height: '150px',
+            }}
+            className="relative flex items-center justify-center"
+          >
+            {fotos.map((foto: string, index: number) => {
+              const angleStep = 360 / fotos.length;
+              const currentAngle = angleStep * index;
+
+              return (
+                <div
+                  key={index}
+                  className="absolute rounded-[1.5rem] md:rounded-[2.5rem] border border-white/10 overflow-hidden shadow-2xl bg-slate-900"
+                  style={{
+                    width: `${itemWidth}px`,
+                    aspectRatio: '16/9',
+                    transform: `rotateY(${currentAngle}deg) translateZ(${radius}px)`,
+                    WebkitBoxReflect: isMobile ? 'none' : 'below 10px linear-gradient(to bottom, transparent, rgba(0,0,0,0.1))',
+                  }}
+                >
+                  <img
+                    src={`https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto,w_${isMobile ? 400 : 800}/v1/${foto}`}
+                    alt={`Vista ${index + 1}`}
+                    className="w-full h-full object-cover"
+                    loading={index === 0 ? "eager" : "lazy"}
+                  />
+                </div>
+              );
+            })}
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Contador de fotos */}
+      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+        <span className="font-mono text-[8px] uppercase tracking-widest text-white/40">{fotos.length} imágenes</span>
+      </div>
+    </section>
+  );
+}
+
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
 export default function ProyectoDetallePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -45,13 +211,7 @@ export default function ProyectoDetallePage({ params }: { params: Promise<{ id: 
   const [loading, setLoading] = useState(true);
   const [windowWidth, setWindowWidth] = useState(0);
 
-  const xDrag = useMotionValue(0);
-  const rotateY = useSpring(useTransform(xDrag, (val) => val * 0.2), {
-    stiffness: 45,
-    damping: 25,
-  });
-
-  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ?? '';
 
   useEffect(() => {
     setWindowWidth(window.innerWidth);
@@ -79,8 +239,7 @@ export default function ProyectoDetallePage({ params }: { params: Promise<{ id: 
 
   const todasLasFotos = [proyecto.cloudinaryId, ...(proyecto.galeria || [])];
   const isMobile = windowWidth < 768;
-  const radius = isMobile ? 180 : 450;
-  const itemWidth = isMobile ? 220 : 500;
+  const usarSlider = todasLasFotos.length > 4;
 
   return (
     <main className="min-h-screen bg-white text-slate-900 overflow-x-hidden">
@@ -88,7 +247,6 @@ export default function ProyectoDetallePage({ params }: { params: Promise<{ id: 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section className="pt-24 md:pt-28 pb-0 px-5 md:px-6 relative overflow-hidden"
         style={{ background: 'linear-gradient(160deg, #f0f7ff 0%, #ffffff 60%)' }}>
-        {/* Grid pattern sutil */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
           style={{ backgroundImage: 'linear-gradient(#2563eb 1px,transparent 1px),linear-gradient(90deg,#2563eb 1px,transparent 1px)', backgroundSize: '52px 52px' }} />
         <div className="absolute -top-24 -right-24 w-[400px] h-[400px] bg-blue-100 rounded-full blur-[100px] opacity-50 pointer-events-none" />
@@ -159,74 +317,11 @@ export default function ProyectoDetallePage({ params }: { params: Promise<{ id: 
         </div>
       </section>
 
-      {/* ── CARRUSEL 3D ───────────────────────────────────────────────────── */}
-      <section className="relative bg-slate-950 py-8 md:py-0">
-        {/* Hint de arrastre */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.6 }}
-          className="absolute top-5 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full pointer-events-none"
-        >
-          <svg className="w-3.5 h-3.5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-          </svg>
-          <span className="font-mono text-[8px] uppercase tracking-widest text-white/60">Arrastra para rotar</span>
-        </motion.div>
-
-        <div className="relative h-[300px] md:h-[550px] w-full flex items-center justify-center">
-          {/* Capa de arrastre */}
-          <motion.div
-            drag="x"
-            style={{ x: 0, zIndex: 50 }}
-            dragConstraints={{ left: 0, right: 0 }}
-            onDrag={(_, info) => xDrag.set(xDrag.get() + info.delta.x)}
-            className="absolute inset-0 cursor-grab active:cursor-grabbing"
-          />
-
-          <div style={{ perspective: isMobile ? '800px' : '1500px', pointerEvents: 'none' }}>
-            <motion.div
-              style={{
-                rotateY: rotateY,
-                transformStyle: 'preserve-3d',
-                width: '200px',
-                height: '150px',
-              }}
-              className="relative flex items-center justify-center"
-            >
-              {todasLasFotos.map((foto: string, index: number) => {
-                const angleStep = 360 / todasLasFotos.length;
-                const currentAngle = angleStep * index;
-
-                return (
-                  <div
-                    key={index}
-                    className="absolute rounded-[1.5rem] md:rounded-[2.5rem] border border-white/10 overflow-hidden shadow-2xl bg-slate-900"
-                    style={{
-                      width: `${itemWidth}px`,
-                      aspectRatio: '16/9',
-                      transform: `rotateY(${currentAngle}deg) translateZ(${radius}px)`,
-                      WebkitBoxReflect: isMobile ? 'none' : 'below 10px linear-gradient(to bottom, transparent, rgba(0,0,0,0.1))',
-                    }}
-                  >
-                    <img
-                      src={`https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto,w_${isMobile ? 400 : 800}/v1/${foto}`}
-                      alt={`Vista ${index + 1}`}
-                      className="w-full h-full object-cover"
-                      loading={index === 0 ? "eager" : "lazy"}
-                    />
-                  </div>
-                );
-              })}
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Contador de fotos */}
-        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
-          <span className="font-mono text-[8px] uppercase tracking-widest text-white/40">{todasLasFotos.length} imágenes</span>
-        </div>
-      </section>
+      {/* ── GALERÍA: slider plano si > 4 fotos, carrusel 3D si <= 4 ─────── */}
+      {usarSlider
+        ? <FlatSlider fotos={todasLasFotos} cloudName={cloudName} />
+        : <Carousel3D fotos={todasLasFotos} cloudName={cloudName} isMobile={isMobile} />
+      }
 
       {/* ── INFO TÉCNICA ──────────────────────────────────────────────────── */}
       <section className="px-5 md:px-6 py-14 md:py-20 bg-white">

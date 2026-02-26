@@ -9,6 +9,7 @@ const SERVICIOS = [
   { name: 'Desarrollo Web', href: '/servicios/desarrollo-web-pro', color: 'bg-blue-500', desc: 'Next.js · TypeScript · PostgreSQL', disabled: false },
   { name: 'E-commerce', href: '/servicios/ecommerce-alta-conversion', color: 'bg-indigo-500', desc: 'Stripe · Headless · Analytics', disabled: false },
   { name: 'Desarrollo Movil', href: '/servicios/desarrollo-movil', color: 'bg-rose-500', desc: 'React Native · Expo · iOS · Android', disabled: false },
+  { name: 'Ingeniería de Software', href: '/servicios/ingenieria-software', color: 'bg-sky-900', desc: 'Node.js · typescript · Aws', disabled: false },
   { name: 'Automatización', href: '/servicios/automatizacion-procesos', color: 'bg-sky-500', desc: 'n8n · Zapier · APIs', disabled: false },
   { name: 'Estrategia UX/CX', href: '/servicios/estrategia-ux-cx', color: 'bg-emerald-500', desc: 'Auditoría · Testing · Heatmaps', disabled: true },
   { name: 'IA & Data Science', href: '/servicios/sistemas-inteligentes-ia', color: 'bg-violet-500', desc: 'Python · ML · Supabase', disabled: true },

@@ -38,8 +38,18 @@ const SERVICIOS = [
   },
 
   {
-    slug: 'automatizacion-procesos',
+    slug: 'ingenieria-software',
     num: '04',
+    titulo: 'Ingeniería de Software',
+    subtitulo: 'Enterprise Software',
+    desc: 'Diseñamos y construimos el núcleo operativo de las empresas mediante software robusto y escalable. Creamos soluciones a medida que garantizan la integridad de los datos y optimizan la toma de decisiones estratégicas.',
+    tags: ['Node.js', 'typescript', 'Aws', 'Etc'],
+    acento: 'bg-sky-900',
+    desde: 'USD 3000',
+  },
+  {
+    slug: 'automatizacion-procesos',
+    num: '05',
     titulo: 'Automatización',
     subtitulo: 'Efficiency Engineering',
     desc: 'Diseñamos flujos automatizados que eliminan redundancias operativas y errores humanos, integrando sistemas y optimizando procesos internos.',
@@ -49,7 +59,7 @@ const SERVICIOS = [
   },
   {
     slug: 'estrategia-ux-cx',
-    num: '05',
+    num: '06',
     titulo: 'Estrategia UX/CX',
     subtitulo: 'Master Consultancy',
     desc: 'Auditoría integral de experiencia digital. Detectamos fricciones invisibles, optimizamos journeys y rediseñamos interacciones para maximizar conversión y fidelización.',
@@ -61,7 +71,7 @@ const SERVICIOS = [
   },
     {
     slug: 'sistemas-inteligentes-ia',
-    num: '06',
+    num: '07',
     titulo: 'IA & Data Science',
     subtitulo: 'Cognitive Systems',
     desc: 'Desarrollamos modelos predictivos, automatización inteligente y pipelines de datos que transforman información operativa en decisiones estratégicas basadas en evidencia.',
