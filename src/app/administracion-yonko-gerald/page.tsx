@@ -175,13 +175,29 @@ export default function AdminPanel() {
     }
   };
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-white"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>;
+if (loading) return (
+  <div className="min-h-screen flex items-center justify-center bg-white">
+    <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+  </div>
+);
 
-  if (!user) return (
-    <main className="min-h-screen flex items-center justify-center bg-slate-50">
-      <button onClick={() => signInWithPopup(auth, googleProvider)} className="bg-slate-900 text-white px-8 py-4 rounded-2xl font-bold shadow-xl">Acceso Administrador</button>
-    </main>
-  );
+if (!user) return (
+  <main className="min-h-screen flex flex-col items-center justify-center bg-[#F8FAFC] px-6 text-center">
+    <div className="max-w-md space-y-6">
+      <h1 className="text-4xl font-black text-slate-900 uppercase">Acceso Restringido</h1>
+      <p className="text-slate-500">Inicia sesión con tu cuenta de Ingeniería para gestionar Yonko.</p>
+      <button 
+        onClick={() => signInWithPopup(auth, googleProvider)} 
+        className="w-full bg-slate-900 text-white px-8 py-4 rounded-2xl font-bold hover:bg-blue-600 transition-all"
+      >
+        Inicia con Google Admin
+      </button>
+      <Link href="/" className="block text-slate-400 text-xs font-bold uppercase tracking-widest">
+        ← Volver al sitio
+      </Link>
+    </div>
+  </main>
+);
 
   const inputStyle = "w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-600 outline-none text-slate-900 font-medium transition-all";
 

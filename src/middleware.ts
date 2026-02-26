@@ -1,35 +1,32 @@
-// Middleware para controlar el acceso a la administración
+// src/middleware.ts
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  /* PROTECCIÓN DE RUTA: Solo verificamos sesión si el usuario 
-     intenta entrar a /administracion.
+  /* MODIFICACIÓN TÉCNICA: 
+     Si el usuario va a administración, ya no lo redirigimos desde aquí.
+     Dejamos que el componente 'use client' maneje la interfaz de bloqueo.
   */
-  if (pathname.startsWith('/administracion')) {
+  
+  // Eliminamos o comentamos la redirección forzada:
+  /* if (pathname.startsWith('/administracion')) {
     const session = request.cookies.get('admin_session');
-
-    // Si no existe la cookie de admin, redirigimos al Home
     if (!session) {
-      return NextResponse.redirect(new URL('/', request.url));
+       return NextResponse.redirect(new URL('/', request.url));
     }
   }
+  */
 
   return NextResponse.next();
 }
 
-/* MATCHER: Configuramos Next.js para que el middleware ignore 
-   archivos estáticos y de sistema, evitando el 'mundo gris' por bloqueos accidentales.
-*/
 export const config = {
   matcher: [
-    /*
-     * Excluimos explícitamente los iconos de la carpeta public 
-     * para que siempre sean visibles sin importar la sesión.
-     */
+    /* Mantenemos las exclusiones para evitar el "mundo gris" en los iconos,
+       pero permitimos que el middleware pase de largo en las rutas de admin.
+    */
     '/((?!api|_next/static|_next/image|favicon.ico|icon.png|apple-touch-icon.png|android-chrome-192.png).*)',
-    '/administracion/:path*',
   ],
 };
