@@ -235,7 +235,7 @@ if (!user) return (
                   <option value="Desarrollo Web">Desarrollo Web (Architecture & Scalability)</option>
                   <option value="E-commerce">E-commerce (Conversion & CX)</option>
                   <option value="Apps Móviles">Apps Móviles (Mobile Engineering)</option>
-                  <option value="Apps Móviles">Ingeniería de Software (Enterprise Software)</option>
+                  <option value="Ingeniería de Software">Ingeniería de Software (Enterprise Software)</option>
                   <option value="Automatización">Automatización (Efficiency Engineering)</option>
                   
                   {/* Servicios en pausa o próximos */}
