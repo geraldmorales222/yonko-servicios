@@ -209,8 +209,8 @@ export default function ContactoPage() {
 
                   {/* Email */}
                   <CanalCard
-                    href="mailto:yonko@yonkoservicios.com"
-                    label="yonko@yonkoservicios.com"
+                    href="mailto:yonkoservicios@gmail.com"
+                    label="yonkoservicios@gmail.com"
                     sublabel="Correo electrónico"
                     color="bg-blue-600"
                     icon={
