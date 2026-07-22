@@ -1,8 +1,8 @@
-"use client";
+﻿"use client";
 
 import Link from 'next/link';
 import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { createElement, useRef, useState } from 'react';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const SERVICIOS = [
@@ -12,9 +12,10 @@ const SERVICIOS = [
     titulo: 'Desarrollo Web',
     subtitulo: 'Architecture & Scalability',
     desc: 'Diseñamos aplicaciones web de alto rendimiento con arquitecturas modulares y escalables, preparadas para soportar crecimiento masivo sin comprometer velocidad ni estabilidad.',
+    micro: 'Sitios y plataformas rápidas, claras y listas para crecer.',
     tags: ['Next.js 15', 'TypeScript', 'PostgreSQL', 'Etc'],
     acento: 'bg-blue-600',
-    desde: 'USD 600',
+    desde: 'Cotización según diagnóstico',
   },
   {
     slug: 'ecommerce-alta-conversion',
@@ -22,9 +23,10 @@ const SERVICIOS = [
     titulo: 'E-commerce',
     subtitulo: 'Conversion & CX',
     desc: 'Construimos ecosistemas transaccionales optimizados desde la psicología del usuario y la analítica avanzada, maximizando tasa de conversión, ticket promedio y retención.',
+    micro: 'Tiendas y flujos de compra pensados para vender mejor.',
     tags: ['Stripe', 'Headless', 'Analytics', 'Etc'],
-    acento: 'bg-indigo-500',
-    desde: 'USD 3200',
+    acento: 'bg-blue-500',
+    desde: 'Cotización según diagnóstico',
   },
   {
     slug: 'desarrollo-movil',
@@ -32,9 +34,10 @@ const SERVICIOS = [
     titulo: 'Apps Móviles',
     subtitulo: 'Mobile Engineering',
     desc: 'Desarrollamos aplicaciones nativas y multiplataforma con experiencias fluidas, rendimiento nativo y arquitectura lista para escalar a millones de usuarios.',
+    micro: 'Apps fluidas para operar, atender o vender desde el teléfono.',
     tags: ['React Native', 'Expo', 'iOS', 'Android'],
-    acento: 'bg-rose-500',
-    desde: 'USD 4000',
+    acento: 'bg-blue-500',
+    desde: 'Cotización según diagnóstico',
   },
 
   {
@@ -43,9 +46,10 @@ const SERVICIOS = [
     titulo: 'Ingeniería de Software',
     subtitulo: 'Enterprise Software',
     desc: 'Diseñamos y construimos el núcleo operativo de las empresas mediante software robusto y escalable. Creamos soluciones a medida que garantizan la integridad de los datos y optimizan la toma de decisiones estratégicas.',
+    micro: 'Sistemas internos para ordenar procesos y datos críticos.',
     tags: ['Node.js', 'typescript', 'Aws', 'Etc'],
-    acento: 'bg-sky-900',
-    desde: 'USD 3000',
+    acento: 'bg-blue-900',
+    desde: 'Cotización según diagnóstico',
   },
   {
     slug: 'automatizacion-procesos',
@@ -53,9 +57,10 @@ const SERVICIOS = [
     titulo: 'Automatización',
     subtitulo: 'Efficiency Engineering',
     desc: 'Diseñamos flujos automatizados que eliminan redundancias operativas y errores humanos, integrando sistemas y optimizando procesos internos.',
+    micro: 'Automatizamos tareas repetitivas para ganar tiempo y control.',
     tags: ['Zapier', 'n8n', 'APIs', 'Etc'],
-    acento: 'bg-sky-500',
-    desde: 'USD 600',
+    acento: 'bg-blue-500',
+    desde: 'Cotización según diagnóstico',
   },
   {
     slug: 'estrategia-ux-cx',
@@ -63,10 +68,11 @@ const SERVICIOS = [
     titulo: 'Estrategia UX/CX',
     subtitulo: 'Master Consultancy',
     desc: 'Auditoría integral de experiencia digital. Detectamos fricciones invisibles, optimizamos journeys y rediseñamos interacciones para maximizar conversión y fidelización.',
+    micro: 'Detectamos fricción para que el cliente entienda y avance.',
     tags: ['Auditoría', 'Testing', 'Heatmaps', 'Etc'],
-    acento: 'bg-emerald-500',
-    desde: 'USD 1000',
-    disabled: true,
+    acento: 'bg-cyan-500',
+    desde: 'Cotización según diagnóstico',
+    disabled: false,
     
   },
     {
@@ -75,15 +81,16 @@ const SERVICIOS = [
     titulo: 'IA & Data Science',
     subtitulo: 'Cognitive Systems',
     desc: 'Desarrollamos modelos predictivos, automatización inteligente y pipelines de datos que transforman información operativa en decisiones estratégicas basadas en evidencia.',
+    micro: 'Datos y modelos para decidir, anticipar y automatizar mejor.',
     tags: ['Python', 'ML', 'Supabase', 'Etc'],
-    acento: 'bg-violet-600',
-    desde: 'USD 6000',
+    acento: 'bg-blue-600',
+    desde: 'Cotización según diagnóstico',
     disabled: true, // <--- DESACTIVADO TEMPORALMENTE
   },
 ];
 
 // ─── Lógica de Conversión ─────────────────────────────────────────────────────
-const VALOR_USD_CLP = 970; // Valor promedio para estabilidad de precios
+const VALOR_USD_CLP = 970; // Valor promedio para estabilidad de ALCANCES
 
 const formatCLP = (usdString: string) => {
   // Extraemos solo los números del string (ej: "USD 700" -> 700)
@@ -96,6 +103,86 @@ const formatCLP = (usdString: string) => {
     maximumFractionDigits: 0,
   }).format(clpValue);
 };
+
+function ServiciosYonkoModel() {
+  const [activeUnit, setActiveUnit] = useState(0);
+  const active = SERVICIOS[activeUnit] ?? SERVICIOS[0];
+
+  return (
+    <div className="relative mx-auto h-[430px] w-full max-w-[520px] overflow-hidden rounded-[2.5rem] border border-blue-100 bg-slate-950 shadow-2xl shadow-blue-100 lg:h-[500px]">
+<div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_28%,rgba(59,130,246,.55),transparent_34%),linear-gradient(180deg,#020617,#0f172a)]" />
+      <div
+        className="absolute inset-0 opacity-[0.13]"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(125,211,252,.55) 1px, transparent 1px), linear-gradient(90deg, rgba(125,211,252,.55) 1px, transparent 1px)',
+          backgroundSize: '42px 42px',
+        }}
+      />
+      <div className="absolute left-1/2 top-[58%] h-52 w-52 -translate-x-1/2 rounded-full border border-cyan-300/40 bg-cyan-300/10 shadow-[0_0_80px_rgba(34,211,238,.28)]" />
+
+      <div className="absolute inset-x-0 bottom-32 top-10 z-[2]">
+        {createElement('model-viewer', {
+          src: '/3d/yonko_haciendo_proyectos.glb',
+          poster: '/imagenes/yonko3d.png',
+          alt: 'Modelo 3D representando un equipo trabajando en servicios informáticos',
+          'camera-controls': true,
+          'auto-rotate': true,
+          'rotation-per-second': '14deg',
+          'interaction-prompt': 'none',
+          reveal: 'auto',
+          loading: 'lazy',
+          'shadow-intensity': '0.85',
+          exposure: '1',
+          style: {
+            width: '100%',
+            height: '100%',
+            filter: 'drop-shadow(0 26px 36px rgba(34,211,238,.28))',
+          },
+        })}
+      </div>
+
+      <div className="pointer-events-none absolute left-5 top-5 z-10 rounded-full border border-cyan-200/30 bg-white/10 px-4 py-2 backdrop-blur">
+        <p className="font-mono text-[9px] font-black uppercase tracking-[0.28em] text-cyan-100">Equipo / Servicios</p>
+      </div>
+
+      <div className="absolute bottom-28 left-4 right-4 z-20 grid grid-cols-4 gap-1.5 sm:grid-cols-7">
+        {SERVICIOS.map((unit, index) => {
+          const isActive = index === activeUnit;
+
+          return (
+            <button
+              key={unit.slug}
+              type="button"
+              onClick={() => setActiveUnit(index)}
+              className={`group rounded-xl border px-2 py-2 text-center backdrop-blur transition-all duration-300 ${
+                isActive
+                  ? 'border-cyan-200/70 bg-cyan-200/20 shadow-[0_0_28px_rgba(34,211,238,.28)]'
+                  : 'border-white/10 bg-white/10 hover:border-cyan-200/40 hover:bg-white/15'
+              }`}
+              aria-pressed={isActive}
+            >
+              <span className="mb-0.5 block font-mono text-[8px] font-black uppercase tracking-[0.12em] text-cyan-100/80">
+                {unit.num}
+              </span>
+              <span className="block truncate text-[8px] font-black uppercase tracking-[0.03em] text-white sm:text-[9px]">
+                {unit.titulo}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="absolute bottom-5 left-5 right-5 z-10 rounded-2xl border border-white/10 bg-white/95 p-4 shadow-lg backdrop-blur-xl">
+        <p className="mb-1 text-[8px] font-black uppercase tracking-[0.35em] text-blue-600">Mesa de trabajo / {active.num}</p>
+        <p className="text-sm font-black leading-tight text-slate-900">{active.titulo}</p>
+        <p className="mt-1 text-xs font-semibold leading-snug text-slate-600">
+          {active.micro}
+        </p>
+      </div>
+    </div>
+  );
+}
 // ─── Service Row (Actualizado con conversión) ────────────────────────────────
 function ServicioRow({ s, index }: { s: typeof SERVICIOS[0]; index: number }) {
   const ref = useRef(null);
@@ -148,18 +235,15 @@ function ServicioRow({ s, index }: { s: typeof SERVICIOS[0]; index: number }) {
           ))}
         </div>
 
-        <div className="md:text-right shrink-0 relative z-10 md:pl-6 min-w-[120px]">
-          <span className="font-mono text-[9px] uppercase tracking-widest text-slate-400 block mb-1">Desde</span>
-          <div className="flex flex-col gap-0.5">
-            <span className="text-sm font-black text-slate-900 leading-none">{s.desde}</span>
-            <div className="flex flex-col items-start md:items-end">
-              <span className="text-[11px] font-bold text-slate-400 leading-none">{formatCLP(s.desde)}</span>
-            </div>
-          </div>
+        <div className="md:text-right shrink-0 relative z-10 md:pl-6 min-w-[150px]">
+          <span className="font-mono text-[9px] uppercase tracking-widest text-slate-400 block mb-1">Alcance</span>
+          <span className="text-xs font-black text-slate-900 leading-tight block">
+            Cotización según diagnóstico
+          </span>
         </div>
 
         <div className="ml-0 md:ml-6 shrink-0 relative z-10">
-          <div className={`w-9 h-9 rounded-full border ${s.disabled ? 'border-slate-100' : 'border-slate-200 group-hover:border-blue-600 group-hover:bg-blue-600'} flex items-center justify-center transition-all duration-300`}>
+          <div className={`w-9 h-9 rounded-full border ${s.disabled ? 'border-slate-100' : 'border-slate-200 group-hover:border-blue-600 group-hover:bg-blue-700'} flex items-center justify-center transition-all duration-300`}>
             {s.disabled ? (
                 <span className="text-slate-300 text-xs">🔒</span>
             ) : (
@@ -196,16 +280,12 @@ export default function ServiciosPage() {
             <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-blue-700">Engineering Portfolio</span>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-end pb-16 md:pb-20">
+          <div className="grid gap-10 pb-16 md:pb-20 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:gap-14">
             <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}>
-              <h1 className="text-[clamp(2.8rem,8vw,6.5rem)] font-black leading-[0.85] tracking-tighter text-slate-900 uppercase mb-6">
+              <h1 className="text-[clamp(2.15rem,5.4vw,4.6rem)] font-black leading-[0.85] tracking-tighter text-slate-900 uppercase mb-6">
                 UNIDADES<br />
                 <span className="text-blue-600 italic">TÁCTICAS.</span>
               </h1>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }}
-              className="lg:pb-3">
               <p className="text-base md:text-lg text-slate-500 leading-relaxed mb-6 max-w-md">
                 Seis especialidades de ingeniería diseñadas para transformar su operación digital bajo estándares avanzados de{' '}
                 <span className="text-slate-900 font-semibold">arquitectura, rendimiento y escalabilidad.</span>
@@ -218,6 +298,15 @@ export default function ServiciosPage() {
                   </div>
                 ))}
               </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+              className="relative"
+            >
+              <ServiciosYonkoModel />
             </motion.div>
           </div>
 
@@ -235,7 +324,7 @@ export default function ServiciosPage() {
             <span className="font-mono text-[8px] uppercase tracking-widest text-slate-900 flex-1">Unidad de Ingeniería</span>
             <span className="font-mono text-[8px] uppercase tracking-widest text-slate-900 w-64 lg:w-80 shrink-0 px-6 hidden md:block">Alcance Técnico</span>
             <span className="font-mono text-[8px] uppercase tracking-widest text-slate-900 w-48 shrink-0 hidden lg:block">Core Stack</span>
-            <span className="font-mono text-[8px] uppercase tracking-widest text-slate-900 w-24 shrink-0 text-right">Inversión</span>
+            <span className="font-mono text-[8px] uppercase tracking-widest text-slate-900 w-24 shrink-0 text-right">Alcances</span>
             <div className="w-9 ml-6" />
           </div>
 
@@ -257,9 +346,9 @@ export default function ServiciosPage() {
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { icon: '🎓', title: 'Respaldo Académico', desc: 'Cada solución se fundamenta en metodologías formales de ingeniería de software y arquitectura de sistemas de nivel Magíster.' },
-              { icon: '⚡', title: 'Entrega Iterativa', desc: 'Trabajamos con sprints semanales y demostraciones en vivo. El progreso es transparente y medible desde el primer día.' },
-              { icon: '🔒', title: 'Gestión y Administración Continua', desc: 'El código y la infraestructura son gestionados por Yonko bajo un modelo de administración mensual. Nos encargamos del mantenimiento, actualizaciones, seguridad y optimización continua para garantizar estabilidad, rendimiento y evolución constante del sistema.' },
+              { icon: '▣', title: 'Metodología profesional', desc: 'Trabajamos con procesos claros de análisis, diseño, desarrollo, pruebas y soporte para que cada solución sea mantenible, segura y escalable.' },
+              { icon: '⚡', title: 'Avance flexible y visible', desc: 'Definimos el ritmo de trabajo según el alcance, urgencia y forma de coordinación de cada cliente. El progreso se revisa con claridad, sin imponer una metodología única.' },
+              { icon: '🔒', title: 'Gestión y administración continua', desc: 'Nuestro equipo puede encargarse del mantenimiento, actualizaciones, seguridad y optimización continua para garantizar estabilidad, rendimiento y evolución constante del sistema.' },
             ].map((item, i) => (
               <motion.div
                 key={i}
@@ -285,16 +374,16 @@ export default function ServiciosPage() {
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-10">
             <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-blue-600 mb-2">Preguntas frecuentes</p>
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-slate-900">
+            <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-slate-900">
               Lo que <span className="text-blue-600 italic">preguntan.</span>
             </h2>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-slate-100 rounded-3xl overflow-hidden border border-slate-100">
             {[
-              { q: '¿Cuánto tarda un proyecto?', a: 'Depende del alcance y complejidad. Un sitio web profesional puede entregarse en 2–4 semanas. Sistemas empresariales avanzados pueden requerir entre 2 y 4 meses bajo metodología iterativa.' },
+              { q: '¿Cuánto tarda un proyecto?', a: 'Depende del alcance, urgencia, integraciones y nivel de detalle requerido. Antes de iniciar definimos una estimación realista, etapas de avance y prioridades para que el proceso sea claro.' },
               { q: '¿Trabajan con empresas grandes?', a: 'Sí. Adaptamos nuestra metodología tanto a startups en crecimiento como a organizaciones consolidadas, integrándonos a sus equipos técnicos o directivos.' },
-              { q: '¿Qué pasa después de entregar?', a: 'Ofrecemos planes de mantenimiento, soporte continuo y SLA definidos. Además, entregamos documentación estructurada para garantizar continuidad operativa.' },
+              { q: '¿Qué pasa después de entregar?', a: 'Podemos acompañar con mantenimiento, soporte, mejoras, seguridad y documentación para que la solución siga funcionando y pueda evolucionar sin depender de improvisaciones.' },
               { q: '¿Puedo empezar con un servicio pequeño?', a: 'Por supuesto. Muchos clientes inician con una auditoría UX/CX, una automatización puntual, sitios web simples antes de escalar hacia soluciones más complejas.' },
             ].map((faq, i) => (
               <motion.div
@@ -320,7 +409,7 @@ export default function ServiciosPage() {
           initial={{ opacity: 0, y: 32, scale: 0.97 }}
           animate={ctaInView ? { opacity: 1, y: 0, scale: 1 } : {}}
           transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-5xl mx-auto bg-blue-600 rounded-[2.5rem] p-10 md:p-16 relative overflow-hidden shadow-2xl shadow-blue-200"
+          className="max-w-4xl mx-auto rounded-[2rem] border border-cyan-300/20 bg-slate-950 p-7 sm:p-8 md:p-10 relative overflow-hidden shadow-xl shadow-blue-950/20"
         >
           <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl -mr-40 -mt-40 pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-56 h-56 bg-blue-800/40 rounded-full blur-2xl -ml-28 -mb-28 pointer-events-none" />
@@ -329,8 +418,8 @@ export default function ServiciosPage() {
 
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
             <div>
-              <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-blue-200 mb-3">¿Listo para empezar?</p>
-              <h2 className="text-3xl md:text-5xl font-black tracking-tighter uppercase leading-[0.9] text-white mb-3">
+              <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-cyan-200 mb-3">¿Listo para empezar?</p>
+              <h2 className="text-2xl md:text-3xl font-black tracking-tighter uppercase leading-[0.9] text-white mb-3">
                 Hablemos de<br />su proyecto.
               </h2>
               <p className="text-blue-100 text-sm md:text-base font-light max-w-sm">
@@ -339,14 +428,14 @@ export default function ServiciosPage() {
             </div>
             <div className="flex flex-col gap-3 shrink-0">
               <Link href="/contacto"
-                className="group inline-flex items-center gap-3 bg-white text-slate-900 px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-[1.03] active:scale-[0.98] transition-all shadow-xl whitespace-nowrap">
+                className="group inline-flex items-center gap-3 bg-white text-slate-950 px-7 py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl whitespace-nowrap">
                 Agendar Consultoría
                 <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                 </svg>
               </Link>
               <Link href="/proyectos"
-                className="inline-flex items-center justify-center gap-2 text-blue-200 hover:text-white text-xs uppercase tracking-widest font-bold transition-colors">
+                className="inline-flex items-center justify-center gap-2 text-cyan-200 hover:text-white text-xs uppercase tracking-widest font-bold transition-colors">
                 Ver proyectos →
               </Link>
             </div>
@@ -357,3 +446,8 @@ export default function ServiciosPage() {
     </main>
   );
 }
+
+
+
+
+

@@ -1,46 +1,79 @@
-// Configuración de Next.js para Yonko Servicios
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
+  compress: true,
   images: {
-    // Permitimos que Next.js optimice imágenes de Cloudinary para mejorar el LCP
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 60 * 60 * 24 * 30,
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "firebasestorage.googleapis.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "storage.googleapis.com",
+        pathname: "/**",
       },
     ],
   },
-  reactCompiler: true, // Habilita las optimizaciones del nuevo compilador de React
+  reactCompiler: true,
 
   async headers() {
     return [
       {
-        // Aplicamos cabeceras de seguridad a todas las rutas del sitio
+        source: "/3d/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+        ],
+      },
+      {
+        source: "/imagenes/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+        ],
+      },
+      {
+        source: "/:icon(icon|favicon|apple-touch-icon|icon-navbar).:ext*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+        ],
+      },
+      {
         source: "/(.*)",
         headers: [
           {
             key: "Content-Security-Policy",
-            /* Definimos la CSP para mitigar ataques XSS.
-               Añadimos dominios de Firebase y Cloudinary para permitir la carga de assets y autenticación.
-            */
             value: [
               "default-src 'self';",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://apis.google.com https://www.gstatic.com https://upload-widget.cloudinary.com https://*.firebaseapp.com;", 
+              "base-uri 'self';",
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://apis.google.com https://www.gstatic.com https://*.firebaseapp.com https://ajax.googleapis.com https://challenges.cloudflare.com;",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
-              // 'img-src self' es vital para que carguen los iconos de la carpeta public
-              "img-src 'self' data: blob: https: res.cloudinary.com https://lh3.googleusercontent.com;", 
+              "img-src 'self' data: blob: https: https://lh3.googleusercontent.com;",
               "font-src 'self' data: https://fonts.gstatic.com;",
-              "connect-src 'self' https://*.firebaseio.com https://*.googleapis.com https://*.firebaseapp.com https://api.cloudinary.com wss://*.firebaseio.com;", 
-              "frame-src 'self' https://*.firebaseapp.com https://*.google.com https://upload-widget.cloudinary.com;",
+              "connect-src 'self' blob: https://*.firebaseio.com https://*.googleapis.com https://*.firebaseapp.com https://firebasestorage.googleapis.com https://challenges.cloudflare.com wss://*.firebaseio.com;",
+              "media-src 'self' blob: https://firebasestorage.googleapis.com https://storage.googleapis.com;",
+              "object-src 'none';",
+              "worker-src 'self' blob:;",
+              "frame-src 'self' https://*.firebaseapp.com https://*.google.com https://challenges.cloudflare.com;",
               "frame-ancestors 'none';",
+              "form-action 'self';",
+              "upgrade-insecure-requests;",
             ].join(" "),
           },
-          { key: "X-Frame-Options", value: "DENY" }, // Evita que el sitio sea embebido en iframes
-          { key: "X-Content-Type-Options", value: "nosniff" }, // Previene el sniffing de MIME types
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "Cross-Origin-Opener-Policy", value: "same-origin-allow-popups" },
+          { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()" },
+          { key: "X-DNS-Prefetch-Control", value: "on" },
+          { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
         ],
       },
     ];

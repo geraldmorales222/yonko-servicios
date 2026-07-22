@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 
@@ -38,32 +39,9 @@ const SPECS = [
   },
 ];
 
-const STACK = [
-  { name: 'Next.js 15', desc: 'Framework de producción', color: 'bg-slate-900 text-white' },
-  { name: 'TypeScript', desc: 'Tipado estricto', color: 'bg-blue-600 text-white' },
-  { name: 'PostgreSQL', desc: 'Base de datos relacional', color: 'bg-indigo-600 text-white' },
-  { name: 'Tailwind v4', desc: 'UI system', color: 'bg-sky-500 text-white' },
-  { name: 'Supabase', desc: 'Backend as a service', color: 'bg-emerald-600 text-white' },
-  { name: 'Vercel', desc: 'Deploy & edge', color: 'bg-slate-700 text-white' },
-];
-const VALOR_USD_CLP = 970;
-const formatCLP = (usdString: string) => {
-  if (usdString.includes('A medida')) return null;
-  const usdValue = parseInt(usdString.replace(/[^0-9]/g, ''), 10);
-  const clpValue = usdValue * VALOR_USD_CLP;
-  
-  return new Intl.NumberFormat('es-CL', {
-    style: 'currency',
-    currency: 'CLP',
-    maximumFractionDigits: 0,
-  }).format(clpValue);
-};
-
 const PLANES = [
   {
     nombre: 'Presencia Básica',
-    precio: 'USD 300',
-    desde: true,
     desc: 'Landing profesional para emprendedores que necesitan presencia digital inmediata.',
     incluye: [
       '1 página tipo landing',
@@ -77,8 +55,6 @@ const PLANES = [
   },
   {
     nombre: 'Web Profesional',
-    precio: 'USD 1000',
-    desde: true,
     desc: 'Sitio web corporativo con diseño personalizado y estructura escalable.',
     incluye: [
       'Hasta 8 páginas',
@@ -92,8 +68,6 @@ const PLANES = [
   },
   {
     nombre: 'Plataforma Business',
-    precio: 'USD 3000',
-    desde: true,
     desc: 'Aplicación web con autenticación y lógica de negocio.',
     incluye: [
       'Auth & roles',
@@ -107,8 +81,6 @@ const PLANES = [
   },
   {
     nombre: 'Sistema Avanzado',
-    precio: 'USD 5000',
-    desde: true,
     desc: 'Plataformas avanzadas listas para escalar y soportar crecimiento acelerado.',
     incluye: [
       'Arquitectura modular',
@@ -122,7 +94,6 @@ const PLANES = [
   },
   {
     nombre: 'Enterprise',
-    precio: 'Personalizado',
     desc: 'Arquitectura distribuida para empresas de alto tráfico.',
     incluye: [
       'Microservicios',
@@ -139,32 +110,27 @@ const PLANES = [
 const PLANES_MENSUALES = [
   {
     nombre: 'Plan Base',
-    precio: '$15.000',
     desc: 'Solo mantener online. Infraestructura compartida estable.',
     incluye: ['Hosting compartido', 'Dominio estándar', 'SSL automático', 'Backup mensual'],
     noIncluye: ['Soporte técnico', 'Cambios de contenido', 'Actualizaciones'],
-    acento: 'border-emerald-100 bg-emerald-50/30',
+    acento: 'border-cyan-100 bg-cyan-50/30',
   },
   {
     nombre: 'Plan Business',
-    precio: '$40.000',
     desc: 'Infraestructura administrada para webs profesionales pequeñas.',
-    incluye: ['Hosting dedicado/VPS', 'Dominio + SSL', 'Backup semanal', 'Actualizaciones seguridad', 'Soporte correo (48h)'],
+    incluye: ['Hosting dedicado/VPS', 'Dominio + SSL', 'Backups programados', 'Actualizaciones de seguridad', 'Soporte por correo'],
     acento: 'border-blue-100 bg-blue-50/30',
   },
   {
     nombre: 'Plan Pro',
-    precio: '$100.000',
     desc: 'Continuidad operativa y partner técnico activo.',
     incluye: ['Infraestructura optimizada', 'Backups diarios', 'Monitoreo activo', '1 ajuste menor mensual', 'Soporte prioritario'],
-    acento: 'border-indigo-100 bg-indigo-50/30',
+    acento: 'border-blue-100 bg-blue-50/30',
   },
   {
     nombre: 'Plan Scale',
-    precio: '$250.000',
-    desde: true,
     desc: 'Operación estratégica para plataformas de alto tráfico.',
-    incluye: ['Infraestructura escalable', 'Monitoreo 24/7', 'SLA definido', 'Roadmap técnico', 'Mejoras evolutivas'],
+    incluye: ['Infraestructura escalable', 'Monitoreo con alertas', 'Soporte según acuerdo', 'Roadmap técnico', 'Mejoras evolutivas'],
     acento: 'border-slate-200 bg-slate-50',
   },
 ];
@@ -172,8 +138,8 @@ const PROCESO = [
   { n: '01', t: 'Discovery', d: 'Entendemos su negocio, usuarios y objetivos técnicos.' },
   { n: '02', t: 'Arquitectura', d: 'Diseñamos la estructura técnica, definimos el stack y documentamos.' },
   { n: '03', t: 'Diseño UI/UX', d: 'Requerimientos con todos los flujos aprobado por usted antes de codear.' },
-  { n: '04', t: 'Desarrollo', d: 'Sprints de 2 semana con el grupo de trabajo.' },
-  { n: '05', t: 'QA & Deploy', d: 'Testing exhaustivo, optimización de performance..' },
+  { n: '04', t: 'Desarrollo', d: 'Construimos por etapas visibles, ajustando el ritmo de avance según alcance, prioridades y forma de coordinación del cliente.' },
+  { n: '05', t: 'QA & Deploy', d: 'Revisamos funcionamiento, rendimiento, versión mobile y puesta en producción antes del lanzamiento.' },
 ];
 
 // ─── Subcomponentes ───────────────────────────────────────────────────────────
@@ -198,18 +164,17 @@ function SpecCard({ spec, index }: { spec: typeof SPECS[0]; index: number }) {
 function PlanCard({ plan, index }: { plan: typeof PLANES[0]; index: number }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-40px' });
-  const clpPrice = formatCLP(plan.precio);
-
+  
   return (
     <motion.div
       ref={ref}
       initial={{ opacity: 0, y: 28 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-      className={`relative rounded-3xl p-7 flex flex-col border transition-all duration-300
+      className={`relative rounded-[1.75rem] p-5 sm:p-6 flex flex-col border transition-all duration-300
         ${plan.especial ? 'border-blue-200 bg-blue-50/30' : ''}
         ${plan.destacado
-          ? 'bg-blue-600 text-white border-transparent shadow-2xl shadow-blue-200 scale-[1.03] z-10'
+          ? 'bg-slate-950 text-white border-cyan-300/20 shadow-xl shadow-blue-950/20 z-10'
           : 'bg-white text-slate-900 border-slate-100 hover:border-blue-100'
         }`}
     >
@@ -225,23 +190,11 @@ function PlanCard({ plan, index }: { plan: typeof PLANES[0]; index: number }) {
         </p>
         
         <div className="flex flex-col gap-1 mb-3">
-          <div className="flex items-baseline gap-1">
-            {plan.desde && <span className={`text-xs font-medium ${plan.destacado ? 'text-blue-200' : 'text-slate-400'}`}>Desde</span>}
-            <span className={`text-3xl font-black tracking-tighter ${plan.destacado ? 'text-white' : 'text-slate-900'}`}>
-              {plan.precio}
-            </span>
+          <div>
+            <p className={`text-xs font-black uppercase tracking-[0.22em] mb-2 ${plan.destacado ? 'text-white/70' : 'text-slate-400'}`}>Alcance</p>
+            <p className={`text-2xl font-black tracking-tighter leading-none ${plan.destacado ? 'text-white' : 'text-slate-900'}`}>Cotizar</p>
+            <p className={`text-xs font-semibold mt-2 ${plan.destacado ? 'text-white/75' : 'text-slate-600'}`}>Cotización según diagnóstico.</p>
           </div>
-          
-          {clpPrice && (
-            <div className="flex flex-col">
-              <span className={`text-sm font-bold ${plan.destacado ? 'text-white/90' : 'text-blue-600'}`}>
-                {clpPrice} <span className="text-[10px] opacity-70">CLP*</span>
-              </span>
-              <span className={`text-[7px] font-bold uppercase tracking-widest ${plan.destacado ? 'text-blue-200' : 'text-slate-400'}`}>
-                + IVA (19%)
-              </span>
-            </div>
-          )}
         </div>
         
         <p className={`text-xs leading-relaxed ${plan.destacado ? 'text-blue-100' : 'text-slate-500'}`}>{plan.desc}</p>
@@ -262,7 +215,7 @@ function PlanCard({ plan, index }: { plan: typeof PLANES[0]; index: number }) {
         className={`w-full py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest text-center transition-all
           ${plan.destacado
             ? 'bg-white text-blue-600 hover:bg-slate-50 shadow-lg'
-            : 'bg-slate-900 text-white hover:bg-blue-600'
+            : 'bg-slate-900 text-white hover:bg-blue-700'
           }`}
       >
         {plan.cta}
@@ -271,37 +224,23 @@ function PlanCard({ plan, index }: { plan: typeof PLANES[0]; index: number }) {
   );
 }
 function PlanMensualCard({ plan, index }: { plan: typeof PLANES_MENSUALES[0]; index: number }) {
-  // Calculamos el valor en CLP usando la constante global VALOR_USD_CLP
-  const clpPrice = formatCLP(`USD ${plan.precio}`);
-
+  
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.08 }}
-      className={`p-7 rounded-[2rem] border ${plan.acento} flex flex-col h-full hover:shadow-xl transition-all group relative overflow-hidden`}
+      className={`p-5 rounded-[1.5rem] border ${plan.acento} flex flex-col h-full hover:shadow-xl transition-all group relative overflow-hidden`}
     >
       <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-1">{plan.nombre}</h3>
       
       <div className="mb-4">
-        <div className="flex items-baseline gap-1">
-          {plan.desde && <span className="text-[10px] font-bold text-slate-400 uppercase">Desde</span>}
-          <span className="text-2xl font-black text-slate-900 tabular-nums">USD {plan.precio}</span>
-          <span className="text-[10px] font-bold text-slate-400">/ mes</span>
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[0.22em] text-slate-400">Continuidad</p>
+          <p className="mt-1 text-sm font-black text-slate-900">Cotizar</p>
+          <p className="mt-1 text-[10px] font-semibold text-slate-500">Se define según operación real.</p>
         </div>
-        
-        {/* Conversión dinámica a CLP */}
-        {clpPrice && (
-          <div className="flex flex-col mt-1">
-            <span className="text-[11px] font-bold text-blue-600 leading-none">
-              ≈ {clpPrice} <span className="text-[8px] opacity-70 text-slate-400 font-black">CLP*</span>
-            </span>
-            <span className="text-[7px] font-black text-slate-400 uppercase tracking-tighter mt-0.5">
-              + IVA (19%)
-            </span>
-          </div>
-        )}
       </div>
 
       <p className="text-[11px] text-slate-500 leading-relaxed mb-6 italic">"{plan.desc}"</p>
@@ -330,7 +269,7 @@ function PlanMensualCard({ plan, index }: { plan: typeof PLANES_MENSUALES[0]; in
         )}
       </div>
       
-      <Link href="/contacto" className="mt-6 w-full py-3 bg-white border border-slate-200 text-slate-900 font-black text-[9px] uppercase tracking-[0.2em] rounded-xl hover:bg-blue-600 hover:text-white hover:border-transparent transition-all text-center">
+      <Link href="/contacto" className="mt-6 w-full py-3 bg-white border border-slate-200 text-slate-900 font-black text-[9px] uppercase tracking-[0.2em] rounded-xl hover:bg-blue-700 hover:text-white hover:border-transparent transition-all text-center">
         Suscribir
       </Link>
     </motion.div>
@@ -376,7 +315,7 @@ export default function DesarrolloWebPage() {
                 initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-                className="text-[clamp(2.8rem,8vw,6.5rem)] font-black leading-[0.85] tracking-tighter uppercase mb-6"
+                className="text-[clamp(2.15rem,5.4vw,4.6rem)] font-black leading-[0.85] tracking-tighter uppercase mb-6"
               >
                 WEB<br />
                 <span className="text-blue-600 italic">Engineering.   </span>
@@ -405,72 +344,89 @@ export default function DesarrolloWebPage() {
                 ))}
               </motion.div>
             </div>
-
-            {/* Visual tech stack */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.94 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, scale: 0.94, y: 18 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className="hidden lg:block"
+              className="relative flex min-h-[360px] items-center justify-center overflow-hidden rounded-[2.5rem] border border-blue-100 bg-white/75 p-8 shadow-2xl shadow-blue-100/60"
             >
-              <div className="relative bg-slate-900 rounded-3xl p-8 shadow-2xl overflow-hidden">
-                {/* Terminal header */}
-                <div className="flex items-center gap-2 mb-6">
-                  <div className="w-3 h-3 rounded-full bg-red-400" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-400" />
-                  <div className="w-3 h-3 rounded-full bg-green-400" />
-                  <span className="font-mono text-[10px] text-slate-500 ml-3">architecture.config.ts</span>
-                </div>
-                {/* Código decorativo */}
-                <div className="font-mono text-sm space-y-2">
-                  <p><span className="text-blue-400">const</span> <span className="text-white">stack</span> <span className="text-slate-400">=</span> <span className="text-yellow-300">{'{'}</span></p>
-                  <p className="pl-4"><span className="text-green-400">framework</span><span className="text-slate-400">:</span> <span className="text-orange-300">'Next.js 15'</span><span className="text-slate-400">,</span></p>
-                  <p className="pl-4"><span className="text-green-400">language</span><span className="text-slate-400">:</span> <span className="text-orange-300">'TypeScript'</span><span className="text-slate-400">,</span></p>
-                  <p className="pl-4"><span className="text-green-400">database</span><span className="text-slate-400">:</span> <span className="text-orange-300">'PostgreSQL'</span><span className="text-slate-400">,</span></p>
-                  <p className="pl-4"><span className="text-green-400">deploy</span><span className="text-slate-400">:</span> <span className="text-orange-300">'Vercel Edge'</span><span className="text-slate-400">,</span></p>
-                  <p className="pl-4"><span className="text-green-400">lighthouse</span><span className="text-slate-400">:</span> <span className="text-blue-300">100</span><span className="text-slate-400">,</span></p>
-                  <p className="pl-4"><span className="text-green-400">uptime</span><span className="text-slate-400">:</span> <span className="text-blue-300">99.9</span><span className="text-slate-400">,</span></p>
-                  <p><span className="text-yellow-300">{'}'}</span></p>
-                  <p className="mt-4"><span className="text-slate-500">// ✓ Ready for production</span></p>
-                  <p className="flex items-center gap-2">
-                    <span className="text-green-400">▶</span>
-                    <span className="text-white">npm run deploy</span>
-                    <span className="inline-block w-2 h-4 bg-white/70 animate-pulse ml-1" />
-                  </p>
-                </div>
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(59,130,246,.16),transparent_42%)]" />
+              <div className="absolute bottom-8 h-28 w-72 rounded-full bg-blue-200/30 blur-3xl" />
+              <Image
+                src="/imagenes/yonko_desarrolloweb.png"
+                alt="Equipo desarrollando una solución web"
+                width={520}
+                height={520}
+                className="relative z-10 h-auto w-full max-w-[360px] object-contain drop-shadow-2xl xl:max-w-[430px]"
+                priority
+              />
+              <div className="absolute bottom-5 left-5 right-5 z-20 rounded-2xl border border-white/70 bg-white/85 px-4 py-3 shadow-lg backdrop-blur">
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Solución en desarrollo</p>
+                <p className="mt-1 text-sm font-semibold leading-snug text-slate-700">Velocidad, arquitectura y confianza desde la primera carga.</p>
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* ── STACK ─────────────────────────────────────────────────────────── */}
-      <section className="py-8 border-y border-slate-100 bg-slate-50 overflow-hidden">
-        <motion.div
-          animate={{ x: ['0%', '-50%'] }}
-          transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-          className="flex gap-3 whitespace-nowrap"
-        >
-          {[...STACK, ...STACK].map((s, i) => (
-            <span key={i} className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-black uppercase tracking-wide ${s.color}`}>
-              {s.name}
-              <span className="opacity-50 font-normal normal-case tracking-normal">{s.desc}</span>
-            </span>
-          ))}
-        </motion.div>
-      </section>
-
       {/* ── SPECS ─────────────────────────────────────────────────────────── */}
       <section className="py-16 md:py-24 px-5 md:px-6 bg-white">
         <div className="max-w-7xl mx-auto">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-10">
-            <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-blue-600 mb-2">Especificaciones técnicas</p>
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">
-              Qué está <span className="text-blue-600 italic">incluido.</span>
-            </h2>
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-blue-600 mb-2">Especificaciones técnicas</p>
+              <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter">
+                Qué está <span className="text-blue-600 italic">incluido.</span>
+              </h2>
+            </div>
           </motion.div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {SPECS.map((spec, i) => <SpecCard key={i} spec={spec} index={i} />)}
+
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {SPECS.map((spec, i) => <SpecCard key={i} spec={spec} index={i} />)}
+            </div>
+            <div className="hidden lg:block">
+<div className="lg:sticky lg:top-28">
+            
+            
+                        {/* Visual tech stack */}
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.94 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                          className="hidden lg:block"
+                        >
+                          <div className="relative bg-slate-900 rounded-2xl p-4 shadow-lg overflow-hidden">
+                            {/* Terminal header */}
+                            <div className="flex items-center gap-2 mb-3">
+                              <div className="w-3 h-3 rounded-full bg-red-400" />
+                              <div className="w-3 h-3 rounded-full bg-yellow-400" />
+                              <div className="w-3 h-3 rounded-full bg-green-400" />
+                              <span className="font-mono text-[10px] text-slate-500 ml-3">architecture.config.ts</span>
+                            </div>
+                            {/* Código decorativo */}
+                            <div className="font-mono text-[11px] space-y-2">
+                              <p><span className="text-blue-400">const</span> <span className="text-white">stack</span> <span className="text-slate-400">=</span> <span className="text-yellow-300">{'{'}</span></p>
+                              <p className="pl-4"><span className="text-green-400">framework</span><span className="text-slate-400">:</span> <span className="text-orange-300">'Next.js 15'</span><span className="text-slate-400">,</span></p>
+                              <p className="pl-4"><span className="text-green-400">language</span><span className="text-slate-400">:</span> <span className="text-orange-300">'TypeScript'</span><span className="text-slate-400">,</span></p>
+                              <p className="pl-4"><span className="text-green-400">database</span><span className="text-slate-400">:</span> <span className="text-orange-300">'PostgreSQL'</span><span className="text-slate-400">,</span></p>
+                              <p className="pl-4"><span className="text-green-400">deploy</span><span className="text-slate-400">:</span> <span className="text-orange-300">'Vercel Edge'</span><span className="text-slate-400">,</span></p>
+                              <p className="pl-4"><span className="text-green-400">lighthouse</span><span className="text-slate-400">:</span> <span className="text-blue-300">100</span><span className="text-slate-400">,</span></p>
+                              <p className="pl-4"><span className="text-green-400">uptime</span><span className="text-slate-400">:</span> <span className="text-blue-300">99.9</span><span className="text-slate-400">,</span></p>
+                              <p><span className="text-yellow-300">{'}'}</span></p>
+                              <p className="mt-4"><span className="text-slate-500">// ✓ Ready for production</span></p>
+                              <p className="flex items-center gap-2">
+                                <span className="text-green-400">▶</span>
+                                <span className="text-white">npm run deploy</span>
+                                <span className="inline-block w-2 h-4 bg-white/70 animate-pulse ml-1" />
+                              </p>
+                            </div>
+                          </div>
+                        </motion.div>
+            
+          </div>
+
+            </div>
           </div>
         </div>
       </section>
@@ -481,7 +437,7 @@ export default function DesarrolloWebPage() {
         <div className="max-w-7xl mx-auto relative z-10">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-10">
             <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-blue-600 mb-2">Metodología</p>
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">
+            <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter">
               Cómo lo <span className="text-blue-600 italic">construimos.</span>
             </h2>
           </motion.div>
@@ -511,87 +467,72 @@ export default function DesarrolloWebPage() {
         </div>
       </section>
 
-      {/* ── PRECIOS ───────────────────────────────────────────────────────── */}
-      <section className="py-16 md:py-24 px-5 md:px-6 bg-white">
-        {/* Franja decorativa */}
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent mb-16" />
+      {/* ── SECCIÓN: ALCANCES ── */}
+      <section className="py-14 md:py-20 px-5 md:px-6 bg-white">
         <div className="max-w-7xl mx-auto">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-10 text-center">
-            <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-blue-600 mb-2">Inversión</p>
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">
-              Planes <span className="text-blue-600 italic">claros.</span>
-            </h2>
-            <p className="text-slate-500 text-sm mt-3 max-w-md mx-auto">Sin letras chicas. El precio que ve es el precio que paga.</p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-start">
+          <div className="mb-16 text-center">
+            <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-blue-600 mb-2">Desarrollo & configuración</p>
+            <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter italic">Alcances — <span className="text-blue-600">Web.</span></h2>
+            <p className="text-slate-500 text-sm mt-4 max-w-xl mx-auto">Cards para entender qué podemos construir. La cotización se define después de revisar alcance, objetivos e integraciones.</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-5">
             {PLANES.map((plan, i) => <PlanCard key={i} plan={plan} index={i} />)}
           </div>
-
-          <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-            className="text-center text-xs text-slate-400 mt-8">
-            ¿Necesita algo específico? <Link href="/contacto" className="text-blue-600 font-bold hover:underline">Cuéntenos su caso →</Link>
-          </motion.p>
         </div>
       </section>
-{/* ── PLANES MENSUALES (Managed Services) ── */}
-      <section className="py-24 px-6 bg-[#F8FAFC] border-y border-slate-100 relative">
-        <div className="max-w-7xl mx-auto relative z-10">
+
+      {/* ── SECCIÓN: CONTINUIDAD ── */}
+      <section className="py-14 md:py-20 px-5 md:px-6 bg-[#F8FAFC] border-y border-slate-100">
+        <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div className="max-w-xl">
-              <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-blue-600 mb-2">Continuidad Operativa</p>
-              <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none">Managed <span className="italic text-slate-400">Services.</span></h2>
-              <p className="text-slate-500 text-sm mt-6">
-                Despreocúpese de la infraestructura. Gestión mensual de seguridad, backups y rendimiento.
-                <span className="text-slate-900 font-bold ml-2 underline decoration-blue-500 decoration-2 underline-offset-4 text-xs">PRECIOS + IVA (19%)</span>
+              <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-blue-600 mb-2">Operación & continuidad</p>
+              <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter leading-none">Managed <span className="italic text-slate-400">Web.</span></h2>
+              <p className="text-slate-500 text-sm mt-6 leading-relaxed">
+                Acompañamiento técnico para mantener el sitio estable, seguro y útil después del lanzamiento.
+                <span className="text-slate-900 font-bold ml-2 underline decoration-blue-500 decoration-2 underline-offset-4 text-xs">Cotización según alcance</span>
               </p>
             </div>
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
             {PLANES_MENSUALES.map((plan, i) => <PlanMensualCard key={i} plan={plan} index={i} />)}
           </div>
-          
-          <p className="text-center text-[9px] text-slate-400 uppercase tracking-widest mt-12">
-            * Soporte técnico bajo Acuerdo de Nivel de Servicio (SLA). Facturación mensual recurrente.
-          </p>
         </div>
       </section>
 
-      
       {/* ── CTA ───────────────────────────────────────────────────────────── */}
       <section ref={ctaRef} className="py-14 md:py-20 px-5 md:px-6 bg-slate-50">
         <motion.div
           initial={{ opacity: 0, y: 32, scale: 0.97 }}
           animate={ctaInView ? { opacity: 1, y: 0, scale: 1 } : {}}
           transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-4xl mx-auto bg-blue-600 rounded-[2.5rem] p-10 md:p-16 relative overflow-hidden shadow-2xl shadow-blue-200"
+          className="max-w-3xl mx-auto rounded-[2rem] border border-cyan-300/20 bg-slate-950 p-7 sm:p-8 md:p-10 relative overflow-hidden shadow-xl shadow-blue-950/20"
         >
-          <div className="absolute top-0 right-0 w-72 h-72 bg-white/10 rounded-full blur-3xl -mr-36 -mt-36 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-52 h-52 bg-blue-800/40 rounded-full blur-2xl -ml-24 -mb-24 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-72 h-72 bg-blue-500/25 rounded-full blur-3xl -mr-36 -mt-36 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-52 h-52 bg-cyan-400/10 rounded-full blur-2xl -ml-24 -mb-24 pointer-events-none" />
           <div className="absolute inset-0 pointer-events-none opacity-[0.07]"
             style={{ backgroundImage: 'radial-gradient(#fff 1px,transparent 1px)', backgroundSize: '20px 20px' }} />
 
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
             <div>
-              <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-blue-200 mb-3">Primer paso</p>
-              <h2 className="text-3xl md:text-4xl font-black tracking-tighter uppercase leading-[0.9] text-white mb-3">
+              <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-cyan-200 mb-3">Primer paso</p>
+              <h2 className="text-2xl md:text-3xl font-black tracking-tighter uppercase leading-[0.9] text-white mb-3">
                 Consultoría gratuita<br />de 30 minutos.
               </h2>
-              <p className="text-blue-100 text-sm font-light max-w-sm">
+              <p className="text-cyan-100/80 text-sm font-light max-w-sm">
                 Analizamos su proyecto sin compromiso y le decimos exactamente qué necesita y cuánto costaría.
               </p>
             </div>
             <div className="flex flex-col gap-3 shrink-0">
               <Link href="/contacto"
-                className="group inline-flex items-center gap-3 bg-white text-slate-900 px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-[1.03] active:scale-[0.98] transition-all shadow-xl whitespace-nowrap">
+                className="group inline-flex items-center gap-3 bg-white text-slate-950 px-7 py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl whitespace-nowrap">
                 Agendar Ahora
                 <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                 </svg>
               </Link>
               <Link href="/proyectos"
-                className="inline-flex items-center justify-center gap-2 text-blue-200 hover:text-white text-xs uppercase tracking-widest font-bold transition-colors">
+                className="inline-flex items-center justify-center gap-2 text-cyan-200 hover:text-white text-xs uppercase tracking-widest font-bold transition-colors">
                 Ver proyectos web →
               </Link>
             </div>

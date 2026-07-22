@@ -1,389 +1,593 @@
 "use client";
 
-import Link from 'next/link';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
-import { useRef, useState, useEffect } from 'react';
-import { db } from '@/lib/firebase';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
-import Navbar from '@/components/Navbar'; // <--- IMPORTA EL NAVBAR
+import Image from "next/image";
+import Link from "next/link";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { createElement, useEffect, useRef, useState } from "react";
 
-// ─── Tipos ───────────────────────────────────────────────────────────────────
-interface TechCardProps { pos: string; label: string; value: string; color: string; delay?: number; }
-interface BentoCardProps { title: string; desc: string; icon: string; col: string; highlight?: boolean; dark?: boolean; }
-interface StatProps { val: string; label: string; index: number; }
+interface StatProps {
+  val: string;
+  label: string;
+  index: number;
+}
 
-// ─── Hook contador ───────────────────────────────────────────────────────────
+const services = [
+  {
+    title: "Webs que venden",
+    desc: "Landing pages, sitios corporativos y plataformas con foco en conversión, velocidad y mantenimiento real.",
+  },
+  {
+    title: "Sistemas a medida",
+    desc: "Dashboards, paneles internos, APIs y automatizaciones para ordenar la operación de tu negocio.",
+  },
+  {
+    title: "IA aplicada",
+    desc: "Automatización, asistentes, clasificación de datos y flujos inteligentes sin humo ni promesas mágicas.",
+  },
+];
+
+const yonkoLabPoints = [
+  {
+    id: "estrategia",
+    n: "01",
+    label: "Estrategia",
+    title: "Antes de diseñar, entendemos el negocio",
+    desc: "Objetivos, usuarios, oferta, fricción comercial y operación interna. La creatividad empieza con dirección.",
+    pos: "left-[9%] top-[22%]",
+    line: "right-[-82px] top-1/2 h-px w-[82px]",
+    dot: "right-[-88px] top-1/2 -translate-y-1/2",
+  },
+  {
+    id: "identidad",
+    n: "02",
+    label: "Identidad",
+    title: "Identidad para cada proyecto",
+    desc: "Diseñamos una presencia propia para cada marca: visual, tono y experiencia alineados al negocio, no una plantilla con colores cambiados.",
+    pos: "right-[9%] top-[22%]",
+    line: "left-[-82px] top-1/2 h-px w-[82px]",
+    dot: "left-[-88px] top-1/2 -translate-y-1/2",
+  },
+  {
+    id: "ejecucion",
+    n: "03",
+    label: "Ejecución",
+    title: "Sitios rápidos y mantenibles",
+    desc: "Componentes claros, contenido ordenado, SEO técnico y una base preparada para crecer sin rehacer todo.",
+    pos: "left-[9%] bottom-[28%]",
+    line: "right-[-92px] top-1/2 h-px w-[92px]",
+    dot: "right-[-98px] top-1/2 -translate-y-1/2",
+  },
+  {
+    id: "sistemas",
+    n: "04",
+    label: "Sistemas",
+    title: "Automatización con propósito",
+    desc: "Formularios, CRM, paneles, integraciones y flujos que reducen trabajo repetitivo donde realmente duele.",
+    pos: "right-[9%] bottom-[28%]",
+    line: "left-[-92px] top-1/2 h-px w-[92px]",
+    dot: "left-[-98px] top-1/2 -translate-y-1/2",
+  },
+  {
+    id: "soporte",
+    n: "05",
+    label: "Soporte",
+    title: "Acompañamiento claro",
+    desc: "Prioridades visibles, entrega explicada y mejoras iterativas sin tecnicismos innecesarios.",
+    pos: "left-1/2 top-[78%] -translate-x-1/2",
+    line: "left-1/2 bottom-full h-[58px] w-px -translate-x-1/2",
+    dot: "left-1/2 bottom-[calc(100%+54px)] -translate-x-1/2",
+  },
+];
+
+const processSteps = [
+  {
+    n: "01",
+    title: "Aterrizamos la idea",
+    problem: "Convertimos una idea dispersa en una oferta fácil de entender: qué vendes, para quién es y por qué vale la pena contactarte.",
+    deliverable: "Mensaje principal, público objetivo y acción prioritaria.",
+  },
+  {
+    n: "02",
+    title: "Diseñamos la experiencia",
+    problem: "Organizamos la navegación como una conversación: primero captamos atención, luego damos confianza y finalmente guiamos al contacto.",
+    deliverable: "Estructura UX, secciones clave y dirección visual profesional.",
+  },
+  {
+    n: "03",
+    title: "Construimos con criterio",
+    problem: "Desarrollamos una base rápida, responsive y fácil de mantener. Los efectos acompañan; no esconden problemas.",
+    deliverable: "Página funcional, componentes reutilizables e integraciones.",
+  },
+  {
+    n: "04",
+    title: "Probamos antes de publicar",
+    problem: "Revisamos cómo se siente usarla: lectura, velocidad, mobile, formularios y momentos donde un cliente podría abandonar.",
+    deliverable: "Checklist de lanzamiento, ajustes UX y prioridades de mejora.",
+  },
+];
+
+function YonkoModel() {
+  return (
+    <div className="relative isolate mx-auto aspect-[4/5] w-full max-w-[360px] overflow-hidden rounded-[1.75rem] border border-white/10 bg-slate-950 shadow-xl shadow-blue-950/20">
+<div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_28%,rgba(59,130,246,0.55),transparent_34%),linear-gradient(145deg,#020617,#0f172a_55%,#1d4ed8)]" />
+      <div
+        className="absolute inset-0 opacity-[0.18]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,.25) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.25) 1px, transparent 1px)",
+          backgroundSize: "44px 44px",
+        }}
+      />
+
+      {createElement("model-viewer", {
+        src: "/3d/Yonko.glb",
+        poster: "/imagenes/yonko3d.png",
+        alt: "Modelo 3D representando servicios informáticos",
+        "camera-controls": true,
+        "auto-rotate": true,
+        "rotation-per-second": "24deg",
+        "interaction-prompt": "none",
+          reveal: 'auto',
+          loading: 'lazy',
+        "shadow-intensity": "0.8",
+        exposure: "0.95",
+        style: {
+          width: "100%",
+          height: "100%",
+          position: "relative",
+          zIndex: 2,
+        },
+      })}
+
+      <Image
+        src="/imagenes/yonko3d.png"
+        alt="Representación visual de servicios informáticos"
+        fill
+        priority
+        className="object-contain p-10 opacity-0"
+      />
+
+      <div className="absolute left-5 top-5 z-10 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.28em] text-cyan-100/80 backdrop-blur">
+        Equipo técnico
+      </div>
+      <div className="absolute bottom-5 left-5 right-5 z-10 rounded-3xl border border-white/10 bg-slate-950/65 p-4 text-white backdrop-blur-xl">
+        <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-cyan-200">Marca con sistema</p>
+        <p className="mt-1 text-sm text-slate-300">Identidad propia, ingeniería seria y una experiencia que se recuerda.</p>
+        </div>
+      </div>
+  );
+}
+
 function useCountUp(target: string, inView: boolean) {
-  const [display, setDisplay] = useState('0');
+  const [display, setDisplay] = useState("0");
+
   useEffect(() => {
     if (!inView) return;
-    const num = parseFloat(target.replace(/[^0-9.]/g, ''));
-    const suffix = target.replace(/[0-9.]/g, '');
-    const duration = 1800;
-    const steps = 60;
+    const num = Number.parseFloat(target.replace(/[^0-9.]/g, ""));
+    const suffix = target.replace(/[0-9.]/g, "");
     let current = 0;
-    const inc = num / steps;
     const timer = setInterval(() => {
-      current = Math.min(current + inc, num);
-      setDisplay(Number.isInteger(num) ? Math.floor(current) + suffix : current.toFixed(1) + suffix);
+      current = Math.min(current + num / 50, num);
+      setDisplay(`${Number.isInteger(num) ? Math.floor(current) : current.toFixed(1)}${suffix}`);
       if (current >= num) clearInterval(timer);
-    }, duration / steps);
+    }, 28);
+
     return () => clearInterval(timer);
   }, [inView, target]);
+
   return display;
 }
 
-// ─── AnimatedStat ─────────────────────────────────────────────────────────────
 function AnimatedStat({ val, label, index }: StatProps) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-60px' });
+  const inView = useInView(ref, { once: true, margin: "-60px" });
   const display = useCountUp(val, inView);
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 24 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-      className="group pl-6 border-l-2 border-slate-200 hover:border-blue-500 transition-colors duration-500"
-    >
-      <span className="block text-5xl md:text-6xl font-black tracking-tighter text-slate-900 tabular-nums mb-1">
-        {inView ? display : '0'}
-      </span>
-      <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-blue-600 font-bold">{label}</span>
-    </motion.div>
-  );
-}
-
-// ─── TechCard ─────────────────────────────────────────────────────────────────
-function TechCard({ pos, label, value, color, delay = 0 }: TechCardProps) {
-  return (
-    <motion.div
-      className={`absolute ${pos} z-20`}
-      initial={{ opacity: 0, scale: 0.85 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: delay + 0.9, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-    >
-      <motion.div
-        animate={{ y: [0, -5, 0] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay }}
-        className="bg-white border border-slate-200 shadow-xl shadow-slate-200/80 px-5 py-4 rounded-2xl"
-      >
-        <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-slate-400 mb-1">{label}</p>
-        <p className={`text-2xl font-black ${color}`}>{value}</p>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-// ─── BentoCard ────────────────────────────────────────────────────────────────
-function BentoCard({ title, desc, icon, col, highlight, dark }: BentoCardProps) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-40px' });
-
-  const base = 'group relative overflow-hidden p-10 rounded-[2.5rem] flex flex-col justify-between min-h-[260px] transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl';
-  const style = highlight
-    ? `${base} bg-blue-600 text-white shadow-xl shadow-blue-200`
-    : dark
-    ? `${base} bg-slate-900 text-white`
-    : `${base} bg-white border border-slate-100 hover:border-slate-200 shadow-sm hover:shadow-slate-200/80`;
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className={`${col} ${style}`}
+      transition={{ duration: 0.55, delay: index * 0.08 }}
+      className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm"
     >
-      <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none rounded-[2.5rem]
-        ${highlight ? 'bg-gradient-to-br from-white/10 to-transparent' : 'bg-gradient-to-br from-blue-50 to-transparent'}`} />
-      <span className="text-4xl block">{icon}</span>
-      <div>
-        <h3 className={`text-lg font-black uppercase tracking-tight mb-2 ${highlight || dark ? 'text-white' : 'text-slate-900'}`}>{title}</h3>
-        <p className={`text-sm leading-relaxed ${highlight ? 'text-blue-100' : dark ? 'text-slate-400' : 'text-slate-500'}`}>{desc}</p>
-      </div>
+      <span className="block text-2xl font-black tracking-tight text-slate-950 md:text-3xl">{inView ? display : "0"}</span>
+      <span className="mt-2 block font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-blue-600">{label}</span>
     </motion.div>
   );
 }
 
-// ─── Marquee ──────────────────────────────────────────────────────────────────
-function Marquee() {
-  const techs = ['Next.js 15', 'TypeScript', 'PostgreSQL', 'Django', 'Supabase', 'Framer Motion', 'Tailwind v4', 'AWS', 'Python AI', 'Docker', 'Redis', 'GraphQL'];
+function InteractiveYonkoLab() {
+  const [activePoint, setActivePoint] = useState(yonkoLabPoints[1]);
+
   return (
-    <div className="overflow-hidden py-8 border-y border-slate-100 bg-slate-50">
+    <div className="mt-14 grid gap-5 xl:grid-cols-[minmax(760px,1fr)_400px] xl:items-start">
       <motion.div
-        animate={{ x: ['0%', '-50%'] }}
-        transition={{ duration: 35, repeat: Infinity, ease: 'linear' }}
-        className="flex gap-10 whitespace-nowrap"
+        initial={{ opacity: 0, y: 28 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7 }}
+        className="relative min-h-[460px] overflow-hidden rounded-[1.75rem] border border-cyan-300/20 bg-slate-950 text-white shadow-xl shadow-blue-950/20 sm:min-h-[500px] lg:min-h-[540px]"
       >
-        {[...techs, ...techs].map((tech, i) => (
-          <span key={i} className="text-2xl font-black uppercase tracking-tighter italic text-slate-300 inline-flex items-center gap-10">
-            {tech}
-            <span className="text-blue-400 not-italic font-light">/</span>
-          </span>
-        ))}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(34,211,238,.32),transparent_24%),radial-gradient(circle_at_50%_70%,rgba(37,99,235,.35),transparent_34%),linear-gradient(180deg,#020617,#0f172a)]" />
+        <div
+          className="absolute inset-0 opacity-[0.11]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(125,211,252,.45) 1px, transparent 1px), linear-gradient(90deg, rgba(125,211,252,.45) 1px, transparent 1px)",
+            backgroundSize: "42px 42px",
+          }}
+        />
+        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-[radial-gradient(ellipse_at_center,rgba(34,211,238,.18),transparent_58%)]" />
+
+        <div className="absolute left-1/2 top-[45%] h-40 w-40 -translate-x-1/2 rounded-full border border-cyan-300/50 bg-cyan-300/10 shadow-[0_0_60px_rgba(34,211,238,.35)] sm:h-44 sm:w-44 lg:top-[52%]" />
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+          className="absolute left-1/2 top-[45%] h-52 w-52 -translate-x-1/2 rounded-full border-t border-cyan-200/80 sm:h-56 sm:w-56 lg:top-[52%]"
+        />
+
+        <div className="absolute inset-x-0 bottom-[14%] mx-auto h-48 w-64 rounded-full bg-cyan-300/15 blur-3xl" />
+
+        <div className="absolute left-1/2 top-[43%] z-10 h-[360px] w-[260px] -translate-x-1/2 -translate-y-1/2 sm:h-[460px] sm:w-[330px] lg:top-[50%] lg:h-[560px] lg:w-[390px] xl:h-[540px] xl:w-[380px]">
+          {createElement("model-viewer", {
+            src: "/3d/Yonko_trabajando.glb",
+            poster: "/imagenes/yonko3d.png",
+            alt: "Modelo 3D representando un equipo técnico trabajando",
+            "camera-controls": true,
+            "auto-rotate": true,
+            "rotation-per-second": "16deg",
+            "interaction-prompt": "none",
+          reveal: 'auto',
+          loading: 'lazy',
+            "shadow-intensity": "1",
+            exposure: "1",
+            style: {
+              width: "100%",
+              height: "100%",
+              filter: "drop-shadow(0 0 28px rgba(34,211,238,.45))",
+            },
+          })}
+        </div>
+
+        <div className="pointer-events-none absolute left-1/2 top-5 z-20 -translate-x-1/2 rounded-full border border-cyan-200/30 bg-cyan-300/10 px-3 py-2 font-mono text-[8px] font-black uppercase tracking-[0.22em] text-cyan-100 backdrop-blur sm:text-[10px] sm:tracking-[0.3em] lg:top-[17%] lg:px-4">
+          Servicio activo / Equipo en marcha
+        </div>
+
+        {yonkoLabPoints.map((point) => {
+          const isActive = activePoint.id === point.id;
+
+          return (
+            <motion.button
+              key={point.id}
+              type="button"
+              onMouseEnter={() => setActivePoint(point)}
+              onFocus={() => setActivePoint(point)}
+              onClick={() => setActivePoint(point)}
+              whileHover={{ scale: 1.03, y: -2 }}
+              className={`absolute z-30 hidden w-[210px] rounded-2xl border p-3 text-left backdrop-blur-xl transition duration-300 lg:block xl:w-[225px] ${point.pos} ${
+                isActive
+                  ? "border-cyan-200/70 bg-cyan-300/15 shadow-[0_0_35px_rgba(34,211,238,.25)]"
+                  : "border-cyan-300/20 bg-slate-900/60 hover:border-cyan-200/50 hover:bg-cyan-300/10"
+              }`}
+            >
+              <span className={`absolute ${point.line} ${isActive ? "bg-cyan-200/80" : "bg-cyan-300/25"}`} />
+              <span className={`absolute h-2.5 w-2.5 rounded-full ${point.dot} ${isActive ? "bg-cyan-100 shadow-[0_0_18px_rgba(34,211,238,.9)]" : "bg-cyan-300/60"}`} />
+              <span className="font-mono text-[9px] font-black uppercase tracking-[0.24em] text-cyan-200">{point.n} / {point.label}</span>
+              <span className="mt-1.5 block text-xs font-black uppercase leading-tight tracking-tight text-white xl:text-sm">{point.title}</span>
+            </motion.button>
+          );
+        })}
+
+        <div className="absolute bottom-6 left-6 right-6 z-30 lg:hidden">
+          <div className="grid grid-cols-5 gap-2">
+            {yonkoLabPoints.map((point) => (
+              <button
+                key={point.id}
+                type="button"
+                onClick={() => setActivePoint(point)}
+                className={`rounded-2xl border py-3 font-mono text-xs font-black transition ${
+                  activePoint.id === point.id ? "border-cyan-200 bg-cyan-300/20 text-white" : "border-cyan-300/20 bg-slate-900/70 text-cyan-200"
+                }`}
+              >
+                {point.n}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="pointer-events-none absolute inset-0 rounded-[2rem] ring-1 ring-inset ring-white/10" />
       </motion.div>
+
+      <motion.aside
+        initial={{ opacity: 0, x: 22, scale: 0.98 }}
+        animate={{ opacity: 1, x: 0, scale: 1 }}
+        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        className="relative overflow-hidden rounded-[1.75rem] border border-blue-100 bg-white p-4 text-left shadow-lg shadow-blue-100/50 sm:p-5 xl:sticky xl:top-28"
+      >
+        <div className="absolute -right-20 -top-20 h-48 w-48 rounded-full bg-cyan-100 blur-3xl" />
+        <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent" />
+        <div className="relative z-10">
+        <div className="mb-6 grid grid-cols-5 gap-1.5">
+          {yonkoLabPoints.map((point) => (
+            <button
+              key={point.id}
+              type="button"
+              onClick={() => setActivePoint(point)}
+              className={`rounded-2xl border px-1.5 py-2 text-center transition ${
+                activePoint.id === point.id
+                  ? "border-blue-200 bg-blue-50 text-blue-700 shadow-sm"
+                  : "border-slate-200 bg-white/80 text-slate-500 hover:border-slate-300 hover:text-slate-950"
+              }`}
+            >
+              <span className="block font-mono text-[10px] font-black leading-none">{point.n}</span>
+              <span className="mt-1 hidden text-[8px] font-black uppercase tracking-wider sm:block">{point.label}</span>
+            </button>
+          ))}
+        </div>
+
+        <motion.div
+          key={activePoint.id}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.28 }}
+        >
+        <p className="font-mono text-[10px] font-black uppercase tracking-[0.3em] text-blue-600">
+          {activePoint.n} / {activePoint.label}
+        </p>
+        <h3 className="mt-4 text-lg font-black leading-tight tracking-tight text-slate-950 sm:text-xl md:text-2xl">
+          {activePoint.title}
+        </h3>
+        <p className="mt-4 text-sm leading-relaxed text-slate-500 md:mt-5 md:text-base">{activePoint.desc}</p>
+
+        <div className="mt-5 rounded-[1.5rem] border border-slate-100 bg-slate-950 p-4 text-white">
+          <p className="font-mono text-[9px] font-black uppercase tracking-[0.28em] text-cyan-200">Lo que gana el cliente</p>
+          <p className="mt-3 text-lg font-bold leading-snug">
+            Una decisión más fácil: entiende qué haces, por qué confiar y cómo empezar.
+          </p>
+        </div>
+
+        </motion.div>
+        </div>
+      </motion.aside>
     </div>
   );
 }
 
-// ─── PAGE ─────────────────────────────────────────────────────────────────────
 export default function HomePage() {
-
-
   const heroRef = useRef(null);
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
-  const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '18%']);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
-
   const ctaRef = useRef(null);
-  const ctaInView = useInView(ctaRef, { once: true, margin: '-80px' });
+  const ctaInView = useInView(ctaRef, { once: true, margin: "-80px" });
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0.2]);
 
   return (
-    <main className="bg-white text-slate-900">
-      
-      {/* ── 1. HERO ───────────────────────────────────────────────────────── */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden bg-white">
-        {/* Fondo sutil con gradiente radial azul muy suave */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_70%_30%,_#eff6ff,_transparent)] pointer-events-none" />
-        {/* Grid pattern muy sutil */}
+    <main className="bg-white text-slate-950">
+      <section ref={heroRef} className="relative isolate min-h-[760px] overflow-hidden bg-slate-950 text-white">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(37,99,235,.45),transparent_28%),radial-gradient(circle_at_80%_35%,rgba(14,165,233,.22),transparent_30%)]" />
         <div
-          className="absolute inset-0 opacity-[0.025] pointer-events-none"
+          className="absolute inset-0 opacity-[0.08]"
           style={{
-            backgroundImage: 'linear-gradient(#1e40af 1px, transparent 1px), linear-gradient(90deg, #1e40af 1px, transparent 1px)',
-            backgroundSize: '60px 60px',
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,.28) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.28) 1px, transparent 1px)",
+            backgroundSize: "64px 64px",
           }}
         />
 
-        <motion.div style={{ y: heroY, opacity: heroOpacity }} className="w-full">
-          <div className="max-w-7xl mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-16 items-center py-24">
-
-            {/* Copy */}
+        <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative z-10">
+          <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 py-14 md:px-6 md:py-16 lg:grid-cols-[1.05fr_.95fr] lg:px-8 lg:py-20">
             <div>
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="inline-flex items-center gap-2 mb-8 bg-blue-50 border border-blue-100 px-4 py-2 rounded-full"
+                transition={{ duration: 0.45 }}
+                className="mb-7 inline-flex items-center gap-2 rounded-full border border-blue-300/20 bg-blue-400/10 px-4 py-2 backdrop-blur"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-blue-700">
-                  Yonko Science in Informatics
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-lg shadow-emerald-400/50" />
+                <span className="font-mono text-[10px] font-bold uppercase tracking-[0.28em] text-cyan-100/80">
+                  Yonko Servicios Informáticos
                 </span>
               </motion.div>
 
               <motion.h1
-                initial={{ opacity: 0, y: 28 }}
+                initial={{ opacity: 0, y: 26 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-                className="text-[clamp(4rem,11vw,8.5rem)] font-black leading-[0.85] tracking-tighter uppercase mb-8 text-slate-900"
+                transition={{ duration: 0.8, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+                className="max-w-3xl text-[clamp(2.05rem,4.8vw,3.8rem)] font-black leading-[0.94] tracking-tight"
               >
-                SISTEMAS
+                No vendemos
                 <br />
-                <span className="text-blue-600 italic">ELITE.</span>
+                <span className="text-blue-400">plantillas.</span>
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.25 }}
-                className="text-lg text-slate-500 max-w-md mb-10 leading-relaxed"
+                transition={{ duration: 0.65, delay: 0.22 }}
+                className="mt-7 max-w-2xl text-lg leading-relaxed text-slate-300 md:text-xl"
               >
-                Arquitecturas escalables donde la{' '}
-                <span className="text-slate-900 font-semibold">complejidad técnica</span>{' '}
-                se traduce en{' '}
-                <span className="text-slate-900 font-semibold">simplicidad de usuario.</span>
+                Diseñamos presencia digital y sistemas informáticos para personas, pymes y empresas que necesitan verse confiables, operar mejor y crecer con tecnología bien implementada.
               </motion.p>
 
               <motion.div
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.35 }}
-                className="flex flex-wrap gap-4"
+                transition={{ duration: 0.55, delay: 0.34 }}
+                className="mt-10 flex flex-wrap gap-4"
               >
-                <Link
-                  href="/contacto"
-                  className="group relative overflow-hidden bg-blue-600 text-white px-9 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-blue-200 hover:shadow-xl hover:shadow-blue-300 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
-                >
-                  <span className="relative z-10 flex items-center gap-2">
-                    Iniciar Proyecto
-                    <svg className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </span>
-                  <div className="absolute inset-0 bg-blue-700 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                <Link href="/contacto" className="rounded-2xl bg-blue-500 px-8 py-4 text-xs font-black uppercase tracking-widest text-white shadow-xl shadow-blue-950/30 transition hover:-translate-y-0.5 hover:bg-blue-400">
+                  Cotizar proyecto
                 </Link>
-                <Link
-                  href="/nosotros"
-                  className="border border-slate-200 text-slate-700 px-9 py-4 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-slate-50 hover:border-slate-300 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
-                >
-                  Ver Visión
+                <Link href="/servicios" className="rounded-2xl border border-white/15 bg-white/5 px-8 py-4 text-xs font-black uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/10">
+                  Ver servicios
                 </Link>
               </motion.div>
 
-              {/* Social proof */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8 }}
-                className="flex items-center gap-4 mt-10 pt-10 border-t border-slate-100"
-              >
-                <div className="flex -space-x-2">
-                  {['#3b82f6', '#10b981', '#8b5cf6', '#f59e0b'].map((c, i) => (
-                    <div key={i} className="w-8 h-8 rounded-full border-2 border-white" style={{ backgroundColor: c }} />
-                  ))}
-                </div>
-                <p className="text-sm text-slate-500">
-                  <span className="font-semibold text-slate-900">+40 clientes</span> confían en nuestros sistemas
-                </p>
-              </motion.div>
-            </div>
-
-            {/* Visual orbit */}
-            <div className="hidden lg:flex items-center justify-center">
-              <div className="relative w-full max-w-[400px] aspect-square">
-                <div className="absolute inset-0 border border-slate-100 rounded-full" />
-                <motion.div animate={{ rotate: 360 }} transition={{ duration: 50, repeat: Infinity, ease: 'linear' }}
-                  className="absolute inset-6 border-t-2 border-blue-200 rounded-full" />
-                <motion.div animate={{ rotate: -360 }} transition={{ duration: 35, repeat: Infinity, ease: 'linear' }}
-                  className="absolute inset-16 border border-blue-100 rounded-full" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-32 h-32 bg-blue-50 rounded-3xl flex items-center justify-center shadow-inner border border-blue-100">
-                    <span className="text-5xl font-black text-blue-200 uppercase tracking-widest select-none">Y</span>
+              <div className="mt-10 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
+                {services.map((service) => (
+                  <div key={service.title} className="rounded-3xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur">
+                    <h2 className="text-sm font-black tracking-tight text-white">{service.title}</h2>
+                    <p className="mt-2 text-xs leading-relaxed text-slate-400">{service.desc}</p>
                   </div>
-                </div>
-                <TechCard pos="top-2 -left-14" label="Latency" value="0.04ms" color="text-emerald-600" delay={0} />
-                <TechCard pos="bottom-20 -right-12" label="Uptime" value="99.9%" color="text-blue-600" delay={0.2} />
-                <TechCard pos="bottom-2 left-10" label="Req/s" value="12K" color="text-violet-600" delay={0.4} />
+                ))}
               </div>
             </div>
+
+            <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.18 }}>
+              <YonkoModel />
+            </motion.div>
           </div>
         </motion.div>
-
-        {/* Scroll hint */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.6 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-          <span className="font-mono text-[9px] uppercase tracking-widest text-slate-300">Scroll</span>
-          <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-px h-8 bg-gradient-to-b from-slate-300 to-transparent" />
-        </motion.div>
       </section>
 
-      {/* ── 2. MARQUEE ────────────────────────────────────────────────────── */}
-      <Marquee />
-
-      {/* ── 3. MÉTRICAS ───────────────────────────────────────────────────── */}
-      <section className="py-24 px-6 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <section className="px-5 py-14 md:px-6 md:py-16">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             {[
-              { label: 'Proyectos Cloud', val: '30+' },
-              { label: 'Líneas de Código', val: '1M+' },
-              { label: 'Disponibilidad', val: '99.9%' },
-              { label: 'Retorno Inversión', val: '250%' },
-            ].map((s, i) => <AnimatedStat key={i} val={s.val} label={s.label} index={i} />)}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 4. BENTO ──────────────────────────────────────────────────────── */}
-      <section className="py-24 px-6 bg-slate-50 overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-14">
-            <motion.p 
-              initial={{ opacity: 0 }} 
-              whileInView={{ opacity: 1 }} 
-              viewport={{ once: true }}
-              className="font-mono text-[10px] uppercase tracking-[0.3em] text-blue-600 mb-3"
-            >
-              Capacidades
-            </motion.p>
-            
-            {/* Título responsivo corregido con clamp y leading ajustado */}
-            <motion.h2 
-              initial={{ opacity: 0, y: 16 }} 
-              whileInView={{ opacity: 1, y: 0 }} 
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              className="text-[clamp(2.5rem,10vw,4.5rem)] font-black uppercase tracking-tighter leading-[0.95] text-slate-900 break-words"
-            >
-              Expertise<br />
-              <span className="text-blue-600 italic">Multidisciplinario.</span>
-            </motion.h2>
-          </div>
-
-          {/* Grid responsivo: 1 columna en móvil, 12 en desktop */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-            <BentoCard col="md:col-span-12" title="Desarrollo Web" desc="Proceso integral de creación y mantenimiento de aplicaciones web escalables." icon="💻" />
-            <BentoCard col="md:col-span-8" title="Sistemas Distribuidos" desc="Arquitecturas backend que soportan crecimiento global sin degradación." icon="⚙️" />
-            <BentoCard col="md:col-span-4" title="IA Aplicada" desc="Modelado de datos para automatización inteligente." icon="🧠" dark />
-            <BentoCard col="md:col-span-5" title="UX / CX Strategy" desc="Diseño centrado en la conversión y psicología del usuario." icon="✦" />
-            <BentoCard col="md:col-span-7" title="Infraestructura Cloud" desc="Seguridad enterprise y escalabilidad automática." icon="☁️" highlight />
-          </div>
-        </div>
-      </section>
-
-      {/* ── 5. PROCESO ────────────────────────────────────────────────────── */}
-      <section className="py-24 px-6 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-14">
-            <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-              className="font-mono text-[10px] uppercase tracking-[0.3em] text-blue-600 mb-3">Metodología</motion.p>
-            <motion.h2 initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              className="text-5xl md:text-6xl font-black uppercase tracking-tighter text-slate-900">
-              Proceso <span className="text-blue-600 italic">Probado.</span>
-            </motion.h2>
-          </div>
-          <div className="grid md:grid-cols-3 gap-4">
-            {[
-              { n: '01', title: 'Evaluación y Diagnóstico', desc: 'Análisis profundo de infraestructura, procesos y arquitectura existente para detectar riesgos estructurales y oportunidades estratégicas.' },
-              { n: '02', title: 'Diseño de Arquitectura', desc: 'Definición de stack tecnológico, documentación formal de decisiones técnicas y planificación estructurada para garantizar escalabilidad y sostenibilidad.' },
-              { n: '03', title: 'Implementación y Optimización Continua', desc: 'Desarrollo ágil con integración y despliegue continuo, seguimiento de métricas clave y mejora iterativa basada en datos.' },
-            ].map((step, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="group bg-white border border-slate-100 rounded-3xl p-8 hover:border-blue-100 hover:bg-blue-50 hover:shadow-xl hover:shadow-blue-100 transition-all duration-500 hover:-translate-y-1"
-              >
-                <span className="font-mono text-sm text-blue-500 mb-6 block">{step.n}</span>
-                <h3 className="text-xl font-black uppercase tracking-tight mb-3 text-slate-900 group-hover:text-blue-700 transition-colors">{step.title}</h3>
-                <p className="text-sm leading-relaxed text-slate-500">{step.desc}</p>
-              </motion.div>
+              { label: "Sitios y sistemas", val: "30+" },
+              { label: "Disponibilidad objetivo", val: "99.9%" },
+              { label: "Entrega iterativa", val: "2x" },
+              { label: "Foco negocio", val: "100%" },
+            ].map((s, i) => (
+              <AnimatedStat key={s.label} val={s.val} label={s.label} index={i} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── 6. CTA FINAL ──────────────────────────────────────────────────── */}
-      <section ref={ctaRef} className="py-20 px-6 bg-slate-50">
-        <motion.div
-          initial={{ opacity: 0, y: 40, scale: 0.97 }}
-          animate={ctaInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-5xl mx-auto bg-blue-600 rounded-[3rem] p-12 md:p-20 text-center text-white relative overflow-hidden shadow-2xl shadow-blue-200"
-        >
-          <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl -mr-40 -mt-40 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-60 h-60 bg-blue-800/40 rounded-full blur-2xl -ml-28 -mb-28 pointer-events-none" />
-          <div className="relative z-10">
-            <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-blue-200 mb-5">Siguiente paso</p>
-            <h2 className="text-4xl md:text-6xl font-black mb-5 tracking-tighter uppercase leading-[0.9]">
-              ¿Construimos el futuro<br />de su sistema?
-            </h2>
-            <p className="text-blue-100 text-lg mb-10 max-w-xl mx-auto font-light">
-              Deje de gestionar deuda técnica. Empiece a construir activos digitales que escalan.
-            </p>
-            <Link
-              href="/contacto"
-              className="group inline-flex items-center gap-3 bg-white text-slate-900 px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-widest hover:scale-[1.03] active:scale-[0.98] transition-all shadow-xl"
+      <section className="overflow-hidden bg-slate-50 px-5 py-14 md:px-6 md:py-16">
+        <div className="mx-auto max-w-7xl">
+          <p className="font-mono text-[10px] font-black uppercase tracking-[0.3em] text-blue-600">Cómo se siente trabajar con nuestro equipo</p>
+          <h2 className="mt-4 max-w-3xl text-[clamp(1.75rem,3.6vw,2.9rem)] font-black leading-tight tracking-tight text-slate-950">
+            Creativo por fuera.
+            <br />
+            <span className="text-blue-600">Rigurosamente técnico por dentro.</span>
+          </h2>
+          <div className="mt-8 grid max-w-4xl gap-3 sm:grid-cols-3">
+            {[
+              ["Se entiende rápido", "El usuario capta tu oferta sin tener que adivinar."],
+              ["Se siente distinto", "Diseño con carácter, pero con seriedad empresarial."],
+              ["Lleva al contacto", "Cada interacción empuja hacia una acción clara."],
+            ].map(([title, desc]) => (
+              <div key={title} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                <p className="text-sm font-black tracking-tight text-slate-950">{title}</p>
+                <p className="mt-1 text-xs leading-relaxed text-slate-500">{desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <InteractiveYonkoLab />
+        </div>
+      </section>
+
+      <section className="overflow-hidden px-5 py-14 md:px-6 md:py-16">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid items-end gap-8 lg:grid-cols-[.9fr_1.1fr]">
+            <div>
+              <p className="font-mono text-[10px] font-black uppercase tracking-[0.3em] text-blue-600">Método de trabajo</p>
+              <h2 className="mt-4 max-w-3xl text-[clamp(1.8rem,3.8vw,3rem)] font-black leading-tight tracking-tight text-slate-950">
+                Un proceso
+                <br />
+                <span className="text-blue-600">sin humo.</span>
+              </h2>
+            </div>
+            <div className="max-w-lg rounded-[1.5rem] border border-blue-100 bg-blue-50 p-5 lg:justify-self-end">
+              <p className="font-mono text-[10px] font-black uppercase tracking-[0.28em] text-blue-600">Promesa del proceso</p>
+              <p className="mt-3 text-lg font-semibold leading-relaxed text-slate-800">
+                Menos adornos sueltos. Más claridad, confianza y caminos simples para que el cliente te contacte.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-14 grid gap-6 lg:grid-cols-[420px_1fr]">
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="relative min-h-[400px] overflow-hidden rounded-[1.75rem] bg-slate-950 p-5 text-white shadow-xl shadow-blue-950/20"
             >
-              Agendar Consultoría Senior
-              <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_22%,rgba(59,130,246,.5),transparent_32%),linear-gradient(180deg,#020617,#0f172a)]" />
+              <div className="absolute left-1/2 top-[48%] h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/20 blur-3xl" />
+              <Image
+                src="/imagenes/yonkoohumo.png"
+                alt="Proceso claro de servicios informáticos"
+                fill
+                sizes="(min-width: 1024px) 420px, 100vw"
+                className="object-contain object-center p-6 drop-shadow-[0_28px_45px_rgba(59,130,246,0.28)]"
+              />
+              <div className="absolute left-6 right-6 top-6 rounded-3xl border border-white/10 bg-white/10 p-4 backdrop-blur-xl">
+                <p className="font-mono text-[10px] font-black uppercase tracking-[0.28em] text-cyan-100/80">Claridad antes que humo</p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-300">
+                  Si una sección no ayuda a vender, explicar o generar confianza, se simplifica.
+                </p>
+              </div>
+              <div className="absolute bottom-6 left-6 right-6 grid grid-cols-3 gap-2">
+                {["Claro", "Vendible", "Medible"].map((tag) => (
+                  <span key={tag} className="rounded-2xl border border-blue-200/20 bg-blue-300/10 px-3 py-3 text-center text-[10px] font-black uppercase tracking-widest text-cyan-100/80 backdrop-blur">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+
+            <div className="relative">
+              <div className="absolute left-6 top-8 hidden h-[calc(100%-4rem)] w-px bg-gradient-to-b from-blue-200 via-blue-500 to-blue-100 md:block" />
+              <div className="space-y-4">
+                {processSteps.map((step, i) => (
+                  <motion.article
+                    key={step.n}
+                    initial={{ opacity: 0, y: 22 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.55, delay: i * 0.08 }}
+                    className="group relative rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-100/60 md:ml-12"
+                  >
+                    <div className="absolute -left-[4.5rem] top-7 hidden h-12 w-12 items-center justify-center rounded-2xl border border-blue-200 bg-white font-mono text-sm font-black text-blue-600 shadow-lg shadow-blue-100 md:flex">
+                      {step.n}
+                    </div>
+                    <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                      <div className="max-w-xl">
+                        <div className="mb-4 inline-flex rounded-full bg-blue-50 px-3 py-1 font-mono text-[10px] font-black uppercase tracking-[0.24em] text-blue-600 md:hidden">
+                          {step.n}
+                        </div>
+                    <h3 className="text-lg font-black leading-tight tracking-tight text-slate-950 md:text-xl">
+                          {step.title}
+                        </h3>
+                        <p className="mt-3 text-sm leading-relaxed text-slate-500">{step.problem}</p>
+                      </div>
+                      <div className="rounded-2xl bg-slate-50 p-4 lg:w-64">
+                        <p className="font-mono text-[9px] font-black uppercase tracking-[0.25em] text-slate-400">Entregable</p>
+                        <p className="mt-2 text-sm font-semibold leading-relaxed text-slate-700">{step.deliverable}</p>
+                      </div>
+                    </div>
+                  </motion.article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section ref={ctaRef} className="bg-slate-50 px-5 py-14 md:px-6 md:py-16">
+        <motion.div
+          initial={{ opacity: 0, y: 32, scale: 0.98 }}
+          animate={ctaInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+          transition={{ duration: 0.7 }}
+          className="relative mx-auto max-w-3xl overflow-hidden rounded-[1.75rem] border border-cyan-300/20 bg-slate-950 p-6 text-center text-white shadow-xl shadow-blue-950/20 md:p-8"
+        >
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(59,130,246,.45),transparent_45%)]" />
+          <div className="relative z-10">
+            <p className="font-mono text-[10px] font-black uppercase tracking-[0.3em] text-cyan-200">Siguiente paso</p>
+            <h2 className="mt-4 text-xl font-black leading-tight tracking-tight md:text-3xl">
+              Hagamos que tu sitio se sienta propio.
+            </h2>
+            <p className="mx-auto mt-5 max-w-2xl text-slate-300">
+              Servicios informáticos serios, claros y bien ejecutados. Un equipo técnico trabajando para que su negocio venda, opere y comunique mejor.
+            </p>
+            <Link href="/contacto" className="mt-9 inline-flex rounded-2xl bg-white px-9 py-4 text-xs font-black uppercase tracking-widest text-slate-950 transition hover:-translate-y-0.5">
+              Agendar conversación
             </Link>
           </div>
         </motion.div>

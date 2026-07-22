@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from 'next/link';
 import { motion, useInView } from 'framer-motion';
@@ -26,16 +26,6 @@ const FEATURES = [
   { icon: '🔄', titulo: 'Sincronización Multi-Sistema', desc: 'Una acción en un sistema se replica automáticamente en todos los demás. Sin copiar y pegar, sin errores humanos.' },
 ];
 
-const STACK = [
-  { name: 'n8n', color: 'bg-slate-900 text-white' },
-  { name: 'Zapier', color: 'bg-orange-500 text-white' },
-  { name: 'REST APIs', color: 'bg-sky-600 text-white' },
-  { name: 'Webhooks', color: 'bg-emerald-600 text-white' },
-  { name: 'Python', color: 'bg-yellow-500 text-slate-900' },
-  { name: 'Make.com', color: 'bg-violet-600 text-white' },
-  { name: 'Supabase', color: 'bg-green-600 text-white' },
-  { name: 'PostgreSQL', color: 'bg-indigo-600 text-white' },
-];
 
 const AHORROS = [
   { icon: '⏱️', titulo: 'Tiempo recuperado', valor: '40h/mes', desc: 'Promedio de horas liberadas por empleado en tareas manuales eliminadas.' },
@@ -45,17 +35,17 @@ const AHORROS = [
 ];
 
 const EJEMPLOS = [
-  { from: 'Formulario web', to: 'CRM + Email + Slack + Factura', icon: '📝', color: 'bg-sky-50 border-sky-100' },
-  { from: 'Nuevo pedido', to: 'Stock → ERP → Logística → Cliente', icon: '📦', color: 'bg-emerald-50 border-emerald-100' },
-  { from: 'Reporte mensual', to: 'Data → Excel → PDF → Email CEO', icon: '📊', color: 'bg-violet-50 border-violet-100' },
+  { from: 'Formulario web', to: 'CRM + Email + Slack + Factura', icon: '📝', color: 'bg-blue-50 border-blue-100' },
+  { from: 'Nuevo pedido', to: 'Stock → ERP → Logística → Cliente', icon: '📦', color: 'bg-cyan-50 border-cyan-100' },
+  { from: 'Reporte mensual', to: 'Data → Excel → PDF → Email CEO', icon: '📊', color: 'bg-blue-50 border-blue-100' },
   { from: 'Lead en LinkedIn', to: 'CRM → Asignación → Secuencia email', icon: '🎯', color: 'bg-orange-50 border-orange-100' },
 ];
 
 const PLANES_IMPLEMENTACION = [
   {
     nombre: 'Micro Automatización',
-    precio: 'USD 300',
-    desde: true,
+    precio: 'Cotización según diagnóstico',
+    desde: false,
     desc: 'Procesos simples y repetitivos para emprendedores o pequeños negocios.',
     incluye: ['1 automatización puntual', 'Integración entre 1-2 herramientas', 'Flujo: Formulario → Email → Sheets', 'Documentación básica de uso', 'Implementación única'],
     noIncluye: ['Monitoreo continuo', 'Optimización mensual', 'Soporte permanente'],
@@ -64,7 +54,7 @@ const PLANES_IMPLEMENTACION = [
   },
   {
     nombre: 'Estratégica',
-    precio: 'USD 1800',
+    precio: 'Cotización según diagnóstico',
     desde: false,
     desc: 'Digitalización de procesos internos de ventas, atención o gestión PYME.',
     incluye: ['3–5 automatizaciones conectadas', 'Integración CRM, WhatsApp, Agenda', 'Dashboard de métricas inicial', 'Optimización de flujo crítico', '3 meses de soporte técnico'],
@@ -73,7 +63,7 @@ const PLANES_IMPLEMENTACION = [
   },
   {
     nombre: 'Transformación',
-    precio: 'USD 4200',
+    precio: 'Cotización según diagnóstico',
     desde: false,
     desc: 'Arquitectura completa para digitalizar la operación de una empresa mediana/grande.',
     incluye: ['Arquitectura de automatización total', 'Integración ERP, CRM y APIs custom', 'Panel ejecutivo con KPIs', 'Capacitación completa al equipo', 'Consultoría de procesos avanzada'],
@@ -85,22 +75,22 @@ const PLANES_IMPLEMENTACION = [
 const PLANES_MENSUALES = [
   {
     nombre: 'On-Demand Support',
-    precio: '$0',
+    precio: 'Cotización según diagnóstico',
     desc: 'Pague solo cuando necesite un ajuste o reparación.',
-    incluye: ['Soporte por hora (USD 40-70/hr)', 'Sin compromiso mensual', 'Atención según disponibilidad'],
+    incluye: ['Soporte por hora según diagnóstico', 'Sin compromiso mensual', 'Atención según disponibilidad'],
     acento: 'border-slate-200 bg-slate-50',
   },
   {
     nombre: 'Active Growth',
-    precio: '$150.000',
+    precio: 'Cotización según diagnóstico',
     target: 'Para Estratégica',
     desc: 'Garantice que sus flujos nunca se detengan y sigan optimizándose.',
     incluye: ['Soporte prioritario', 'Ajustes menores incluidos', 'Revisión de rendimiento mensual', 'Monitoreo proactivo de errores'],
-    acento: 'border-sky-200 bg-sky-50/30',
+    acento: 'border-blue-200 bg-blue-50/30',
   },
   {
     nombre: 'Full Ops Managed',
-    precio: '$550.000',
+    precio: 'Cotización según diagnóstico',
     target: 'Para Transformación',
     desc: 'Luna operando como su equipo de ingeniería de procesos dedicado.',
     incluye: ['Nuevas automatizaciones cada mes', 'Análisis de procesos continuo', 'Mejora evolutiva constante', 'Reportes ejecutivos de impacto'],
@@ -126,43 +116,34 @@ function FeatureCard({ f, index }: { f: typeof FEATURES[0]; index: number }) {
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.55, delay: (index % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
-      className="group bg-white border border-slate-100 rounded-2xl p-6 hover:border-sky-100 hover:shadow-xl hover:shadow-sky-50 hover:-translate-y-1 transition-all duration-400"
+      className="group bg-white border border-slate-100 rounded-2xl p-6 hover:border-blue-100 hover:shadow-xl hover:shadow-blue-50 hover:-translate-y-1 transition-all duration-400"
     >
       <span className="text-2xl mb-4 block">{f.icon}</span>
-      <h3 className="text-sm font-black uppercase tracking-tight text-slate-900 mb-2 group-hover:text-sky-600 transition-colors">{f.titulo}</h3>
+      <h3 className="text-sm font-black uppercase tracking-tight text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">{f.titulo}</h3>
       <p className="text-xs text-slate-500 leading-relaxed">{f.desc}</p>
     </motion.div>
   );
 }
 
-function PlanInversionCard({ plan, index }: { plan: typeof PLANES_IMPLEMENTACION[0]; index: number }) {
-  const clpPrice = formatCLP(plan.precio);
+function PlanAlcancesCard({ plan, index }: { plan: typeof PLANES_IMPLEMENTACION[0]; index: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.1 }}
-      className={`p-8 rounded-[2.5rem] border flex flex-col h-full transition-all duration-500
-        ${plan.destacado ? 'bg-sky-600 text-white shadow-2xl scale-[1.02] z-10' : 'bg-white border-slate-100'}`}
+      className={`p-5 sm:p-6 rounded-[1.75rem] border flex flex-col h-full transition-all duration-300
+        ${plan.destacado ? 'bg-slate-950 text-white shadow-xl shadow-blue-950/20 ring-1 ring-cyan-300/20 z-10' : 'bg-white border-slate-100'}`}
     >
-      <p className={`font-mono text-[9px] uppercase tracking-widest mb-4 ${plan.destacado ? 'text-sky-200' : 'text-sky-600'}`}>{plan.nombre}</p>
+      <p className={`font-mono text-[9px] uppercase tracking-widest mb-4 ${plan.destacado ? 'text-blue-200' : 'text-blue-600'}`}>{plan.nombre}</p>
       <div className="mb-6">
-        <div className="flex items-baseline gap-1">
-          {plan.desde && <span className={`text-xs font-medium ${plan.destacado ? 'text-sky-200' : 'text-slate-400'}`}>Desde</span>}
-          <span className="text-4xl font-black tracking-tighter tabular-nums">{plan.precio}</span>
-        </div>
-        {clpPrice && (
-          <p className={`text-xs font-bold mt-1 ${plan.destacado ? 'text-white/80' : 'text-sky-600'}`}>
-            ≈ {clpPrice} <span className="text-[10px] opacity-70">CLP + IVA*</span>
-          </p>
-        )}
+        <p className={`text-xs font-black uppercase tracking-[0.22em] mb-2 ${plan.destacado ? 'text-white/70' : 'text-slate-400'}`}>Alcance</p><p className="text-2xl font-black tracking-tighter leading-none">Cotización según diagnóstico</p><p className={`text-xs font-semibold mt-2 ${plan.destacado ? 'text-white/75' : 'text-slate-600'}`}>Se define después de entender objetivos, integraciones y tiempos reales.</p>
       </div>
-      <p className={`text-xs leading-relaxed mb-8 ${plan.destacado ? 'text-sky-100' : 'text-slate-500'}`}>{plan.desc}</p>
+      <p className={`text-xs leading-relaxed mb-8 ${plan.destacado ? 'text-blue-100' : 'text-slate-500'}`}>{plan.desc}</p>
       <ul className="space-y-3 mb-8 flex-1">
         {plan.incluye.map(i => (
           <li key={i} className="flex items-center gap-3 text-xs font-medium">
-            <span className={plan.destacado ? 'text-white' : 'text-sky-600'}>✓</span> {i}
+            <span className={plan.destacado ? 'text-white' : 'text-blue-600'}>✓</span> {i}
           </li>
         ))}
         {plan.noIncluye && plan.noIncluye.map(i => (
@@ -171,7 +152,7 @@ function PlanInversionCard({ plan, index }: { plan: typeof PLANES_IMPLEMENTACION
           </li>
         ))}
       </ul>
-      <Link href="/contacto" className={`w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest text-center transition-all ${plan.destacado ? 'bg-white text-sky-600 shadow-lg' : 'bg-slate-900 text-white hover:bg-sky-600'}`}>
+      <Link href="/contacto" className={`w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest text-center transition-all ${plan.destacado ? 'bg-white text-slate-950 shadow-lg' : 'bg-slate-900 text-white hover:bg-blue-700'}`}>
         {plan.cta}
       </Link>
     </motion.div>
@@ -185,21 +166,21 @@ function PlanMensualCard({ plan, index }: { plan: typeof PLANES_MENSUALES[0]; in
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.1 }}
-      className={`p-7 rounded-[2rem] border ${plan.acento} flex flex-col h-full hover:shadow-xl transition-all`}
+      className={`p-5 rounded-[1.5rem] border ${plan.acento} flex flex-col h-full hover:shadow-xl transition-all`}
     >
       <div className="mb-4">
         <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-1">{plan.nombre}</h3>
-        {plan.target && <p className="text-[9px] font-bold text-sky-600 uppercase tracking-tighter">{plan.target}</p>}
+        {plan.target && <p className="text-[9px] font-bold text-blue-600 uppercase tracking-tighter">{plan.target}</p>}
       </div>
       <div className="mb-4">
-        <span className="text-xl font-black text-slate-900">CLP {plan.precio}</span>
+        <span className="text-lg font-black text-slate-900 leading-tight">Soporte según alcance</span>
         <span className="text-[10px] font-bold text-slate-400"> / mes</span>
       </div>
       <p className="text-[11px] text-slate-500 leading-relaxed mb-6 italic">"{plan.desc}"</p>
       <ul className="space-y-2 flex-1">
         {plan.incluye.map(i => (
           <li key={i} className="text-[10px] text-slate-600 flex items-center gap-2 font-semibold">
-            <span className="w-1 h-1 bg-sky-400 rounded-full" /> {i}
+            <span className="w-1 h-1 bg-blue-400 rounded-full" /> {i}
           </li>
         ))}
       </ul>
@@ -217,14 +198,14 @@ export default function AutomatizacionPage() {
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section className="pt-24 md:pt-32 pb-16 md:pb-20 px-5 md:px-6 relative overflow-hidden"
-        style={{ background: 'linear-gradient(160deg, #f0f9ff 0%, #ffffff 55%)' }}>
+        style={{ background: 'linear-gradient(160deg, #f0f7ff 0%, #ffffff 55%)' }}>
         <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
-          style={{ backgroundImage: 'linear-gradient(#0284c7 1px,transparent 1px),linear-gradient(90deg,#0284c7 1px,transparent 1px)', backgroundSize: '52px 52px' }} />
-        <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-sky-100 rounded-full blur-[120px] opacity-60 pointer-events-none" />
+          style={{ backgroundImage: 'linear-gradient(#2563eb 1px,transparent 1px),linear-gradient(90deg,#2563eb 1px,transparent 1px)', backgroundSize: '52px 52px' }} />
+        <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-blue-100 rounded-full blur-[120px] opacity-60 pointer-events-none" />
 
         <div className="max-w-7xl mx-auto relative z-10">
           <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4 }}>
-            <Link href="/servicios" className="inline-flex items-center gap-2 text-slate-400 hover:text-sky-600 transition-colors text-xs font-bold uppercase tracking-widest mb-10 group">
+            <Link href="/servicios" className="inline-flex items-center gap-2 text-slate-400 hover:text-blue-600 transition-colors text-xs font-bold uppercase tracking-widest mb-10 group">
               <svg className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
               </svg>
@@ -235,19 +216,19 @@ export default function AutomatizacionPage() {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div>
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45 }}
-                className="inline-flex items-center gap-2 bg-white border border-sky-100 shadow-sm px-3.5 py-1.5 rounded-full mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse" />
-                <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-sky-700">Efficiency Engineering</span>
+                className="inline-flex items-center gap-2 bg-white border border-blue-100 shadow-sm px-3.5 py-1.5 rounded-full mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+                <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-blue-700">Efficiency Engineering</span>
               </motion.div>
 
               <motion.h1
                 initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-                className="text-[clamp(2.8rem,8vw,6.5rem)] font-black leading-[0.85] tracking-tighter uppercase mb-6"
+                className="text-[clamp(2.15rem,5.4vw,4.6rem)] font-black leading-[0.85] tracking-tighter uppercase mb-6"
               >
                 FLUJOS QUE<br />
-                <span className="text-sky-600 italic">escalan.</span>
+                <span className="text-blue-600 italic">escalan.</span>
               </motion.h1>
 
               <motion.p initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }}
@@ -264,7 +245,7 @@ export default function AutomatizacionPage() {
                   { v: '8x', l: 'ROI promedio' },
                 ].map((m) => (
                   <div key={m.l} className="bg-white border border-slate-100 rounded-2xl px-5 py-4 shadow-sm">
-                    <span className="block text-2xl font-black tracking-tighter text-sky-600">{m.v}</span>
+                    <span className="block text-2xl font-black tracking-tighter text-blue-600">{m.v}</span>
                     <span className="font-mono text-[8px] uppercase tracking-widest text-slate-400">{m.l}</span>
                   </div>
                 ))}
@@ -284,10 +265,10 @@ export default function AutomatizacionPage() {
                 {/* Nodos del pipeline */}
                 <div className="space-y-3">
                   {[
-                    { label: 'TRIGGER', sub: 'Nuevo formulario recibido', status: 'done', color: 'bg-emerald-500' },
-                    { label: 'PASO 1', sub: 'Crear contacto en CRM', status: 'done', color: 'bg-emerald-500' },
-                    { label: 'PASO 2', sub: 'Enviar email de bienvenida', status: 'done', color: 'bg-emerald-500' },
-                    { label: 'PASO 3', sub: 'Notificar equipo en Slack', status: 'running', color: 'bg-sky-500' },
+                    { label: 'TRIGGER', sub: 'Nuevo formulario recibido', status: 'done', color: 'bg-cyan-500' },
+                    { label: 'PASO 1', sub: 'Crear contacto en CRM', status: 'done', color: 'bg-cyan-500' },
+                    { label: 'PASO 2', sub: 'Enviar email de bienvenida', status: 'done', color: 'bg-cyan-500' },
+                    { label: 'PASO 3', sub: 'Notificar equipo en Slack', status: 'running', color: 'bg-blue-500' },
                     { label: 'PASO 4', sub: 'Generar factura en ERP', status: 'pending', color: 'bg-slate-200' },
                     { label: 'PASO 5', sub: 'Asignar vendedor', status: 'pending', color: 'bg-slate-200' },
                   ].map((node, i) => (
@@ -305,19 +286,19 @@ export default function AutomatizacionPage() {
                       </div>
                       {/* Contenido */}
                       <div className={`flex-1 flex items-center justify-between px-4 py-2.5 rounded-xl border text-xs
-                        ${node.status === 'done' ? 'bg-emerald-50 border-emerald-100' :
-                          node.status === 'running' ? 'bg-sky-50 border-sky-200' :
+                        ${node.status === 'done' ? 'bg-cyan-50 border-cyan-100' :
+                          node.status === 'running' ? 'bg-blue-50 border-blue-200' :
                           'bg-slate-50 border-slate-100'}`}
                       >
                         <div>
                           <span className={`font-mono font-bold text-[8px] uppercase tracking-widest block
-                            ${node.status === 'done' ? 'text-emerald-600' : node.status === 'running' ? 'text-sky-600' : 'text-slate-300'}`}>
+                            ${node.status === 'done' ? 'text-cyan-600' : node.status === 'running' ? 'text-blue-600' : 'text-slate-300'}`}>
                             {node.label}
                           </span>
                           <span className={`text-[10px] font-medium ${node.status === 'pending' ? 'text-slate-300' : 'text-slate-600'}`}>{node.sub}</span>
                         </div>
-                        {node.status === 'done' && <span className="text-emerald-500 text-xs">✓</span>}
-                        {node.status === 'running' && <span className="inline-block w-1.5 h-3 bg-sky-400 animate-pulse rounded-sm" />}
+                        {node.status === 'done' && <span className="text-cyan-500 text-xs">✓</span>}
+                        {node.status === 'running' && <span className="inline-block w-1.5 h-3 bg-blue-400 animate-pulse rounded-sm" />}
                       </div>
                     </motion.div>
                   ))}
@@ -325,7 +306,7 @@ export default function AutomatizacionPage() {
 
                 <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
                   <span className="font-mono text-[8px] text-slate-400 uppercase tracking-widest">Tiempo total estimado</span>
-                  <span className="font-mono text-xs font-black text-sky-600">1.4s ⚡</span>
+                  <span className="font-mono text-xs font-black text-blue-600">1.4s ⚡</span>
                 </div>
               </div>
             </motion.div>
@@ -333,28 +314,13 @@ export default function AutomatizacionPage() {
         </div>
       </section>
 
-      {/* ── STACK MARQUEE ─────────────────────────────────────────────────── */}
-      <section className="py-8 border-y border-slate-100 bg-slate-50 overflow-hidden">
-        <motion.div
-          animate={{ x: ['0%', '-50%'] }}
-          transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-          className="flex gap-3 whitespace-nowrap"
-        >
-          {[...STACK, ...STACK].map((s, i) => (
-            <span key={i} className={`inline-flex items-center px-4 py-2 rounded-full text-xs font-black uppercase tracking-wide ${s.color}`}>
-              {s.name}
-            </span>
-          ))}
-        </motion.div>
-      </section>
-
       {/* ── IMPACTO REAL ─────────────────────────────────────────────────── */}
       <section className="py-16 md:py-24 px-5 md:px-6 bg-white">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-10">
-            <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-sky-600 mb-2">Impacto medible</p>
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">
-              Lo que <span className="text-sky-600 italic">gana.</span>
+            <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-blue-600 mb-2">Impacto medible</p>
+            <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter">
+              Lo que <span className="text-blue-600 italic">gana.</span>
             </h2>
           </motion.div>
 
@@ -366,10 +332,10 @@ export default function AutomatizacionPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="bg-white border border-slate-100 rounded-2xl p-6 hover:border-sky-100 hover:shadow-lg hover:shadow-sky-50 transition-all duration-400"
+                className="bg-white border border-slate-100 rounded-2xl p-6 hover:border-blue-100 hover:shadow-lg hover:shadow-blue-50 transition-all duration-400"
               >
                 <span className="text-2xl mb-3 block">{a.icon}</span>
-                <span className="block text-3xl font-black text-sky-600 tracking-tighter mb-1">{a.valor}</span>
+                <span className="block text-3xl font-black text-blue-600 tracking-tighter mb-1">{a.valor}</span>
                 <span className="font-mono text-[8px] uppercase tracking-widest text-slate-900 font-bold block mb-2">{a.titulo}</span>
                 <p className="text-xs text-slate-500 leading-relaxed">{a.desc}</p>
               </motion.div>
@@ -378,9 +344,9 @@ export default function AutomatizacionPage() {
 
           {/* Ejemplos de flujos */}
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-8">
-            <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-sky-600 mb-2">Ejemplos reales</p>
-            <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter">
-              Flujos que <span className="text-sky-600 italic">automatizamos.</span>
+            <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-blue-600 mb-2">Ejemplos reales</p>
+            <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter">
+              Flujos que <span className="text-blue-600 italic">automatizamos.</span>
             </h2>
           </motion.div>
 
@@ -407,9 +373,9 @@ export default function AutomatizacionPage() {
 
           {/* Features grid */}
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-8">
-            <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-sky-600 mb-2">Capacidades</p>
-            <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter">
-              Qué <span className="text-sky-600 italic">construimos.</span>
+            <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-blue-600 mb-2">Capacidades</p>
+            <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter">
+              Qué <span className="text-blue-600 italic">construimos.</span>
             </h2>
           </motion.div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -420,18 +386,18 @@ export default function AutomatizacionPage() {
 
       {/* ── PROCESO ───────────────────────────────────────────────────────── */}
       <section className="py-16 md:py-24 px-5 md:px-6 relative overflow-hidden"
-        style={{ backgroundColor: '#f0f9ff' }}>
+        style={{ backgroundColor: '#f0f7ff' }}>
         <div className="absolute inset-0 pointer-events-none opacity-40"
           style={{ backgroundImage: 'radial-gradient(#bae6fd 1px,transparent 1px)', backgroundSize: '22px 22px' }} />
         <div className="max-w-7xl mx-auto relative z-10">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-10">
-            <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-sky-600 mb-2">Metodología</p>
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">
-              Cómo lo <span className="text-sky-600 italic">implementamos.</span>
+            <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-blue-600 mb-2">Metodología</p>
+            <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter">
+              Cómo lo <span className="text-blue-600 italic">implementamos.</span>
             </h2>
           </motion.div>
           <div className="relative">
-            <div className="hidden md:block absolute top-7 left-6 right-6 h-px bg-sky-100 z-0" />
+            <div className="hidden md:block absolute top-7 left-6 right-6 h-px bg-blue-100 z-0" />
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4 relative z-10">
               {PROCESO.map((paso, i) => (
                 <motion.div key={i}
@@ -439,12 +405,12 @@ export default function AutomatizacionPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.08 }}
-                  className="group bg-white border border-slate-100 rounded-2xl p-5 hover:border-sky-100 hover:shadow-lg hover:shadow-sky-50 hover:-translate-y-1 transition-all duration-400"
+                  className="group bg-white border border-slate-100 rounded-2xl p-5 hover:border-blue-100 hover:shadow-lg hover:shadow-blue-50 hover:-translate-y-1 transition-all duration-400"
                 >
-                  <div className="w-8 h-8 rounded-full bg-sky-600 flex items-center justify-center mb-4">
+                  <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center mb-4">
                     <span className="font-mono text-[9px] font-black text-white">{paso.n}</span>
                   </div>
-                  <h3 className="text-sm font-black uppercase tracking-tight text-slate-900 mb-2 group-hover:text-sky-600 transition-colors">{paso.t}</h3>
+                  <h3 className="text-sm font-black uppercase tracking-tight text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">{paso.t}</h3>
                   <p className="text-xs text-slate-500 leading-relaxed">{paso.d}</p>
                 </motion.div>
               ))}
@@ -453,31 +419,31 @@ export default function AutomatizacionPage() {
         </div>
       </section>
 
-      {/* ── PRECIOS ───────────────────────────────────────────────────────── */}
+      {/* ── ALCANCES ───────────────────────────────────────────────────────── */}
       {/* ── SECCIÓN: IMPLEMENTACIÓN (CAPEX) ── */}
-      <section className="py-24 px-6 bg-white">
+      <section className="py-14 md:py-20 px-5 md:px-6 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16">
-            <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-sky-600 mb-2">Build & Automate</p>
-            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter italic">Inversión — <span className="text-sky-600">Procesos.</span></h2>
-            <p className="text-slate-500 text-sm mt-4">Inversión única para el diseño e implementación de sus flujos digitales.</p>
+            <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-blue-600 mb-2">Build & Automate</p>
+            <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter italic">Alcances — <span className="text-blue-600">Procesos.</span></h2>
+            <p className="text-slate-500 text-sm mt-4">Definimos alcance, prioridades y esfuerzo después de un diagnóstico breve.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {PLANES_IMPLEMENTACION.map((plan, i) => <PlanInversionCard key={i} plan={plan} index={i} />)}
+            {PLANES_IMPLEMENTACION.map((plan, i) => <PlanAlcancesCard key={i} plan={plan} index={i} />)}
           </div>
         </div>
       </section>
 
       {/* ── SECCIÓN: MENSUALIDADES (OPEX / LUNA) ── */}
-      <section className="py-24 px-6 bg-[#F8FAFC] border-y border-slate-100">
+      <section className="py-14 md:py-20 px-5 md:px-6 bg-[#F8FAFC] border-y border-slate-100">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div className="max-w-xl">
-              <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-sky-600 mb-2">Continuidad & Optimización</p>
-              <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none">Managed <span className="italic text-slate-400">Operations.</span></h2>
+              <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-blue-600 mb-2">Continuidad & Optimización</p>
+              <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter leading-none">Managed <span className="italic text-slate-400">Operations.</span></h2>
               <p className="text-slate-500 text-sm mt-6 leading-relaxed">
                 El entorno digital cambia, sus automatizaciones deben adaptarse. Gestión mensual de errores, soporte y mejora continua.
-                <span className="text-slate-900 font-bold ml-2 underline decoration-sky-500 decoration-2 underline-offset-4 text-xs uppercase">Valores + IVA</span>
+                <span className="text-slate-900 font-bold ml-2 underline decoration-blue-500 decoration-2 underline-offset-4 text-xs uppercase">Cotización según alcance</span>
               </p>
             </div>
           </div>
@@ -494,33 +460,33 @@ export default function AutomatizacionPage() {
           initial={{ opacity: 0, y: 32, scale: 0.97 }}
           animate={ctaInView ? { opacity: 1, y: 0, scale: 1 } : {}}
           transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-4xl mx-auto bg-sky-600 rounded-[2.5rem] p-10 md:p-16 relative overflow-hidden shadow-2xl shadow-sky-200"
+          className="max-w-3xl mx-auto rounded-[2rem] border border-cyan-300/20 bg-slate-950 p-7 sm:p-8 md:p-10 relative overflow-hidden shadow-xl shadow-blue-950/20"
         >
-          <div className="absolute top-0 right-0 w-72 h-72 bg-white/10 rounded-full blur-3xl -mr-36 -mt-36 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-52 h-52 bg-sky-800/40 rounded-full blur-2xl -ml-24 -mb-24 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-72 h-72 bg-blue-500/25 rounded-full blur-3xl -mr-36 -mt-36 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-52 h-52 bg-cyan-400/10 rounded-full blur-2xl -ml-24 -mb-24 pointer-events-none" />
           <div className="absolute inset-0 pointer-events-none opacity-[0.07]"
             style={{ backgroundImage: 'radial-gradient(#fff 1px,transparent 1px)', backgroundSize: '20px 20px' }} />
 
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
             <div>
-              <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-sky-200 mb-3">¿Cuánto tiempo pierde su equipo?</p>
-              <h2 className="text-3xl md:text-4xl font-black tracking-tighter uppercase leading-[0.9] text-white mb-3">
+              <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-cyan-200 mb-3">¿Cuánto tiempo pierde su equipo?</p>
+              <h2 className="text-2xl md:text-3xl font-black tracking-tighter uppercase leading-[0.9] text-white mb-3">
                 Mapeemos sus<br />procesos gratis.
               </h2>
-              <p className="text-sky-100 text-sm font-light max-w-sm">
+              <p className="text-cyan-100/80 text-sm font-light max-w-sm">
                 En 30 minutos identificamos qué procesos tienen más impacto al automatizarlos y le damos el plan de acción.
               </p>
             </div>
             <div className="flex flex-col gap-3 shrink-0">
               <Link href="/contacto"
-                className="group inline-flex items-center gap-3 bg-white text-sky-600 px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-[1.03] active:scale-[0.98] transition-all shadow-xl whitespace-nowrap">
+                className="group inline-flex items-center gap-3 bg-white text-slate-950 px-7 py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all shadow-xl whitespace-nowrap">
                 Auditar mis Procesos
                 <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                 </svg>
               </Link>
               <Link href="/proyectos"
-                className="inline-flex items-center justify-center gap-2 text-sky-200 hover:text-white text-xs uppercase tracking-widest font-bold transition-colors">
+                className="inline-flex items-center justify-center gap-2 text-cyan-200 hover:text-white text-xs uppercase tracking-widest font-bold transition-colors">
                 Ver automatizaciones →
               </Link>
             </div>
@@ -531,3 +497,7 @@ export default function AutomatizacionPage() {
     </main>
   );
 }
+
+
+
+

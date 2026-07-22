@@ -1,11 +1,13 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy, where } from 'firebase/firestore';
+import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import { assetUrl } from '@/lib/project-assets';
 
 
 // ─── Loader ───────────────────────────────────────────────────────────────────
@@ -24,8 +26,7 @@ function ProyectoCard({ proyecto, index }: { proyecto: any; index: number }) {
   const inView = useInView(ref, { once: true, margin: '-40px' });
   const techs: string[] = proyecto.tecnologias?.split(',') ?? [];
   
-  // Leemos el cloudName desde las variables de entorno
-  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+  const coverUrl = assetUrl(proyecto.coverAsset, 400);
 
   return (
     <motion.div
@@ -37,17 +38,18 @@ function ProyectoCard({ proyecto, index }: { proyecto: any; index: number }) {
     >
       {/* Imagen compacta con optimización dinámica */}
       <div className="relative h-44 w-full overflow-hidden bg-slate-100">
-        <img
-          /* Explicación técnica: 
-             w_400: Limita el ancho a 400px (ideal para el grid de móviles/desktop)
-             f_auto: Elige el formato más ligero (WebP/AVIF) según el navegador
-             q_auto: Comprime la imagen sin que el ojo humano note la diferencia
-          */
-          src={`https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto,w_400/v1/${proyecto.cloudinaryId}`}
-          alt={proyecto.nombre}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-600 ease-out"
-          loading="lazy" // Mejora el rendimiento de carga inicial
-        />
+        {coverUrl ? (
+          <img
+            src={coverUrl}
+            alt={proyecto.nombre}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-600 ease-out"
+            loading="lazy"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-slate-900 text-white">
+            <span className="font-mono text-[8px] uppercase tracking-[0.25em] text-white/50">Sin portada Drive</span>
+          </div>
+        )}
         {/* ... Resto del código del badge categoría e índice ... */}
         <div className="absolute top-3 left-3 z-10">
           <span className="px-2.5 py-1 bg-white/90 backdrop-blur-sm text-slate-700 text-[8px] font-black uppercase tracking-widest rounded-full border border-white/60 shadow-sm">
@@ -131,53 +133,64 @@ export default function ProyectosPage() {
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-100 px-3.5 py-1.5 rounded-full mb-6">
               <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-              <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-blue-700">Portafolio Técnico</span>
+              <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-blue-700">Portafolio técnico</span>
             </div>
           </motion.div>
 
-          {/* Título + descripción en columnas separadas y bien alineadas */}
-          <div className="grid lg:grid-cols-[1fr_auto] gap-8 items-end mb-10">
-            <motion.h1
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.75, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-              className="text-[clamp(3rem,8vw,6.5rem)] font-black text-slate-900 tracking-tighter leading-[0.85] uppercase"
-            >
-              INGENIERÍA<br />
-              <span className="text-blue-600 italic">APLICADA.</span>
-            </motion.h1>
+          <div className="grid gap-10 lg:grid-cols-[1fr_420px] lg:items-end mb-10">
+            <div>
+              <motion.h1
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.75, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+                className="text-[clamp(1.95rem,4.2vw,3.3rem)] font-black text-slate-900 tracking-tight leading-tight"
+              >
+                Ingeniería aplicada a proyectos reales.
+              </motion.h1>
 
-            {/* Métricas alineadas a la derecha abajo, sin pisar el título */}
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="text-slate-500 text-base leading-relaxed max-w-xl mt-6"
+              >
+                Soluciones escalables, arquitectura modular y desarrollo de software con{' '}
+                <span className="text-slate-800 font-semibold">estándares de alto rendimiento.</span>
+              </motion.p>
+            </div>
+
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="hidden lg:flex flex-col gap-4 pb-2"
+              className="relative hidden min-h-[320px] overflow-hidden rounded-[2rem] bg-slate-950 shadow-xl shadow-blue-950/20 lg:block"
             >
-              {[
-                { v: String(proyectos.length), l: 'Proyectos' },
-                { v: '99.9%', l: 'Uptime' },
-                { v: '40+', l: 'Clientes' },
-              ].map((m) => (
-                <div key={m.l} className="flex items-baseline gap-2 pl-4 border-l-2 border-slate-200">
-                  <span className="text-xl font-black text-slate-900 tracking-tighter tabular-nums">{m.v}</span>
-                  <span className="font-mono text-[9px] uppercase tracking-widest text-blue-600">{m.l}</span>
+              <Image
+                src="/imagenes/yonko.png"
+                alt="Equipo presentando proyectos de ingeniería y arquitectura cloud"
+                fill
+                priority
+                sizes="420px"
+                className="object-cover object-center"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+              <div className="absolute bottom-5 left-5 right-5 rounded-3xl border border-white/10 bg-slate-950/70 p-4 text-white backdrop-blur-xl">
+                <p className="font-mono text-[9px] font-black uppercase tracking-[0.28em] text-cyan-200">Proyectos con sistema</p>
+                <div className="mt-3 grid grid-cols-3 gap-2">
+                  {[
+                    { v: String(proyectos.length), l: 'Proyectos' },
+                    { v: '99.9%', l: 'Uptime' },
+                    { v: '40+', l: 'Clientes' },
+                  ].map((m) => (
+                    <div key={m.l} className="rounded-2xl bg-white/10 p-3 text-center">
+                      <span className="block text-lg font-black tabular-nums">{m.v}</span>
+                      <span className="font-mono text-[8px] uppercase tracking-widest text-cyan-100/80">{m.l}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </motion.div>
           </div>
-
-          {/* Descripción debajo del título, sin colisión */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-slate-500 text-base leading-relaxed max-w-xl mb-8"
-          >
-            Soluciones escalables, arquitecturas modulares y desarrollo de software con{' '}
-            <span className="text-slate-800 font-semibold">estándares de alto rendimiento.</span>
-          </motion.p>
-
           {/* Filtros */}
           {categorias.length > 2 && (
             <motion.div
@@ -208,7 +221,7 @@ export default function ProyectosPage() {
       <section className="px-6 py-12 bg-slate-50">
         <div className="max-w-7xl mx-auto">
           {filtrados.length === 0 ? (
-            <div className="text-center py-24 bg-white rounded-3xl border-2 border-dashed border-slate-200">
+            <div className="text-center py-16 bg-white rounded-2xl border-2 border-dashed border-slate-200">
               <p className="text-slate-400 font-mono text-xs uppercase tracking-widest">
                 No hay proyectos en esta categoría
               </p>
@@ -230,17 +243,17 @@ export default function ProyectosPage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-5xl mx-auto bg-blue-600 rounded-[2.5rem] p-10 md:p-16 text-center text-white relative overflow-hidden shadow-2xl shadow-blue-200"
+          className="max-w-4xl mx-auto rounded-[2rem] border border-cyan-300/20 bg-slate-950 p-7 md:p-10 text-center text-white relative overflow-hidden shadow-xl shadow-blue-950/20"
         >
-          <div className="absolute top-0 right-0 w-72 h-72 bg-white/10 rounded-full blur-3xl -mr-36 -mt-36 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-52 h-52 bg-blue-800/40 rounded-full blur-2xl -ml-24 -mb-24 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-72 h-72 bg-blue-500/25 rounded-full blur-3xl -mr-36 -mt-36 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-52 h-52 bg-cyan-400/10 rounded-full blur-2xl -ml-24 -mb-24 pointer-events-none" />
 
           <div className="relative z-10">
-            <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-blue-200 mb-4">¿Siguiente proyecto?</p>
-            <h2 className="text-3xl md:text-5xl font-black mb-4 tracking-tighter uppercase leading-[0.9]">
+            <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-cyan-200 mb-4">¿Siguiente proyecto?</p>
+            <h2 className="text-2xl md:text-3xl font-black mb-4 tracking-tighter uppercase leading-[0.9]">
               ¿Tienes un desafío técnico?
             </h2>
-            <p className="text-blue-100 text-base mb-8 max-w-lg mx-auto font-light">
+            <p className="text-cyan-100/80 text-base mb-8 max-w-lg mx-auto font-light">
               Transformamos ideas complejas en productos digitales robustos y escalables.
             </p>
             <Link

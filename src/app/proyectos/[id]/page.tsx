@@ -5,7 +5,8 @@ import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ProjectAsset, assetKind, assetUrl } from '@/lib/project-assets';
 
 // ─── DocSection ───────────────────────────────────────────────────────────────
 function DocSection({ num, title, content, accent = false }: {
@@ -39,7 +40,7 @@ function LoadingScreen() {
 }
 
 // ─── Flat Slider (> 4 fotos) ──────────────────────────────────────────────────
-function FlatSlider({ fotos, cloudName }: { fotos: string[]; cloudName: string }) {
+function FlatSlider({ fotos }: { fotos: (ProjectAsset | string)[] }) {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
 
@@ -70,7 +71,7 @@ function FlatSlider({ fotos, cloudName }: { fotos: string[]; cloudName: string }
             animate="center"
             exit="exit"
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-            src={`https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto,w_1200/v1/${fotos[current]}`}
+            src={assetUrl(fotos[current], 1200)}
             alt={`Vista ${current + 1}`}
             className="absolute inset-0 w-full h-full object-contain"
             draggable={false}
@@ -111,7 +112,7 @@ function FlatSlider({ fotos, cloudName }: { fotos: string[]; cloudName: string }
             style={{ width: '80px', aspectRatio: '16/9' }}
           >
             <img
-              src={`https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto,w_200/v1/${foto}`}
+              src={assetUrl(foto, 200)}
               alt={`Thumb ${i + 1}`}
               className="w-full h-full object-cover"
             />
@@ -122,102 +123,13 @@ function FlatSlider({ fotos, cloudName }: { fotos: string[]; cloudName: string }
   );
 }
 
-// ─── 3D Carousel (<= 4 fotos) ─────────────────────────────────────────────────
-function Carousel3D({ fotos, cloudName, isMobile }: { fotos: string[]; cloudName: string; isMobile: boolean }) {
-  const xDrag = useMotionValue(0);
-  const rotateY = useSpring(useTransform(xDrag, (val) => val * 0.2), {
-    stiffness: 45,
-    damping: 25,
-  });
-
-  const radius = isMobile ? 180 : 450;
-  const itemWidth = isMobile ? 220 : 500;
-
-  return (
-    <section className="relative bg-slate-950 py-8 md:py-0">
-      {/* Hint de arrastre */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 0.6 }}
-        className="absolute top-5 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full pointer-events-none"
-      >
-        <svg className="w-3.5 h-3.5 text-white/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-        </svg>
-        <span className="font-mono text-[8px] uppercase tracking-widest text-white/60">Arrastra para rotar</span>
-      </motion.div>
-
-      <div className="relative h-[300px] md:h-[550px] w-full flex items-center justify-center">
-        {/* Capa de arrastre */}
-        <motion.div
-          drag="x"
-          style={{ x: 0, zIndex: 50 }}
-          dragConstraints={{ left: 0, right: 0 }}
-          onDrag={(_, info) => xDrag.set(xDrag.get() + info.delta.x)}
-          className="absolute inset-0 cursor-grab active:cursor-grabbing"
-        />
-
-        <div style={{ perspective: isMobile ? '800px' : '1500px', pointerEvents: 'none' }}>
-          <motion.div
-            style={{
-              rotateY: rotateY,
-              transformStyle: 'preserve-3d',
-              width: '200px',
-              height: '150px',
-            }}
-            className="relative flex items-center justify-center"
-          >
-            {fotos.map((foto: string, index: number) => {
-              const angleStep = 360 / fotos.length;
-              const currentAngle = angleStep * index;
-
-              return (
-                <div
-                  key={index}
-                  className="absolute rounded-[1.5rem] md:rounded-[2.5rem] border border-white/10 overflow-hidden shadow-2xl bg-slate-900"
-                  style={{
-                    width: `${itemWidth}px`,
-                    aspectRatio: '16/9',
-                    transform: `rotateY(${currentAngle}deg) translateZ(${radius}px)`,
-                    WebkitBoxReflect: isMobile ? 'none' : 'below 10px linear-gradient(to bottom, transparent, rgba(0,0,0,0.1))',
-                  }}
-                >
-                  <img
-                    src={`https://res.cloudinary.com/${cloudName}/image/upload/f_auto,q_auto,w_${isMobile ? 400 : 800}/v1/${foto}`}
-                    alt={`Vista ${index + 1}`}
-                    className="w-full h-full object-cover"
-                    loading={index === 0 ? "eager" : "lazy"}
-                  />
-                </div>
-              );
-            })}
-          </motion.div>
-        </div>
-      </div>
-
-      {/* Contador de fotos */}
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
-        <span className="font-mono text-[8px] uppercase tracking-widest text-white/40">{fotos.length} imágenes</span>
-      </div>
-    </section>
-  );
-}
-
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
 export default function ProyectoDetallePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const [proyecto, setProyecto] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [windowWidth, setWindowWidth] = useState(0);
-
-  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ?? '';
 
   useEffect(() => {
-    setWindowWidth(window.innerWidth);
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-
     const loadData = async () => {
       try {
         const docRef = doc(db, 'proyectos', id);
@@ -231,15 +143,12 @@ export default function ProyectoDetallePage({ params }: { params: Promise<{ id: 
     };
 
     loadData();
-    return () => window.removeEventListener('resize', handleResize);
   }, [id]);
 
   if (loading) return <LoadingScreen />;
   if (!proyecto) notFound();
 
-  const todasLasFotos = [proyecto.cloudinaryId, ...(proyecto.galeria || [])];
-  const isMobile = windowWidth < 768;
-  const usarSlider = todasLasFotos.length > 4;
+  const todasLasFotos = [proyecto.coverAsset, ...(proyecto.assets || [])].filter((asset) => asset && assetKind(asset) === 'image');
 
   return (
     <main className="min-h-screen bg-white text-slate-900 overflow-x-hidden">
@@ -317,11 +226,15 @@ export default function ProyectoDetallePage({ params }: { params: Promise<{ id: 
         </div>
       </section>
 
-      {/* ── GALERÍA: slider plano si > 4 fotos, carrusel 3D si <= 4 ─────── */}
-      {usarSlider
-        ? <FlatSlider fotos={todasLasFotos} cloudName={cloudName} />
-        : <Carousel3D fotos={todasLasFotos} cloudName={cloudName} isMobile={isMobile} />
-      }
+      {/* ── GALERÍA: visor simple sin carrusel 3D ─────────────────────────── */}
+      {todasLasFotos.length > 0 ? (
+        <FlatSlider fotos={todasLasFotos} />
+      ) : (
+        <section className="bg-slate-950 px-6 py-20 text-center text-white">
+          <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-white/40">Pendiente de Drive</p>
+          <p className="mt-3 text-sm text-white/70">Este proyecto aún no tiene imágenes vinculadas desde Google Drive.</p>
+        </section>
+      )}
 
       {/* ── INFO TÉCNICA ──────────────────────────────────────────────────── */}
       <section className="px-5 md:px-6 py-14 md:py-20 bg-white">
