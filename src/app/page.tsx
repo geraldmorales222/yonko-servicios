@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { createElement, useEffect, useRef, useState } from "react";
 
 interface StatProps {
@@ -33,7 +33,7 @@ const yonkoLabPoints = [
     label: "Estrategia",
     title: "Antes de diseñar, entendemos el negocio",
     desc: "Objetivos, usuarios, oferta, fricción comercial y operación interna. La creatividad empieza con dirección.",
-    pos: "left-[9%] top-[22%]",
+    pos: "left-[9%] top-[16%]",
     line: "right-[-82px] top-1/2 h-px w-[82px]",
     dot: "right-[-88px] top-1/2 -translate-y-1/2",
   },
@@ -43,7 +43,7 @@ const yonkoLabPoints = [
     label: "Identidad",
     title: "Identidad para cada proyecto",
     desc: "Diseñamos una presencia propia para cada marca: visual, tono y experiencia alineados al negocio, no una plantilla con colores cambiados.",
-    pos: "right-[9%] top-[22%]",
+    pos: "right-[9%] top-[16%]",
     line: "left-[-82px] top-1/2 h-px w-[82px]",
     dot: "left-[-88px] top-1/2 -translate-y-1/2",
   },
@@ -108,7 +108,7 @@ const processSteps = [
 
 function YonkoModel() {
   return (
-    <div className="relative isolate mx-auto aspect-[4/5] w-full max-w-[360px] overflow-hidden rounded-[1.75rem] border border-white/10 bg-slate-950 shadow-xl shadow-blue-950/20">
+    <div className="relative isolate mx-auto aspect-[4/5] w-full max-w-[300px] overflow-hidden rounded-[1.75rem] border border-white/10 bg-slate-950 shadow-xl shadow-blue-950/20 sm:max-w-[360px]">
 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_28%,rgba(59,130,246,0.55),transparent_34%),linear-gradient(145deg,#020617,#0f172a_55%,#1d4ed8)]" />
       <div
         className="absolute inset-0 opacity-[0.18]"
@@ -145,15 +145,15 @@ function YonkoModel() {
         alt="Representación visual de servicios informáticos"
         fill
         priority
-        className="object-contain p-10 opacity-0"
+        className="object-contain p-8 opacity-0 sm:p-10"
       />
 
       <div className="absolute left-5 top-5 z-10 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.28em] text-cyan-100/80 backdrop-blur">
         Equipo técnico
       </div>
-      <div className="absolute bottom-5 left-5 right-5 z-10 rounded-3xl border border-white/10 bg-slate-950/65 p-4 text-white backdrop-blur-xl">
+      <div className="absolute bottom-4 left-4 right-4 z-10 rounded-2xl border border-white/10 bg-slate-950/65 p-3 text-white backdrop-blur-xl sm:bottom-5 sm:left-5 sm:right-5 sm:rounded-3xl sm:p-4">
         <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-cyan-200">Marca con sistema</p>
-        <p className="mt-1 text-sm text-slate-300">Identidad propia, ingeniería seria y una experiencia que se recuerda.</p>
+        <p className="mt-1 text-xs text-slate-300 sm:text-sm">Identidad propia, ingeniería seria y una experiencia que se recuerda.</p>
         </div>
       </div>
   );
@@ -233,7 +233,7 @@ function InteractiveYonkoLab() {
         <div className="absolute left-1/2 top-[43%] z-10 h-[360px] w-[260px] -translate-x-1/2 -translate-y-1/2 sm:h-[460px] sm:w-[330px] lg:top-[50%] lg:h-[560px] lg:w-[390px] xl:h-[540px] xl:w-[380px]">
           {createElement("model-viewer", {
             src: "/3d/Yonko_trabajando.glb",
-            poster: "/imagenes/yonko3d.png",
+            poster: "/imagenes/yonko3d.webp",
             alt: "Modelo 3D representando un equipo técnico trabajando",
             "camera-controls": true,
             "auto-rotate": true,
@@ -246,12 +246,13 @@ function InteractiveYonkoLab() {
             style: {
               width: "100%",
               height: "100%",
+              pointerEvents: "none",
               filter: "drop-shadow(0 0 28px rgba(34,211,238,.45))",
             },
           })}
         </div>
 
-        <div className="pointer-events-none absolute left-1/2 top-5 z-20 -translate-x-1/2 rounded-full border border-cyan-200/30 bg-cyan-300/10 px-3 py-2 font-mono text-[8px] font-black uppercase tracking-[0.22em] text-cyan-100 backdrop-blur sm:text-[10px] sm:tracking-[0.3em] lg:top-[17%] lg:px-4">
+        <div className="pointer-events-none absolute left-1/2 top-4 z-20 -translate-x-1/2 rounded-full border border-cyan-200/30 bg-cyan-300/10 px-3 py-1.5 font-mono text-[8px] font-black uppercase tracking-[0.22em] text-cyan-100 backdrop-blur sm:text-[10px] sm:tracking-[0.3em] lg:top-5 lg:px-4">
           Servicio activo / Equipo en marcha
         </div>
 
@@ -359,13 +360,9 @@ export default function HomePage() {
   const heroRef = useRef(null);
   const ctaRef = useRef(null);
   const ctaInView = useInView(ctaRef, { once: true, margin: "-80px" });
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0.2]);
-
   return (
     <main className="bg-white text-slate-950">
-      <section ref={heroRef} className="relative isolate min-h-[760px] overflow-hidden bg-slate-950 text-white">
+      <section ref={heroRef} className="relative isolate overflow-hidden bg-slate-950 text-white lg:min-h-[760px]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(37,99,235,.45),transparent_28%),radial-gradient(circle_at_80%_35%,rgba(14,165,233,.22),transparent_30%)]" />
         <div
           className="absolute inset-0 opacity-[0.08]"
@@ -376,8 +373,8 @@ export default function HomePage() {
           }}
         />
 
-        <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative z-10">
-          <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 py-14 md:px-6 md:py-16 lg:grid-cols-[1.05fr_.95fr] lg:px-8 lg:py-20">
+        <motion.div className="relative z-10">
+          <div className="mx-auto grid max-w-7xl items-center gap-8 px-5 pb-20 pt-24 md:px-6 md:py-16 lg:grid-cols-[1.05fr_.95fr] lg:gap-10 lg:px-8 lg:py-20">
             <div>
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
@@ -415,7 +412,7 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.55, delay: 0.34 }}
-                className="mt-10 flex flex-wrap gap-4"
+                className="mt-8 flex flex-wrap gap-3 sm:gap-4 lg:mt-10"
               >
                 <Link href="/contacto" className="rounded-2xl bg-blue-500 px-8 py-4 text-xs font-black uppercase tracking-widest text-white shadow-xl shadow-blue-950/30 transition hover:-translate-y-0.5 hover:bg-blue-400">
                   Cotizar proyecto
@@ -425,7 +422,7 @@ export default function HomePage() {
                 </Link>
               </motion.div>
 
-              <div className="mt-10 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
+              <div className="mt-8 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3 lg:mt-10">
                 {services.map((service) => (
                   <div key={service.title} className="rounded-3xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur">
                     <h2 className="text-sm font-black tracking-tight text-white">{service.title}</h2>
@@ -435,14 +432,14 @@ export default function HomePage() {
               </div>
             </div>
 
-            <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.18 }}>
+            <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.18 }} className="mt-2 lg:mt-0">
               <YonkoModel />
             </motion.div>
           </div>
         </motion.div>
       </section>
 
-      <section className="px-5 py-14 md:px-6 md:py-16">
+      <section className="px-5 py-10 md:px-6 md:py-16">
         <div className="mx-auto max-w-7xl">
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             {[
