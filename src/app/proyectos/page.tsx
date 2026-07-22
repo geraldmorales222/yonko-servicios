@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
@@ -166,7 +166,7 @@ export default function ProyectosPage() {
               className="relative hidden min-h-[320px] overflow-hidden rounded-[2rem] bg-slate-950 shadow-xl shadow-blue-950/20 lg:block"
             >
               <Image
-                src="/imagenes/yonko.png"
+                src="/imagenes/yonko.webp"
                 alt="Equipo presentando proyectos de ingeniería y arquitectura cloud"
                 fill
                 priority

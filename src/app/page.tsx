@@ -121,7 +121,7 @@ function YonkoModel() {
 
       {createElement("model-viewer", {
         src: "/3d/Yonko.glb",
-        poster: "/imagenes/yonko3d.png",
+        poster: "/imagenes/yonko3d.webp",
         alt: "Modelo 3D representando servicios informáticos",
         "camera-controls": true,
         "auto-rotate": true,
@@ -134,13 +134,14 @@ function YonkoModel() {
         style: {
           width: "100%",
           height: "100%",
+          pointerEvents: "none",
           position: "relative",
           zIndex: 2,
         },
       })}
 
       <Image
-        src="/imagenes/yonko3d.png"
+        src="/imagenes/yonko3d.webp"
         alt="Representación visual de servicios informáticos"
         fill
         priority
@@ -511,7 +512,7 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_22%,rgba(59,130,246,.5),transparent_32%),linear-gradient(180deg,#020617,#0f172a)]" />
               <div className="absolute left-1/2 top-[48%] h-72 w-72 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/20 blur-3xl" />
               <Image
-                src="/imagenes/yonkoohumo.png"
+                src="/imagenes/yonkoohumo.webp"
                 alt="Proceso claro de servicios informáticos"
                 fill
                 sizes="(min-width: 1024px) 420px, 100vw"

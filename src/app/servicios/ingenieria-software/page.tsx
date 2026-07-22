@@ -231,7 +231,7 @@ export default function IngenieriaSoftwarePage() {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(59,130,246,.16),transparent_42%)]" />
               <div className="absolute bottom-8 h-28 w-72 rounded-full bg-blue-200/30 blur-3xl" />
               <Image
-                src="/imagenes/yonko_ingeneria de software.png"
+                src="/imagenes/yonko_ingenieria_software.webp"
                 alt="Equipo construyendo ingeniería de software"
                 width={520}
                 height={520}

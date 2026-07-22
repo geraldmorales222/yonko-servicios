@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
@@ -60,10 +60,9 @@ function YonkoAboutModel() {
       />
       <div className="absolute left-1/2 top-[46%] h-48 w-48 -translate-x-1/2 rounded-full border border-cyan-300/40 bg-cyan-300/10 shadow-[0_0_70px_rgba(34,211,238,.28)]" />
 
-      <div className="absolute inset-x-0 top-0 bottom-36 z-[2]">
+      <div className="absolute inset-x-0 top-10 bottom-32 z-[2] sm:top-8">
         {createElement("model-viewer", {
           src: "/3d/yonko_nosotros.glb",
-          poster: "/imagenes/Nosotros.png",
           alt: "Modelo 3D representando al equipo de servicios informáticos",
           "camera-controls": true,
           "auto-rotate": true,
@@ -76,13 +75,14 @@ function YonkoAboutModel() {
           style: {
             width: "100%",
             height: "100%",
+            pointerEvents: "none",
             filter: "drop-shadow(0 24px 34px rgba(34,211,238,.28))",
           },
         })}
       </div>
 
-      <div className="pointer-events-none absolute left-6 top-6 z-10 rounded-full border border-cyan-200/30 bg-white/10 px-4 py-2 backdrop-blur">
-        <p className="font-mono text-[9px] font-black uppercase tracking-[0.28em] text-cyan-100">Equipo / Servicios informáticos</p>
+      <div className="pointer-events-none absolute left-1/2 top-4 z-20 -translate-x-1/2 rounded-full border border-cyan-200/30 bg-slate-950/55 px-4 py-2 text-center shadow-lg shadow-blue-950/20 backdrop-blur">
+        <p className="whitespace-nowrap font-mono text-[8px] font-black uppercase tracking-[0.24em] text-cyan-100 sm:text-[9px] sm:tracking-[0.28em]">Equipo / Servicios informáticos</p>
       </div>
 
       <div className="absolute bottom-6 left-6 right-6 z-10 rounded-2xl border border-white/10 bg-white/95 p-5 shadow-lg backdrop-blur-xl md:p-6">
@@ -145,7 +145,6 @@ function MethodCore3D({ activeId, onSelect }: {
       <div className="absolute left-1/2 top-[44%] z-[2] h-[310px] w-[310px] -translate-x-1/2 -translate-y-1/2 sm:h-[380px] sm:w-[380px] lg:top-1/2 lg:h-[430px] lg:w-[430px]">
         {createElement("model-viewer", {
           src: "/3d/yonko_metodo.glb",
-          poster: "/imagenes/yonkochamba.png",
           alt: "Modelo 3D representando nuestro método de trabajo",
           "camera-controls": true,
           "auto-rotate": true,
@@ -158,6 +157,7 @@ function MethodCore3D({ activeId, onSelect }: {
           style: {
             width: "100%",
             height: "100%",
+            pointerEvents: "none",
             filter: "drop-shadow(0 24px 34px rgba(34,211,238,.35))",
           },
         })}
@@ -300,7 +300,7 @@ function ChambaStudio() {
             className="relative min-h-[420px] overflow-hidden rounded-[1.75rem] bg-slate-950 shadow-xl shadow-blue-950/20"
           >
             <Image
-              src="/imagenes/yonko.chamba.png"
+              src="/imagenes/yonko.chamba.webp"
               alt="Equipo trabajando en diseño de interfaz y software"
               fill
               sizes="(min-width: 1024px) 65vw, 100vw"

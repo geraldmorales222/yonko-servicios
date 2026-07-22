@@ -109,7 +109,7 @@ function ServiciosYonkoModel() {
   const active = SERVICIOS[activeUnit] ?? SERVICIOS[0];
 
   return (
-    <div className="relative mx-auto h-[430px] w-full max-w-[520px] overflow-hidden rounded-[2.5rem] border border-blue-100 bg-slate-950 shadow-2xl shadow-blue-100 lg:h-[500px]">
+    <div className="relative mx-auto h-[500px] w-full max-w-[520px] overflow-hidden rounded-[2rem] border border-blue-100 bg-slate-950 shadow-xl shadow-blue-100 lg:h-[520px]">
 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_28%,rgba(59,130,246,.55),transparent_34%),linear-gradient(180deg,#020617,#0f172a)]" />
       <div
         className="absolute inset-0 opacity-[0.13]"
@@ -121,10 +121,9 @@ function ServiciosYonkoModel() {
       />
       <div className="absolute left-1/2 top-[58%] h-52 w-52 -translate-x-1/2 rounded-full border border-cyan-300/40 bg-cyan-300/10 shadow-[0_0_80px_rgba(34,211,238,.28)]" />
 
-      <div className="absolute inset-x-0 bottom-32 top-10 z-[2]">
+      <div className="absolute inset-x-0 bottom-28 top-24 z-[2] sm:top-20">
         {createElement('model-viewer', {
           src: '/3d/yonko_haciendo_proyectos.glb',
-          poster: '/imagenes/yonko3d.png',
           alt: 'Modelo 3D representando un equipo trabajando en servicios informáticos',
           'camera-controls': true,
           'auto-rotate': true,
@@ -137,16 +136,17 @@ function ServiciosYonkoModel() {
           style: {
             width: '100%',
             height: '100%',
+            pointerEvents: 'none',
             filter: 'drop-shadow(0 26px 36px rgba(34,211,238,.28))',
           },
         })}
       </div>
 
-      <div className="pointer-events-none absolute left-5 top-5 z-10 rounded-full border border-cyan-200/30 bg-white/10 px-4 py-2 backdrop-blur">
+      <div className="pointer-events-none absolute left-1/2 top-4 z-20 -translate-x-1/2 rounded-full border border-cyan-200/30 bg-slate-950/55 px-4 py-2 backdrop-blur">
         <p className="font-mono text-[9px] font-black uppercase tracking-[0.28em] text-cyan-100">Equipo / Servicios</p>
       </div>
 
-      <div className="absolute bottom-28 left-4 right-4 z-20 grid grid-cols-4 gap-1.5 sm:grid-cols-7">
+      <div className="absolute left-4 right-4 top-14 z-30 grid grid-cols-7 gap-1.5">
         {SERVICIOS.map((unit, index) => {
           const isActive = index === activeUnit;
 
@@ -155,17 +155,18 @@ function ServiciosYonkoModel() {
               key={unit.slug}
               type="button"
               onClick={() => setActiveUnit(index)}
-              className={`group rounded-xl border px-2 py-2 text-center backdrop-blur transition-all duration-300 ${
+              className={`group rounded-xl border px-1.5 py-2 text-center backdrop-blur transition-all duration-300 ${
                 isActive
                   ? 'border-cyan-200/70 bg-cyan-200/20 shadow-[0_0_28px_rgba(34,211,238,.28)]'
                   : 'border-white/10 bg-white/10 hover:border-cyan-200/40 hover:bg-white/15'
               }`}
               aria-pressed={isActive}
+              title={unit.titulo}
             >
-              <span className="mb-0.5 block font-mono text-[8px] font-black uppercase tracking-[0.12em] text-cyan-100/80">
+              <span className="block font-mono text-[9px] font-black uppercase tracking-[0.12em] text-cyan-100/80">
                 {unit.num}
               </span>
-              <span className="block truncate text-[8px] font-black uppercase tracking-[0.03em] text-white sm:text-[9px]">
+              <span className="mt-0.5 hidden truncate text-[8px] font-black uppercase tracking-[0.03em] text-white sm:block">
                 {unit.titulo}
               </span>
             </button>
@@ -173,7 +174,7 @@ function ServiciosYonkoModel() {
         })}
       </div>
 
-      <div className="absolute bottom-5 left-5 right-5 z-10 rounded-2xl border border-white/10 bg-white/95 p-4 shadow-lg backdrop-blur-xl">
+      <div className="absolute bottom-5 left-5 right-5 z-30 rounded-2xl border border-white/10 bg-white/95 p-4 shadow-lg backdrop-blur-xl">
         <p className="mb-1 text-[8px] font-black uppercase tracking-[0.35em] text-blue-600">Mesa de trabajo / {active.num}</p>
         <p className="text-sm font-black leading-tight text-slate-900">{active.titulo}</p>
         <p className="mt-1 text-xs font-semibold leading-snug text-slate-600">

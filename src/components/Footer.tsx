@@ -37,7 +37,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="mb-3.5 font-mono text-[9px] uppercase tracking-[0.3em] text-blue-500">Explorar</h4>
+            <p className="mb-3.5 font-mono text-[9px] uppercase tracking-[0.3em] text-blue-500">Explorar</p>
             <ul className="space-y-2.5">
               {NAV.map((item) => (
                 <li key={item.href}>
@@ -51,7 +51,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="mb-3.5 font-mono text-[9px] uppercase tracking-[0.3em] text-blue-500">Servicios</h4>
+            <p className="mb-3.5 font-mono text-[9px] uppercase tracking-[0.3em] text-blue-500">Servicios</p>
             <ul className="space-y-2.5">
               {SERVICIOS.map((service) => (
                 <li key={service.href}>
@@ -65,7 +65,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="mb-3.5 font-mono text-[9px] uppercase tracking-[0.3em] text-blue-500">Contacto</h4>
+            <p className="mb-3.5 font-mono text-[9px] uppercase tracking-[0.3em] text-blue-500">Contacto</p>
             <ul className="space-y-3">
               <li>
                 <a href="mailto:yonkoservicios@gmail.com" className="text-xs text-slate-400 transition-colors hover:text-white">
@@ -87,11 +87,11 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col items-center justify-between gap-3 border-t border-slate-800/60 pt-5 sm:flex-row">
-          <p className="text-xs text-slate-600">© {currentYear} Yonko SpA. Todos los derechos reservados.</p>
+          <p className="text-xs text-slate-400">© {currentYear} Yonko SpA. Todos los derechos reservados.</p>
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-slate-700">Servicios informáticos</span>
-            <span className="h-1 w-1 rounded-full bg-slate-700" />
-            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-blue-700">Chile</span>
+            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-slate-400">Servicios informáticos</span>
+            <span className="h-1 w-1 rounded-full bg-slate-500" />
+            <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-blue-400">Chile</span>
           </div>
         </div>
       </div>
