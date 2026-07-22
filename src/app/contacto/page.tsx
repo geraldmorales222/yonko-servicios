@@ -25,29 +25,47 @@ function Toast({ visible }: { visible: boolean }) {
 }
 
 function CanalCard({ href, icon, label, sublabel, color }: {
-  href: string;
+  href?: string;
   icon: React.ReactNode;
   label: string;
   sublabel: string;
   color: string;
 }) {
+  const className = `group flex items-center gap-4 rounded-2xl border border-slate-100 bg-white p-5 transition-all duration-300 ${
+    href
+      ? 'hover:-translate-y-0.5 hover:border-slate-200 hover:shadow-lg hover:shadow-slate-100'
+      : 'cursor-default'
+  }`;
+
+  const content = (
+    <>
+      <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white shadow-md transition-transform duration-300 ${href ? 'group-hover:scale-110' : ''} ${color}`}>
+        {icon}
+      </div>
+      <div>
+        <p className="mb-0.5 font-mono text-[8px] uppercase tracking-[0.2em] text-slate-400">{sublabel}</p>
+        <p className={`text-sm font-black text-slate-900 transition-colors ${href ? 'group-hover:text-blue-600' : 'select-all'}`}>{label}</p>
+      </div>
+      {href && (
+        <svg className="ml-auto h-4 w-4 text-slate-300 transition-colors group-hover:text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </svg>
+      )}
+    </>
+  );
+
+  if (!href) {
+    return <div className={className}>{content}</div>;
+  }
+
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center gap-4 rounded-2xl border border-slate-100 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-200 hover:shadow-lg hover:shadow-slate-100"
+      className={className}
     >
-      <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white shadow-md transition-transform duration-300 group-hover:scale-110 ${color}`}>
-        {icon}
-      </div>
-      <div>
-        <p className="mb-0.5 font-mono text-[8px] uppercase tracking-[0.2em] text-slate-400">{sublabel}</p>
-        <p className="text-sm font-black text-slate-900 transition-colors group-hover:text-blue-600">{label}</p>
-      </div>
-      <svg className="ml-auto h-4 w-4 text-slate-300 transition-colors group-hover:text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-      </svg>
+      {content}
     </a>
   );
 }
@@ -204,7 +222,6 @@ export default function ContactoPage() {
                   />
 
                   <CanalCard
-                    href="mailto:yonkoservicios@gmail.com"
                     label="yonkoservicios@gmail.com"
                     sublabel="Correo electrónico"
                     color="bg-blue-600"

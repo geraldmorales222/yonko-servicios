@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { db } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy, where } from 'firebase/firestore';
 import Image from 'next/image';
@@ -11,14 +11,26 @@ import { assetUrl } from '@/lib/project-assets';
 
 
 // ─── Loader ───────────────────────────────────────────────────────────────────
-function Loader() {
+function ProyectoSkeletonGrid() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white gap-4">
-      <div className="w-8 h-8 border-[3px] border-blue-600 border-t-transparent rounded-full animate-spin" />
-      <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-slate-400">Cargando proyectos</span>
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {Array.from({ length: 8 }).map((_, index) => (
+        <div key={index} className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
+          <div className="h-44 animate-pulse bg-slate-200" />
+          <div className="space-y-3 p-5">
+            <div className="h-3 w-24 animate-pulse rounded-full bg-blue-100" />
+            <div className="h-4 w-3/4 animate-pulse rounded bg-slate-200" />
+            <div className="h-3 w-full animate-pulse rounded bg-slate-100" />
+            <div className="h-10 w-full animate-pulse rounded-xl bg-slate-100" />
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
+
+const PROJECTS_CACHE_KEY = 'yonko:proyectos:v1';
+const PROJECTS_CACHE_TTL = 1000 * 60 * 10;
 
 // ─── Proyecto Card (compacta) ─────────────────────────────────────────────────
 function ProyectoCard({ proyecto, index }: { proyecto: any; index: number }) {
@@ -94,9 +106,29 @@ function ProyectoCard({ proyecto, index }: { proyecto: any; index: number }) {
 export default function ProyectosPage() {
   const [proyectos, setProyectos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadSlow, setLoadSlow] = useState(false);
   const [filtro, setFiltro] = useState('Todos');
 
   useEffect(() => {
+    let mounted = true;
+
+    const cached = sessionStorage.getItem(PROJECTS_CACHE_KEY);
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        if (Date.now() - parsed.timestamp < PROJECTS_CACHE_TTL && Array.isArray(parsed.data)) {
+          setProyectos(parsed.data);
+          setLoading(false);
+        }
+      } catch {
+        sessionStorage.removeItem(PROJECTS_CACHE_KEY);
+      }
+    }
+
+    const slowTimer = window.setTimeout(() => {
+      if (mounted) setLoadSlow(true);
+    }, 2200);
+
     const fetchProyectos = async () => {
       try {
         // Cambio principal: Agregamos el filtro where
@@ -107,20 +139,28 @@ export default function ProyectosPage() {
         );
         
         const snap = await getDocs(q);
-        setProyectos(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+        const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        if (!mounted) return;
+        setProyectos(data);
+        sessionStorage.setItem(PROJECTS_CACHE_KEY, JSON.stringify({ timestamp: Date.now(), data }));
       } catch (error) {
         console.error(error);
       } finally {
-        setLoading(false);
+        if (mounted) {
+          setLoading(false);
+          setLoadSlow(false);
+        }
       }
     };
     fetchProyectos();
+    return () => {
+      mounted = false;
+      window.clearTimeout(slowTimer);
+    };
   }, []);
 
-  if (loading) return <Loader />;
-
-  const categorias = ['Todos', ...Array.from(new Set(proyectos.map(p => p.categoria).filter(Boolean)))];
-  const filtrados = filtro === 'Todos' ? proyectos : proyectos.filter(p => p.categoria === filtro);
+  const categorias = useMemo(() => ['Todos', ...Array.from(new Set(proyectos.map(p => p.categoria).filter(Boolean)))], [proyectos]);
+  const filtrados = useMemo(() => filtro === 'Todos' ? proyectos : proyectos.filter(p => p.categoria === filtro), [filtro, proyectos]);
 
   return (
     <main className="bg-white min-h-screen">
@@ -220,7 +260,16 @@ export default function ProyectosPage() {
       {/* ── GRID ─────────────────────────────────────────────────────────── */}
       <section className="px-6 py-12 bg-slate-50">
         <div className="max-w-7xl mx-auto">
-          {filtrados.length === 0 ? (
+          {loading ? (
+            <>
+              {loadSlow && (
+                <div className="mb-5 rounded-2xl border border-blue-100 bg-white px-4 py-3 text-xs font-semibold text-slate-500 shadow-sm">
+                  Estamos preparando los proyectos. Si es la primera carga, puede tardar unos segundos; las próximas visitas quedan cacheadas en el navegador.
+                </div>
+              )}
+              <ProyectoSkeletonGrid />
+            </>
+          ) : filtrados.length === 0 ? (
             <div className="text-center py-16 bg-white rounded-2xl border-2 border-dashed border-slate-200">
               <p className="text-slate-400 font-mono text-xs uppercase tracking-widest">
                 No hay proyectos en esta categoría

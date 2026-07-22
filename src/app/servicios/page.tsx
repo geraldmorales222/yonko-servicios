@@ -142,8 +142,12 @@ function ServiciosYonkoModel() {
         })}
       </div>
 
-      <div className="pointer-events-none absolute left-1/2 top-4 z-20 -translate-x-1/2 rounded-full border border-cyan-200/30 bg-slate-950/55 px-4 py-2 backdrop-blur">
-        <p className="font-mono text-[9px] font-black uppercase tracking-[0.28em] text-cyan-100">Equipo / Servicios</p>
+      <div className="pointer-events-none absolute left-4 right-4 top-4 z-20 mx-auto flex max-w-[calc(100%-2rem)] items-center justify-center gap-2 rounded-full border border-cyan-200/30 bg-slate-950/70 px-3 py-2 backdrop-blur sm:left-1/2 sm:right-auto sm:max-w-[92%] sm:-translate-x-1/2 sm:px-4">
+        <p className="min-w-0 truncate font-mono text-[8px] font-black uppercase tracking-[0.18em] text-cyan-100 sm:text-[9px] sm:tracking-[0.28em]">
+          Equipo / Servicios
+          <span className="mx-1.5 text-cyan-300/70">/</span>
+          <span className="text-white">{active.titulo}</span>
+        </p>
       </div>
 
       <div className="absolute left-4 right-4 top-14 z-30 grid grid-cols-7 gap-1.5">
@@ -157,16 +161,16 @@ function ServiciosYonkoModel() {
               onClick={() => setActiveUnit(index)}
               className={`group rounded-xl border px-1.5 py-2 text-center backdrop-blur transition-all duration-300 ${
                 isActive
-                  ? 'border-cyan-200/70 bg-cyan-200/20 shadow-[0_0_28px_rgba(34,211,238,.28)]'
-                  : 'border-white/10 bg-white/10 hover:border-cyan-200/40 hover:bg-white/15'
+                  ? 'border-blue-400 bg-blue-600 text-white shadow-[0_0_28px_rgba(37,99,235,.42)]'
+                  : 'border-white/10 bg-white/10 text-cyan-100/80 hover:border-blue-300/50 hover:bg-blue-500/20'
               }`}
               aria-pressed={isActive}
               title={unit.titulo}
             >
-              <span className="block font-mono text-[9px] font-black uppercase tracking-[0.12em] text-cyan-100/80">
+              <span className={`block font-mono text-[9px] font-black uppercase tracking-[0.12em] ${isActive ? 'text-white' : 'text-cyan-100/80'}`}>
                 {unit.num}
               </span>
-              <span className="mt-0.5 hidden truncate text-[8px] font-black uppercase tracking-[0.03em] text-white sm:block">
+              <span className={`mt-0.5 hidden truncate text-[8px] font-black uppercase tracking-[0.03em] sm:block ${isActive ? 'text-white' : 'text-white/80'}`}>
                 {unit.titulo}
               </span>
             </button>

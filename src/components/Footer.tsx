@@ -68,9 +68,9 @@ export default function Footer() {
             <p className="mb-3.5 font-mono text-[9px] uppercase tracking-[0.3em] text-blue-500">Contacto</p>
             <ul className="space-y-3">
               <li>
-                <a href="mailto:yonkoservicios@gmail.com" className="text-xs text-slate-400 transition-colors hover:text-white">
+                <span className="block select-all text-xs text-slate-400">
                   yonkoservicios@gmail.com
-                </a>
+                </span>
               </li>
               <li>
                 <a

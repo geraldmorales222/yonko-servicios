@@ -109,7 +109,7 @@ const processSteps = [
 function YonkoModel() {
   return (
     <div className="relative isolate mx-auto aspect-[4/5] w-full max-w-[300px] overflow-hidden rounded-[1.75rem] border border-white/10 bg-slate-950 shadow-xl shadow-blue-950/20 sm:max-w-[360px]">
-<div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_28%,rgba(59,130,246,0.55),transparent_34%),linear-gradient(145deg,#020617,#0f172a_55%,#1d4ed8)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_28%,rgba(59,130,246,0.55),transparent_34%),linear-gradient(145deg,#020617,#0f172a_55%,#1d4ed8)]" />
       <div
         className="absolute inset-0 opacity-[0.18]"
         style={{
@@ -121,14 +121,13 @@ function YonkoModel() {
 
       {createElement("model-viewer", {
         src: "/3d/Yonko.glb",
-        poster: "/imagenes/yonko3d.webp",
         alt: "Modelo 3D representando servicios informáticos",
         "camera-controls": true,
         "auto-rotate": true,
         "rotation-per-second": "24deg",
         "interaction-prompt": "none",
-          reveal: 'auto',
-          loading: 'lazy',
+        reveal: 'auto',
+        loading: 'lazy',
         "shadow-intensity": "0.8",
         exposure: "0.95",
         style: {
@@ -139,14 +138,6 @@ function YonkoModel() {
           zIndex: 2,
         },
       })}
-
-      <Image
-        src="/imagenes/yonko3d.webp"
-        alt="Representación visual de servicios informáticos"
-        fill
-        priority
-        className="object-contain p-8 opacity-0 sm:p-10"
-      />
 
       <div className="absolute left-5 top-5 z-10 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.28em] text-cyan-100/80 backdrop-blur">
         Equipo técnico
@@ -233,7 +224,6 @@ function InteractiveYonkoLab() {
         <div className="absolute left-1/2 top-[43%] z-10 h-[360px] w-[260px] -translate-x-1/2 -translate-y-1/2 sm:h-[460px] sm:w-[330px] lg:top-[50%] lg:h-[560px] lg:w-[390px] xl:h-[540px] xl:w-[380px]">
           {createElement("model-viewer", {
             src: "/3d/Yonko_trabajando.glb",
-            poster: "/imagenes/yonko3d.webp",
             alt: "Modelo 3D representando un equipo técnico trabajando",
             "camera-controls": true,
             "auto-rotate": true,
@@ -388,25 +378,19 @@ export default function HomePage() {
                 </span>
               </motion.div>
 
-              <motion.h1
-                initial={{ opacity: 0, y: 26 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+              <h1
                 className="max-w-3xl text-[clamp(2.05rem,4.8vw,3.8rem)] font-black leading-[0.94] tracking-tight"
               >
                 No vendemos
                 <br />
                 <span className="text-blue-400">plantillas.</span>
-              </motion.h1>
+              </h1>
 
-              <motion.p
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.65, delay: 0.22 }}
+              <p
                 className="mt-7 max-w-2xl text-lg leading-relaxed text-slate-300 md:text-xl"
               >
                 Diseñamos presencia digital y sistemas informáticos para personas, pymes y empresas que necesitan verse confiables, operar mejor y crecer con tecnología bien implementada.
-              </motion.p>
+              </p>
 
               <motion.div
                 initial={{ opacity: 0, y: 14 }}
@@ -414,7 +398,7 @@ export default function HomePage() {
                 transition={{ duration: 0.55, delay: 0.34 }}
                 className="mt-8 flex flex-wrap gap-3 sm:gap-4 lg:mt-10"
               >
-                <Link href="/contacto" className="rounded-2xl bg-blue-500 px-8 py-4 text-xs font-black uppercase tracking-widest text-white shadow-xl shadow-blue-950/30 transition hover:-translate-y-0.5 hover:bg-blue-400">
+                <Link href="/contacto" className="rounded-2xl bg-blue-600 px-8 py-4 text-xs font-black uppercase tracking-widest text-white shadow-xl shadow-blue-950/30 transition hover:-translate-y-0.5 hover:bg-blue-500">
                   Cotizar proyecto
                 </Link>
                 <Link href="/servicios" className="rounded-2xl border border-white/15 bg-white/5 px-8 py-4 text-xs font-black uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/10">
