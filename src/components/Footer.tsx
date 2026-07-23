@@ -5,6 +5,7 @@ const SERVICIOS = [
   { label: "E-commerce", href: "/servicios/ecommerce-alta-conversion" },
   { label: "Automatización", href: "/servicios/automatizacion-procesos" },
   { label: "Estrategia UX/CX", href: "/servicios/estrategia-ux-cx" },
+  { label: "Rendimiento Web WPO", href: "/servicios/auditoria-rendimiento-web-wpo" },
   { label: "Ingeniería de Software", href: "/servicios/ingenieria-software" },
 ];
 

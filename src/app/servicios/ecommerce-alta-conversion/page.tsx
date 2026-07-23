@@ -30,7 +30,7 @@ const ALCANCES_PROYECTO = [
   {
     nombre: 'Store',
     desc: 'Tienda online completa lista para vender bajo estándares de alto rendimiento.',
-    incluye: ['Catálogo administrable', 'Checkout optimizado', 'Panel de administración', 'Gestión de pedidos', 'SEO técnico base', 'Deploy inicial'],
+    incluye: ['Catálogo administrable', 'Checkout optimizado', 'Panel de administración', 'Gestión de pedidos', 'Estructura técnica base', 'Deploy inicial'],
     cta: 'Agendar diagnóstico',
     destacado: false,
   },

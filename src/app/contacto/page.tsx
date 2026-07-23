@@ -280,6 +280,7 @@ export default function ContactoPage() {
                         <option value="IA & Data Science">IA & Data Science</option>
                         <option value="Automatización">Automatización de Procesos</option>
                         <option value="Estrategia UX/CX">Estrategia UX/CX</option>
+                        <option value="Auditoría e Implementación WPO">Auditoría e Implementación de Rendimiento Web (WPO)</option>
                         <option value="Consultoría Senior">Consultoría Técnica Senior</option>
                       </select>
                       <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">

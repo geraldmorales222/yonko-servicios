@@ -53,7 +53,7 @@ const yonkoLabPoints = [
     n: "03",
     label: "Ejecución",
     title: "Sitios rápidos y mantenibles",
-    desc: "Componentes claros, contenido ordenado, SEO técnico y una base preparada para crecer sin rehacer todo.",
+    desc: "Componentes claros, contenido ordenado, rendimiento técnico y una base preparada para crecer sin rehacer todo.",
     pos: "left-[9%] bottom-[28%]",
     line: "right-[-92px] top-1/2 h-px w-[92px]",
     dot: "right-[-98px] top-1/2 -translate-y-1/2",

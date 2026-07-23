@@ -75,9 +75,21 @@ const SERVICIOS = [
     disabled: false,
     
   },
+  {
+    slug: 'auditoria-rendimiento-web-wpo',
+    num: '07',
+    titulo: 'Rendimiento Web WPO',
+    subtitulo: 'Performance & Core Web Vitals',
+    desc: 'Auditamos, optimizamos e implementamos mejoras reales de rendimiento web para que su sitio cargue más rápido, responda mejor y convierta con menos fricción técnica.',
+    micro: 'Velocidad, estabilidad y experiencia medible para no perder clientes en la carga.',
+    tags: ['Core Web Vitals', 'Lighthouse', 'UX técnica', 'Caching'],
+    acento: 'bg-blue-600',
+    desde: 'Cotización según diagnóstico',
+    disabled: false,
+  },
     {
     slug: 'sistemas-inteligentes-ia',
-    num: '07',
+    num: '08',
     titulo: 'IA & Data Science',
     subtitulo: 'Cognitive Systems',
     desc: 'Desarrollamos modelos predictivos, automatización inteligente y pipelines de datos que transforman información operativa en decisiones estratégicas basadas en evidencia.',
@@ -150,7 +162,7 @@ function ServiciosYonkoModel() {
         </p>
       </div>
 
-      <div className="absolute left-4 right-4 top-14 z-30 grid grid-cols-7 gap-1.5">
+      <div className="absolute left-4 right-4 top-14 z-30 grid grid-cols-4 gap-1.5 sm:grid-cols-8">
         {SERVICIOS.map((unit, index) => {
           const isActive = index === activeUnit;
 
@@ -296,7 +308,7 @@ export default function ServiciosPage() {
                 <span className="text-slate-900 font-semibold">arquitectura, rendimiento y escalabilidad.</span>
               </p>
               <div className="flex gap-6">
-                {[{ v: '7', l: 'Servicios' }, { v: '40+', l: 'Proyectos' }, { v: '99.9%', l: 'Uptime' }].map(s => (
+                {[{ v: '8', l: 'Servicios' }, { v: '40+', l: 'Proyectos' }, { v: '99.9%', l: 'Uptime' }].map(s => (
                   <div key={s.l} className="pl-3 border-l-2 border-blue-200">
                     <span className="block text-xl font-black text-slate-900 tracking-tighter">{s.v}</span>
                     <span className="font-mono text-[9px] uppercase tracking-widest text-blue-600">{s.l}</span>

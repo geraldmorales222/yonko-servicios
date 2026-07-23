@@ -14,8 +14,8 @@ const SPECS = [
   },
   {
     icon: '🔍',
-    titulo: 'SEO Técnico Estructural',
-    desc: 'Indexación optimizada con Server Side Rendering, metadatos dinámicos, sitemap automático y Core Web Vitals en verde.',
+    titulo: 'Estructura Técnica',
+    desc: 'Base ordenada con Server Side Rendering, metadatos básicos, sitemap automático y Core Web Vitals en verde.',
   },
   {
     icon: '🔒',
@@ -59,7 +59,7 @@ const PLANES = [
     incluye: [
       'Hasta 8 páginas',
       'UI personalizado',
-      'SEO técnico base',
+      'Estructura técnica base',
       'CMS integrado',
       'Optimización rendimiento'
     ],

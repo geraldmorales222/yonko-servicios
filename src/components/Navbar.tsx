@@ -13,6 +13,7 @@ const SERVICIOS = [
   { name: "Ingeniería de Software", href: "/servicios/ingenieria-software", color: "bg-sky-900", desc: "Node.js · TypeScript · AWS", disabled: false },
   { name: "Automatización", href: "/servicios/automatizacion-procesos", color: "bg-sky-500", desc: "n8n · Zapier · APIs", disabled: false },
   { name: "Estrategia UX/CX", href: "/servicios/estrategia-ux-cx", color: "bg-emerald-500", desc: "Auditoría · Testing · Heatmaps", disabled: false },
+  { name: "Rendimiento Web WPO", href: "/servicios/auditoria-rendimiento-web-wpo", color: "bg-blue-600", desc: "Core Web Vitals · UX · Velocidad", disabled: false },
   { name: "IA & Data Science", href: "/servicios/sistemas-inteligentes-ia", color: "bg-violet-500", desc: "Python · ML · Supabase", disabled: true },
 ];
 
