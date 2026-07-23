@@ -102,12 +102,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="es-CL" suppressHydrationWarning>
       <body className="flex min-h-screen flex-col font-sans antialiased">
         <Script
-          id="model-viewer"
-          type="module"
-          src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"
-          strategy="lazyOnload"
-        />
-        <Script
           id="yonko-json-ld"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}

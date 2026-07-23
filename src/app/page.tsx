@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useInView } from "framer-motion";
 import { createElement, useEffect, useRef, useState } from "react";
+import LazyModelViewer from "@/components/LazyModelViewer";
 
 interface StatProps {
   val: string;
@@ -119,25 +120,11 @@ function YonkoModel() {
         }}
       />
 
-      {createElement("model-viewer", {
-        src: "/3d/Yonko.glb",
-        alt: "Modelo 3D representando servicios informáticos",
-        "camera-controls": true,
-        "auto-rotate": true,
-        "rotation-per-second": "24deg",
-        "interaction-prompt": "none",
-        reveal: 'auto',
-        loading: 'lazy',
-        "shadow-intensity": "0.8",
-        exposure: "0.95",
-        style: {
-          width: "100%",
-          height: "100%",
-          pointerEvents: "none",
-          position: "relative",
-          zIndex: 2,
-        },
-      })}
+      <LazyModelViewer
+        src="/3d/Yonko.glb"
+        poster="/imagenes/yonko3d.webp"
+        alt="Modelo 3D representando servicios informáticos"
+      />
 
       <div className="absolute left-5 top-5 z-10 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.28em] text-cyan-100/80 backdrop-blur">
         Equipo técnico
@@ -222,24 +209,14 @@ function InteractiveYonkoLab() {
         <div className="absolute inset-x-0 bottom-[14%] mx-auto h-48 w-64 rounded-full bg-cyan-300/15 blur-3xl" />
 
         <div className="absolute left-1/2 top-[43%] z-10 h-[360px] w-[260px] -translate-x-1/2 -translate-y-1/2 sm:h-[460px] sm:w-[330px] lg:top-[50%] lg:h-[560px] lg:w-[390px] xl:h-[540px] xl:w-[380px]">
-          {createElement("model-viewer", {
-            src: "/3d/Yonko_trabajando.glb",
-            alt: "Modelo 3D representando un equipo técnico trabajando",
-            "camera-controls": true,
-            "auto-rotate": true,
-            "rotation-per-second": "16deg",
-            "interaction-prompt": "none",
-          reveal: 'auto',
-          loading: 'lazy',
-            "shadow-intensity": "1",
-            exposure: "1",
-            style: {
-              width: "100%",
-              height: "100%",
-              pointerEvents: "none",
-              filter: "drop-shadow(0 0 28px rgba(34,211,238,.45))",
-            },
-          })}
+          <LazyModelViewer
+            src="/3d/Yonko_trabajando.glb"
+            poster="/imagenes/yonko3d.webp"
+            alt="Modelo 3D representando un equipo técnico trabajando"
+            rotationPerSecond="16deg"
+            shadowIntensity="1"
+            exposure="1"
+          />
         </div>
 
         <div className="pointer-events-none absolute left-1/2 top-4 z-20 -translate-x-1/2 rounded-full border border-cyan-200/30 bg-cyan-300/10 px-3 py-1.5 font-mono text-[8px] font-black uppercase tracking-[0.22em] text-cyan-100 backdrop-blur sm:text-[10px] sm:tracking-[0.3em] lg:top-5 lg:px-4">
