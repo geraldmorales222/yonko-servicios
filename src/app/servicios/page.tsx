@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { motion, useInView } from 'framer-motion';
 import { createElement, useRef, useState } from 'react';
+import LazyModelViewer from "@/components/LazyModelViewer";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const SERVICIOS = [
@@ -146,24 +147,17 @@ function ServiciosYonkoModel() {
       <div className="absolute left-1/2 top-[58%] h-52 w-52 -translate-x-1/2 rounded-full border border-cyan-300/40 bg-cyan-300/10 shadow-[0_0_80px_rgba(34,211,238,.28)]" />
 
       <div className="absolute inset-x-0 bottom-28 top-24 z-[2] sm:top-20">
-        {createElement('model-viewer', {
-          src: '/3d/yonko_haciendo_proyectos.glb',
-          alt: 'Modelo 3D representando un equipo trabajando en servicios informáticos',
-          'camera-controls': true,
-          'auto-rotate': true,
-          'rotation-per-second': '14deg',
-          'interaction-prompt': 'none',
-          reveal: 'auto',
-          loading: 'lazy',
-          'shadow-intensity': '0.85',
-          exposure: '1',
-          style: {
-            width: '100%',
-            height: '100%',
-            pointerEvents: 'none',
-            filter: 'drop-shadow(0 26px 36px rgba(34,211,238,.28))',
-          },
-        })}
+        <LazyModelViewer
+          src="/3d/yonko_haciendo_proyectos.glb"
+          poster=""
+          alt="Modelo 3D representando un equipo trabajando en servicios informáticos"
+          rotationPerSecond="14deg"
+          shadowIntensity="0.85"
+          exposure="1"
+          style={{
+            filter: "drop-shadow(0 26px 36px rgba(34,211,238,.28))",
+          }}
+        />
       </div>
 
       <div className="pointer-events-none absolute left-4 right-4 top-4 z-20 mx-auto flex max-w-[calc(100%-2rem)] items-center justify-center gap-2 rounded-full border border-cyan-200/30 bg-slate-950/70 px-3 py-2 backdrop-blur sm:left-1/2 sm:right-auto sm:max-w-[92%] sm:-translate-x-1/2 sm:px-4">

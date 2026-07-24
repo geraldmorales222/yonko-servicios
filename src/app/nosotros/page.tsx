@@ -2,8 +2,9 @@
 
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
-import { createElement, useRef, useState } from "react";
+import Link from "next/link";
+import { useRef, useState } from "react";
+import LazyModelViewer from "@/components/LazyModelViewer";
 
 const workModes = [
   {
@@ -61,24 +62,17 @@ function YonkoAboutModel() {
       <div className="absolute left-1/2 top-[46%] h-48 w-48 -translate-x-1/2 rounded-full border border-cyan-300/40 bg-cyan-300/10 shadow-[0_0_70px_rgba(34,211,238,.28)]" />
 
       <div className="absolute inset-x-0 top-10 bottom-32 z-[2] sm:top-8">
-        {createElement("model-viewer", {
-          src: "/3d/yonko_nosotros.glb",
-          alt: "Modelo 3D representando al equipo de servicios informáticos",
-          "camera-controls": true,
-          "auto-rotate": true,
-          "rotation-per-second": "16deg",
-          "interaction-prompt": "none",
-          reveal: 'auto',
-          loading: 'lazy',
-          "shadow-intensity": "0.9",
-          exposure: "1",
-          style: {
-            width: "100%",
-            height: "100%",
-            pointerEvents: "none",
+        <LazyModelViewer
+          src="/3d/yonko_nosotros.glb"
+          poster=""
+          alt="Modelo 3D representando al equipo de servicios informáticos"
+          rotationPerSecond="16deg"
+          shadowIntensity="0.9"
+          exposure="1"
+          style={{
             filter: "drop-shadow(0 24px 34px rgba(34,211,238,.28))",
-          },
-        })}
+          }}
+        />
       </div>
 
       <div className="pointer-events-none absolute left-1/2 top-4 z-20 -translate-x-1/2 rounded-full border border-cyan-200/30 bg-slate-950/55 px-4 py-2 text-center shadow-lg shadow-blue-950/20 backdrop-blur">
@@ -143,24 +137,17 @@ function MethodCore3D({ activeId, onSelect }: {
       />
 
       <div className="absolute left-1/2 top-[44%] z-[2] h-[310px] w-[310px] -translate-x-1/2 -translate-y-1/2 sm:h-[380px] sm:w-[380px] lg:top-1/2 lg:h-[430px] lg:w-[430px]">
-        {createElement("model-viewer", {
-          src: "/3d/yonko_metodo.glb",
-          alt: "Modelo 3D representando nuestro método de trabajo",
-          "camera-controls": true,
-          "auto-rotate": true,
-          "rotation-per-second": "18deg",
-          "interaction-prompt": "none",
-          reveal: 'auto',
-          loading: 'lazy',
-          "shadow-intensity": "0.9",
-          exposure: "1",
-          style: {
-            width: "100%",
-            height: "100%",
-            pointerEvents: "none",
+        <LazyModelViewer
+          src="/3d/yonko_metodo.glb"
+          poster=""
+          alt="Modelo 3D representando nuestro método de trabajo"
+          rotationPerSecond="18deg"
+          shadowIntensity="0.9"
+          exposure="1"
+          style={{
             filter: "drop-shadow(0 24px 34px rgba(34,211,238,.35))",
-          },
-        })}
+          }}
+        />
       </div>
 
       <div className="pointer-events-none absolute left-1/2 top-5 z-20 -translate-x-1/2 rounded-full border border-cyan-200/30 bg-cyan-300/10 px-3 py-2 backdrop-blur sm:top-6 sm:px-4">

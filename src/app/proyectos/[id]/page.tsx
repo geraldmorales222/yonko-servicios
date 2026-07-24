@@ -313,32 +313,31 @@ export default function ProyectoDetallePage({ params }: { params: Promise<{ id: 
       </section>
 
       {/* ── CTA FINAL ─────────────────────────────────────────────────────── */}
-      <section className="px-5 md:px-6 py-14 md:py-16"
-        style={{ background: 'repeating-linear-gradient(135deg,#f8fafc 0px,#f8fafc 20px,#f1f5f9 20px,#f1f5f9 21px)' }}>
-        <div className="max-w-4xl mx-auto bg-blue-600 rounded-[2.5rem] p-10 md:p-14 relative overflow-hidden shadow-2xl shadow-blue-200">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-800/40 rounded-full blur-2xl -ml-20 -mb-20 pointer-events-none" />
-          <div className="absolute inset-0 pointer-events-none opacity-[0.07]"
-            style={{ backgroundImage: 'radial-gradient(#fff 1px,transparent 1px)', backgroundSize: '20px 20px' }} />
+      <section className="px-5 md:px-6 py-12 md:py-16 bg-white">
+        <div className="max-w-4xl mx-auto bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 border border-slate-800 rounded-3xl p-6 md:p-10 relative overflow-hidden shadow-xl shadow-slate-950/20">
+          <div className="absolute -right-16 -top-16 w-48 h-48 bg-blue-600/25 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -left-16 -bottom-16 w-48 h-48 bg-cyan-600/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
+            style={{ backgroundImage: 'radial-gradient(#fff 1px,transparent 1px)', backgroundSize: '16px 16px' }} />
 
-          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
-              <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-blue-200 mb-3">¿Le gustaría algo similar?</p>
-              <h2 className="text-2xl md:text-4xl font-black tracking-tighter uppercase leading-[0.9] text-white mb-2">
-                Construyamos su<br />próximo proyecto.
+              <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-cyan-400 mb-2">¿Le gustaría algo similar?</p>
+              <h2 className="text-xl md:text-3xl font-black tracking-tighter uppercase leading-[1.0] text-white mb-2">
+                Construyamos su<br className="hidden md:block" /> próximo proyecto.
               </h2>
-              <p className="text-blue-100 text-sm font-light max-w-sm">Primera consultoría gratuita de 30 minutos. Sin compromiso.</p>
+              <p className="text-slate-400 text-xs md:text-sm font-medium">Primera consultoría gratuita de 30 minutos. Sin compromiso.</p>
             </div>
-            <div className="flex flex-col gap-3 shrink-0">
+            <div className="flex flex-col sm:flex-row md:flex-col gap-3 shrink-0 w-full md:w-auto">
               <Link href="/contacto"
-                className="group inline-flex items-center gap-3 bg-white text-slate-900 px-7 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-[1.03] active:scale-[0.98] transition-all shadow-xl whitespace-nowrap">
+                className="group inline-flex items-center justify-center gap-2.5 bg-blue-600 hover:bg-blue-500 text-white px-6 py-3.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-all shadow-lg shadow-blue-950/40 whitespace-nowrap">
                 Iniciar Proyecto
-                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                 </svg>
               </Link>
               <Link href="/proyectos"
-                className="inline-flex items-center justify-center gap-2 text-blue-200 hover:text-white text-xs uppercase tracking-widest font-bold transition-colors">
+                className="inline-flex items-center justify-center gap-2 text-slate-400 hover:text-white text-[10px] uppercase tracking-widest font-bold transition-colors py-2">
                 Ver más proyectos →
               </Link>
             </div>

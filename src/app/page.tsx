@@ -215,7 +215,7 @@ function InteractiveYonkoLab() {
         <div className="absolute left-1/2 top-[43%] z-10 h-[360px] w-[260px] -translate-x-1/2 -translate-y-1/2 sm:h-[460px] sm:w-[330px] lg:top-[50%] lg:h-[560px] lg:w-[390px] xl:h-[540px] xl:w-[380px]">
           <LazyModelViewer
             src="/3d/Yonko_trabajando.glb"
-            poster="/imagenes/yonko3d.webp"
+            poster=""
             alt="Modelo 3D representando un equipo técnico trabajando"
             rotationPerSecond="16deg"
             shadowIntensity="1"
