@@ -5,11 +5,11 @@ import AppChrome from '@/components/AppChrome';
 
 export const metadata: Metadata = {
   title: {
-    default: 'Yonko Servicios | Ingeniería, desarrollo web, apps y automatización',
+    default: 'Yonko Servicios | Desarrollo Web, Apps y Software a Medida en Chile',
     template: '%s | Yonko Servicios',
   },
   description:
-    'Servicios informáticos para empresas: desarrollo web, e-commerce, apps móviles, ingeniería de software, automatización, UX/CX e IA aplicada.',
+    'Agencia de servicios informáticos en Chile: Desarrollo web profesional, e-commerce de alta conversión, aplicaciones móviles iOS/Android e ingeniería de software a medida.',
   metadataBase: new URL('https://www.yonkoservicios.com'),
   alternates: {
     canonical: '/',
@@ -19,12 +19,15 @@ export const metadata: Metadata = {
   keywords: [
     'Yonko Servicios',
     'desarrollo web Chile',
-    'servicios informáticos',
-    'ingeniería de software',
-    'apps móviles',
-    'e-commerce',
+    'agencia desarrollo web Santiago',
+    'posicionamiento SEO Chile',
+    'agencia SEO Santiago',
+    'servicios informáticos Chile',
+    'ingeniería de software a medida',
+    'desarrollo de apps móviles Chile',
+    'creación e-commerce Chile',
     'automatización de procesos',
-    'consultoría informática',
+    'consultoría informática Santiago',
     'UX CX',
     'IA aplicada',
   ],
@@ -47,23 +50,23 @@ export const metadata: Metadata = {
     locale: 'es_CL',
     url: '/',
     siteName: 'Yonko Servicios',
-    title: 'Yonko Servicios | Ingeniería y servicios informáticos',
+    title: 'Yonko Servicios | Desarrollo Web, Apps y Software a Medida en Chile',
     description:
-      'Desarrollo web, e-commerce, apps móviles, ingeniería de software y automatización para empresas que necesitan operar mejor.',
+      'Agencia de servicios informáticos en Chile: Desarrollo web profesional, e-commerce de alta conversión, aplicaciones móviles e ingeniería de software.',
     images: [
       {
         url: '/icon.png',
         width: 1200,
         height: 1200,
-        alt: 'Yonko Servicios',
+        alt: 'Yonko Servicios Informáticos Chile',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Yonko Servicios | Ingeniería y servicios informáticos',
+    title: 'Yonko Servicios | Desarrollo Web, Apps y Software a Medida en Chile',
     description:
-      'Servicios informáticos para empresas: desarrollo web, apps, e-commerce, automatización e ingeniería de software.',
+      'Agencia de servicios informáticos en Chile: Desarrollo web profesional, e-commerce, apps e ingeniería de software.',
     images: ['/icon.png'],
   },
   manifest: '/site.webmanifest',
@@ -83,17 +86,38 @@ const organizationJsonLd = {
   url: 'https://www.yonkoservicios.com',
   logo: 'https://www.yonkoservicios.com/icon.png',
   image: 'https://www.yonkoservicios.com/icon.png',
+  email: 'yonkoservicios@gmail.com',
+  telephone: '+56942882503',
+  priceRange: '$$',
+  address: {
+    '@type': 'PostalAddress',
+    addressCountry: 'CL',
+    addressRegion: 'Región Metropolitana',
+    addressLocality: 'Santiago',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: -33.4489,
+    longitude: -70.6693,
+  },
+  sameAs: [
+    'https://wa.me/56942882503',
+  ],
   description:
-    'Servicios informáticos para empresas: desarrollo web, e-commerce, apps móviles, ingeniería de software, automatización, UX/CX e IA aplicada.',
-  areaServed: 'CL',
+    'Agencia de servicios informáticos en Chile: desarrollo web a medida, tiendas e-commerce de alta conversión, aplicaciones móviles iOS/Android e ingeniería de software.',
+  areaServed: {
+    '@type': 'Country',
+    name: 'Chile',
+  },
   serviceType: [
-    'Desarrollo web',
-    'E-commerce',
-    'Apps móviles',
+    'Desarrollo web a medida',
+    'Desarrollo de e-commerce',
+    'Desarrollo de aplicaciones móviles',
     'Ingeniería de software',
     'Automatización de procesos',
-    'UX/CX',
-    'IA aplicada',
+    'Consultoría UX/CX',
+    'Posicionamiento SEO y Visibilidad Web',
+    'IA y Data Science',
   ],
 };
 

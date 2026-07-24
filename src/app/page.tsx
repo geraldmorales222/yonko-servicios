@@ -18,12 +18,16 @@ const services = [
     desc: "Landing pages, sitios corporativos y plataformas con foco en conversión, velocidad y mantenimiento real.",
   },
   {
-    title: "Sistemas a medida",
-    desc: "Dashboards, paneles internos, APIs y automatizaciones para ordenar la operación de tu negocio.",
+    title: "Sistemas & Apps",
+    desc: "Dashboards, paneles internos, apps móviles y software a medida para tu negocio.",
   },
   {
-    title: "IA aplicada",
-    desc: "Automatización, asistentes, clasificación de datos y flujos inteligentes sin humo ni promesas mágicas.",
+    title: "Posicionamiento SEO",
+    desc: "Estrategia On-Page, SEO técnico y posicionamiento orgánico en Google para atraer clientes.",
+  },
+  {
+    title: "IA & Automatización",
+    desc: "Flujos de trabajo inteligentes, integraciones de APIs y asistentes para tu operación.",
   },
 ];
 
@@ -358,9 +362,9 @@ export default function HomePage() {
               <h1
                 className="max-w-3xl text-[clamp(2.05rem,4.8vw,3.8rem)] font-black leading-[0.94] tracking-tight"
               >
-                No vendemos
+                Agencia de Desarrollo Web e
                 <br />
-                <span className="text-blue-400">plantillas.</span>
+                <span className="text-blue-400">Ingeniería de Software.</span>
               </h1>
 
               <p
@@ -383,7 +387,7 @@ export default function HomePage() {
                 </Link>
               </motion.div>
 
-              <div className="mt-8 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3 lg:mt-10">
+              <div className="mt-8 grid max-w-2xl grid-cols-2 gap-3 sm:grid-cols-4 lg:mt-10">
                 {services.map((service) => (
                   <div key={service.title} className="rounded-3xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur">
                     <h2 className="text-sm font-black tracking-tight text-white">{service.title}</h2>

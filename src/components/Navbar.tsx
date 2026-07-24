@@ -12,14 +12,16 @@ const SERVICIOS = [
   { name: "Desarrollo Móvil", href: "/servicios/desarrollo-movil", color: "bg-rose-500", desc: "React Native · Expo · iOS · Android", disabled: false },
   { name: "Ingeniería de Software", href: "/servicios/ingenieria-software", color: "bg-sky-900", desc: "Node.js · TypeScript · AWS", disabled: false },
   { name: "Automatización", href: "/servicios/automatizacion-procesos", color: "bg-sky-500", desc: "n8n · Zapier · APIs", disabled: false },
-  { name: "Estrategia UX/CX", href: "/servicios/estrategia-ux-cx", color: "bg-emerald-500", desc: "Auditoría · Testing · Heatmaps", disabled: false },
+  { name: "Estrategia UX/CX", href: "/servicios/estrategia-ux-cx", color: "bg-cyan-500", desc: "Auditoría · Testing · Heatmaps", disabled: false },
   { name: "Rendimiento Web WPO", href: "/servicios/auditoria-rendimiento-web-wpo", color: "bg-blue-600", desc: "Core Web Vitals · UX · Velocidad", disabled: false },
+  { name: "Posicionamiento SEO", href: "/servicios/posicionamiento-seo-web", color: "bg-teal-500", desc: "Google · Keyword Research · Local SEO", disabled: false },
   { name: "IA & Data Science", href: "/servicios/sistemas-inteligentes-ia", color: "bg-violet-500", desc: "Python · ML · Supabase", disabled: true },
 ];
 
 const MOBILE_LINKS = [
   { label: "Inicio", href: "/" },
   { label: "Proyectos", href: "/proyectos" },
+  { label: "Blog", href: "/blog" },
   { label: "Nosotros", href: "/nosotros" },
 ];
 
@@ -67,18 +69,16 @@ export default function Navbar() {
   }, [pathname]);
 
   const navClass = (href: string) =>
-    `text-[11px] font-black uppercase tracking-[0.2em] transition-colors duration-200 ${
-      pathname === href ? "text-blue-600" : "text-slate-500 hover:text-slate-950"
+    `text-[11px] font-black uppercase tracking-[0.2em] transition-colors duration-200 ${pathname === href ? "text-blue-600" : "text-slate-500 hover:text-slate-950"
     }`;
 
   return (
     <>
       <nav
-        className={`fixed left-0 top-0 z-[100] w-full transition-all duration-300 ${
-          scrolled
+        className={`fixed left-0 top-0 z-[100] w-full transition-all duration-300 ${scrolled
             ? "border-b border-slate-100 bg-white/95 shadow-sm shadow-slate-100 backdrop-blur-xl"
             : "border-b border-slate-100/60 bg-white/80 backdrop-blur-lg"
-        }`}
+          }`}
       >
         <div className="mx-auto flex h-[68px] max-w-7xl items-center justify-between px-5 md:justify-center md:px-6">
           <Link href="/" aria-label="Ir al inicio" className="flex h-12 w-12 items-center justify-center rounded-full ring-1 ring-blue-100 md:hidden">
@@ -89,9 +89,8 @@ export default function Navbar() {
             <div ref={dropdownRef} className="relative">
               <button
                 onClick={() => setDropdownOpen((open) => !open)}
-                className={`flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.2em] transition-colors duration-200 ${
-                  pathname.startsWith("/servicios") ? "text-blue-600" : "text-slate-500 hover:text-slate-950"
-                }`}
+                className={`flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.2em] transition-colors duration-200 ${pathname.startsWith("/servicios") ? "text-blue-600" : "text-slate-500 hover:text-slate-950"
+                  }`}
               >
                 Servicios
                 <motion.svg
@@ -155,22 +154,25 @@ export default function Navbar() {
               Proyectos
             </Link>
 
+
             <Link
               href="/"
               aria-label="Ir al inicio"
               title="Inicio"
-              className={`group mx-1 flex h-14 w-16 flex-col items-center justify-center gap-0.5 rounded-2xl transition duration-300 hover:bg-blue-50 ${
-                pathname === "/" ? "bg-blue-50/80 text-blue-600" : "text-slate-400 hover:text-blue-600"
-              }`}
+              className={`group mx-1 flex h-14 w-16 flex-col items-center justify-center gap-0.5 rounded-2xl transition duration-300 hover:bg-blue-50 ${pathname === "/" ? "bg-blue-50/80 text-blue-600" : "text-slate-400 hover:text-blue-600"
+                }`}
             >
-              <span className={`flex h-10 w-10 items-center justify-center rounded-full ring-1 transition ${
-                pathname === "/" ? "ring-blue-200 shadow-sm shadow-blue-100" : "ring-blue-100 group-hover:ring-blue-200"
-              }`}>
+              <span className={`flex h-10 w-10 items-center justify-center rounded-full ring-1 transition ${pathname === "/" ? "ring-blue-200 shadow-sm shadow-blue-100" : "ring-blue-100 group-hover:ring-blue-200"
+                }`}>
                 <Logo size={34} />
               </span>
               <span className="font-mono text-[7px] font-black uppercase tracking-[0.24em]">
                 Inicio
               </span>
+            </Link>
+
+            <Link href="/blog" className={navClass("/blog")}>
+              Blog
             </Link>
 
             <Link href="/nosotros" className={navClass("/nosotros")}>
@@ -233,9 +235,8 @@ export default function Navbar() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`flex items-center justify-between rounded-xl px-4 py-3.5 text-sm font-black uppercase tracking-wide transition-colors ${
-                      pathname === link.href ? "bg-blue-50 text-blue-600" : "text-slate-700 hover:bg-slate-50"
-                    }`}
+                    className={`flex items-center justify-between rounded-xl px-4 py-3.5 text-sm font-black uppercase tracking-wide transition-colors ${pathname === link.href ? "bg-blue-50 text-blue-600" : "text-slate-700 hover:bg-slate-50"
+                      }`}
                   >
                     {link.label}
                     {pathname === link.href && <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />}

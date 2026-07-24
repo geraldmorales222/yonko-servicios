@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from 'next/link';
 import { motion, useInView } from 'framer-motion';
@@ -25,7 +25,7 @@ const SERVICIOS = [
     desc: 'Construimos ecosistemas transaccionales optimizados desde la psicología del usuario y la analítica avanzada, maximizando tasa de conversión, ticket promedio y retención.',
     micro: 'Tiendas y flujos de compra pensados para vender mejor.',
     tags: ['Stripe', 'Headless', 'Analytics', 'Etc'],
-    acento: 'bg-blue-500',
+    acento: 'bg-indigo-500',
     desde: 'Cotización según diagnóstico',
   },
   {
@@ -36,7 +36,7 @@ const SERVICIOS = [
     desc: 'Desarrollamos aplicaciones nativas y multiplataforma con experiencias fluidas, rendimiento nativo y arquitectura lista para escalar a millones de usuarios.',
     micro: 'Apps fluidas para operar, atender o vender desde el teléfono.',
     tags: ['React Native', 'Expo', 'iOS', 'Android'],
-    acento: 'bg-blue-500',
+    acento: 'bg-rose-500',
     desde: 'Cotización según diagnóstico',
   },
 
@@ -59,7 +59,7 @@ const SERVICIOS = [
     desc: 'Diseñamos flujos automatizados que eliminan redundancias operativas y errores humanos, integrando sistemas y optimizando procesos internos.',
     micro: 'Automatizamos tareas repetitivas para ganar tiempo y control.',
     tags: ['Zapier', 'n8n', 'APIs', 'Etc'],
-    acento: 'bg-blue-500',
+    acento: 'bg-sky-500',
     desde: 'Cotización según diagnóstico',
   },
   {
@@ -87,15 +87,27 @@ const SERVICIOS = [
     desde: 'Cotización según diagnóstico',
     disabled: false,
   },
-    {
-    slug: 'sistemas-inteligentes-ia',
+  {
+    slug: 'posicionamiento-seo-web',
     num: '08',
+    titulo: 'Posicionamiento SEO',
+    subtitulo: 'Search & Visibility Engineering',
+    desc: 'Posicionamos su negocio en las primeras opciones de Google en Chile mediante SEO técnico, optimización geográfica local y estrategia de palabras clave con intención de venta.',
+    micro: 'Posicionamiento orgánico y visibilidad en Google para atraer clientes calificados.',
+    tags: ['Google SEO', 'SEO Técnico', 'Google Maps', 'Keyword Research'],
+    acento: 'bg-teal-500',
+    desde: 'Cotización según diagnóstico',
+    disabled: false,
+  },
+  {
+    slug: 'sistemas-inteligentes-ia',
+    num: '09',
     titulo: 'IA & Data Science',
     subtitulo: 'Cognitive Systems',
     desc: 'Desarrollamos modelos predictivos, automatización inteligente y pipelines de datos que transforman información operativa en decisiones estratégicas basadas en evidencia.',
     micro: 'Datos y modelos para decidir, anticipar y automatizar mejor.',
     tags: ['Python', 'ML', 'Supabase', 'Etc'],
-    acento: 'bg-blue-600',
+    acento: 'bg-violet-500',
     desde: 'Cotización según diagnóstico',
     disabled: true, // <--- DESACTIVADO TEMPORALMENTE
   },

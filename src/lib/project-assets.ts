@@ -1,5 +1,6 @@
 export type ProjectAsset = {
   id?: string;
+  projectFolderId?: string;
   name: string;
   path: string;
   url: string;

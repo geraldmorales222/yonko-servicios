@@ -81,6 +81,19 @@ export async function findOrCreateFolder(name: string, parentId: string) {
   return folder.id as string;
 }
 
+export async function findFolder(name: string, parentId: string) {
+  const q = [
+    `name='${name.replace(/'/g, "\\'")}'`,
+    "mimeType='application/vnd.google-apps.folder'",
+    `'${parentId}' in parents`,
+    "trashed=false",
+  ].join(" and ");
+
+  const search = await driveFetch(`${DRIVE_API}/files?q=${encodeURIComponent(q)}&fields=files(id,name)`);
+  const data = await search.json();
+  return data.files?.[0]?.id as string | undefined;
+}
+
 export async function uploadDriveFile(file: File, parentId: string) {
   const metadata = {
     name: file.name,
@@ -154,6 +167,10 @@ export async function uploadDriveBuffer(input: {
 
 export async function deleteDriveFile(fileId: string) {
   await driveFetch(`${DRIVE_API}/files/${fileId}`, { method: "DELETE" });
+}
+
+export async function deleteDriveFolder(folderId: string) {
+  await deleteDriveFile(folderId);
 }
 
 export async function getDriveFile(fileId: string) {

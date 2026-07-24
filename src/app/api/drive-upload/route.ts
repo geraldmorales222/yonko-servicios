@@ -26,6 +26,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({
       id: uploaded.id,
+      projectFolderId,
       name: uploaded.name,
       path: `proyectos/${projectFolderName}/${area}/${uploaded.name}`,
       url: `/api/drive-file/${uploaded.id}`,

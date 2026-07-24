@@ -3,16 +3,19 @@ import Link from "next/link";
 const SERVICIOS = [
   { label: "Desarrollo Web", href: "/servicios/desarrollo-web-pro" },
   { label: "E-commerce", href: "/servicios/ecommerce-alta-conversion" },
+  { label: "Desarrollo Móvil", href: "/servicios/desarrollo-movil" },
+  { label: "Ingeniería de Software", href: "/servicios/ingenieria-software" },
   { label: "Automatización", href: "/servicios/automatizacion-procesos" },
   { label: "Estrategia UX/CX", href: "/servicios/estrategia-ux-cx" },
   { label: "Rendimiento Web WPO", href: "/servicios/auditoria-rendimiento-web-wpo" },
-  { label: "Ingeniería de Software", href: "/servicios/ingenieria-software" },
+  { label: "Posicionamiento SEO", href: "/servicios/posicionamiento-seo-web" },
 ];
 
 const NAV = [
   { label: "Inicio", href: "/" },
   { label: "Servicios", href: "/servicios" },
   { label: "Proyectos", href: "/proyectos" },
+  { label: "Blog", href: "/blog" },
   { label: "Nosotros", href: "/nosotros" },
   { label: "Contacto", href: "/contacto" },
 ];

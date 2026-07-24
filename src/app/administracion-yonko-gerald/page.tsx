@@ -232,6 +232,28 @@ export default function AdminPanel() {
     }
   };
 
+  const deleteDriveProjectFolder = async (proyecto: any) => {
+    const folderId =
+      proyecto.driveFolderId ||
+      proyecto.coverAsset?.projectFolderId ||
+      proyecto.assets?.find((asset: ProjectAsset) => asset?.projectFolderId)?.projectFolderId;
+
+    const body = folderId
+      ? { folderId }
+      : { projectName: proyecto.nombre, driveFolder: proyecto.driveFolder };
+
+    const res = await fetch('/api/drive-delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data.error || 'No se pudo eliminar la carpeta de Google Drive.');
+    }
+  };
+
   const toggleHabilitado = async (p: any) => {
     const nuevoEstado = !p.habilitado;
     await updateDoc(doc(db, 'proyectos', p.id), { habilitado: nuevoEstado });
@@ -285,6 +307,7 @@ export default function AdminPanel() {
       tecnologias,
       coverAsset,
       assets,
+      driveFolderId: coverAsset?.projectFolderId || assets.find((asset) => asset.projectFolderId)?.projectFolderId || null,
       driveFolder: `proyectos/${slugifyProjectName(nombre)}`,
       fecha: serverTimestamp(),
     };
@@ -313,8 +336,13 @@ export default function AdminPanel() {
     if (!confirm(`¿Eliminar ${proyecto.nombre}? Se borrará el proyecto y sus archivos de Google Drive.`)) return;
 
     try {
-      await deleteDriveAsset(proyecto.coverAsset);
-      await Promise.all((proyecto.assets || []).map((asset: ProjectAsset) => deleteDriveAsset(asset)));
+      try {
+        await deleteDriveProjectFolder(proyecto);
+      } catch (driveError) {
+        console.warn('No se pudo eliminar carpeta completa. Intentando borrar archivos individuales:', driveError);
+        await deleteDriveAsset(proyecto.coverAsset);
+        await Promise.all((proyecto.assets || []).map((asset: ProjectAsset) => deleteDriveAsset(asset)));
+      }
       await deleteDoc(doc(db, 'proyectos', proyecto.id));
       await fetchData();
     } catch (error) {
